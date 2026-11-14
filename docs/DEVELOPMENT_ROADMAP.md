@@ -7,7 +7,8 @@
 | 1 | Expo foundation, tooling, theme, i18n, Supabase skeleton | Done (PR #1) |
 | 2 | Docs (spec, architecture, schema, screens, roadmap) | Done (PR #1) |
 | 3 | Verification (typecheck, lint, test, Expo) | Done (PR #1) |
-| 4+ | Product features | Unblocked for planning; implement after merge / next tasks |
+| 4 | Auth + DB schema / RLS | In progress (`feat/auth-and-schema`) |
+| 5+ | Feed, create animal, offers, hub | Next after auth merge |
 
 ## Locked product decisions (2026-11-14)
 
@@ -54,14 +55,15 @@ See also [PRODUCT_SPEC.md](./PRODUCT_SPEC.md), [ARCHITECTURE.md](./ARCHITECTURE.
 
 ## Manual setup after merge
 
-1. Create Supabase project  
+1. Create Supabase project (if not already)  
 2. Copy URL + anon key into local `.env` (from `.env.example`)  
-3. Apply real migrations + RLS matching locked decisions  
-4. Configure Storage buckets (photo limits / MIME)  
+3. Apply migrations in order — see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)  
+4. Configure Auth redirect URLs for password reset  
 5. (Optional) EAS project + `eas.json`  
 
-## Out of scope in foundation PR
+## Out of scope in auth/schema PR
 
-- Product screens and business logic  
-- Fake seed data / demo auth  
+- Animal feed / create form UI  
+- Offers accept/reject flows in the app  
+- Fake seed data  
 - Production EAS submit  

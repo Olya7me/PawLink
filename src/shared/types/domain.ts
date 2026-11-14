@@ -1,24 +1,16 @@
 /**
- * Shared domain type stubs for documentation alignment.
- * Expand when implementing features — see docs/DATABASE_SCHEMA.md.
+ * Shared domain types aligned with docs/DATABASE_SCHEMA.md and migrations.
  */
 
-export type HelpRequestStatus =
-  | 'open'
-  | 'accepted'
-  | 'in_progress'
-  | 'completed'
-  | 'cancelled';
-
-export type AnimalSpecies = 'dog' | 'cat' | 'other';
-
-export type UrgencyLevel = 'low' | 'medium' | 'high' | 'critical';
-
-export type HelpType =
-  | 'catch'
-  | 'transport'
-  | 'vet'
-  | 'foster'
-  | 'permanent_home'
-  | 'food'
-  | 'other';
+export type {
+  AnimalSpecies,
+  AnimalStatus,
+  AnimalUpdateEventType,
+  HelpOfferStatus,
+  HelpRequestStatus,
+  HelpType,
+  Profile,
+  ReportStatus,
+  ReportTargetType,
+  UrgencyLevel,
+} from '@/services/supabase/database.types';

@@ -6,6 +6,10 @@ describe('i18n locales', () => {
     expect(Object.keys(ru.app)).toEqual(Object.keys(en.app));
     expect(Object.keys(ru.common)).toEqual(Object.keys(en.common));
     expect(Object.keys(ru.shell)).toEqual(Object.keys(en.shell));
+    expect(Object.keys(ru.auth)).toEqual(Object.keys(en.auth));
+    expect(Object.keys(ru.auth.errors)).toEqual(Object.keys(en.auth.errors));
+    expect(Object.keys(ru.profile)).toEqual(Object.keys(en.profile));
+    expect(Object.keys(ru.create)).toEqual(Object.keys(en.create));
   });
 
   it('includes brand name', () => {

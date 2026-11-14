@@ -1,2 +1,6 @@
-// RNTL v14 registers Jest matchers when the library is imported in a test.
-// Keep this file for future global mocks (AsyncStorage, Reanimated, etc.).
+// Global Jest mocks for native modules used by Supabase / Expo.
+
+jest.mock('@react-native-async-storage/async-storage', () =>
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- Jest mock factory
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
+);
