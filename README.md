@@ -2,7 +2,7 @@
 
 Mobile app (iOS / Android) for coordinating help for homeless and abandoned animals. Built with **Expo**, **React Native**, **TypeScript**, and **Supabase**.
 
-> Stage 1–3: technical foundation + documentation only. Product screens and business logic are intentionally not implemented yet.
+> Stage 1–3: technical foundation + documentation. Product screens and business logic are not implemented in this PR.
 
 ## Docs
 
@@ -54,6 +54,17 @@ docs/                # Technical documentation
 supabase/            # Migration / config skeleton
 tests/               # Jest tests
 ```
+
+## Conventions
+
+- **English** for PR titles/descriptions, branch names, commit messages, technical docs, and code comments.
+- **Conventional Commits** (e.g. `feat:`, `fix:`, `docs:`, `chore:`).
+- Use the [pull request template](.github/pull_request_template.md).
+- App UI strings may be Russian and English via i18n.
+
+## Locked product decisions (2026-11-14)
+
+See [DEVELOPMENT_ROADMAP.md](docs/DEVELOPMENT_ROADMAP.md) for the full table (single accepted offer, author-only accept/reject, anonymize on delete, guest feed, photo limits, no maps/chat/dark mode in MVP, basic reports).
 
 ## CI
 

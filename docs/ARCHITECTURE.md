@@ -16,13 +16,16 @@
 | Quality | ESLint (expo) + Prettier | Consistent style |
 | CI | GitHub Actions | lint / typecheck / test |
 
-### Intentionally deferred
+### Intentionally deferred (locked)
 
 | Item | Reason |
 |------|--------|
-| Push notifications (Expo Notifications) | Architecture only for MVP; add when in-app notifications work |
-| Maps SDK | Approximate location first; exact map UX needs product decision |
-| Nativewind / heavy UI kit | Custom minimal theme tokens keep design control for MVP |
+| Maps SDK | MVP uses city text only (approved 2026-11-14) |
+| In-app chat | Not in MVP; contact after offer accept |
+| Dark mode | Light theme only for MVP |
+| Push notifications (Expo Notifications) | Add after in-app notifications work |
+| Admin panel | Reports are stored; moderation UI later |
+| Nativewind / heavy UI kit | Custom theme tokens keep design control |
 
 ## Feature-based layout
 
@@ -65,14 +68,21 @@ Keep routes thin: `app/...` composes feature components.
 
 Do not mirror server lists into Zustand.
 
-## UI / UX patterns
+## Locked domain rules (2026-11-14)
 
-Documented patterns for later screens:
+- Many `help_offers` per `help_request`; **at most one accepted**  
+- **Only the help request author** accepts/rejects offers  
+- Public location = city + approximate label; meetup/contact **after accept only**  
+- Guests may **read** feed + animal detail; auth required to create/respond  
+- Photos: ≤5 / animal, ≤5 MB, JPEG/PNG/WebP, compress when possible  
+- Account deletion **anonymizes** PII; rescue history remains without personal data  
+
+## UI / UX patterns
 
 - Loading / error / empty states in `shared/components` (to be added with first feature)
 - Errors: map Supabase / network errors to i18n keys; never show raw secrets
 - Design tokens in `src/theme` — warm neutrals `#F7F3EE`, accent coral `#E07A5F`
-- **Light theme only for MVP** — dark mode deferred (avoids doubling QA). `userInterfaceStyle: light` in `app.json`
+- **Light theme only** — `userInterfaceStyle: light` in `app.json`
 
 ## Frontend ↔ backend
 
@@ -86,33 +96,37 @@ App (Expo)
 
 - Only `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` in the client  
 - Service role key stays on server / CI only (never in the app)  
-- Public location fields must be approximate (city / area / coarse coords) — never publish private foster addresses  
+- RLS must allow **anonymous read** of public listing fields; writes require auth  
 
 ## Security
 
 - RLS on every public table  
-- Storage policies scoped to owner / public-read for listing photos as designed  
-- User deletion: cascade from `auth.users` → `profiles` and related content policy (see DATABASE_SCHEMA)  
-- Reports table for abuse  
+- Storage: public read for listing photos; authenticated write to own prefix; enforce MIME/size  
+- Contact / meetup fields gated so only request author + accepted offerer can read  
+- User deletion: anonymize profile and scrub PII; keep historical rows (see DATABASE_SCHEMA)  
+- Reports table for abuse (no admin UI in MVP)  
 
 ## Navigation model (planned)
 
 See [SCREENS.md](./SCREENS.md). High level:
 
-- Auth stack (unauthenticated)
-- Main tabs: Feed | Create | My tasks | Profile
-- Stacks for animal detail, help request, offers, settings
+- Public: Feed + Animal Detail (guest-readable)
+- Auth stack for sign-in / sign-up when needed
+- Authenticated tabs: Feed | Create | My tasks | Profile
+- Stacks for help request, offers, settings
 
 ## Risks
 
 | Risk | Mitigation |
 |------|------------|
-| Location privacy | Coarse public location; private details only after accept |
-| Duplicate / spam listings | Reports + rate limits later |
-| Coordination conflicts | One active assignee per help request (MVP) |
+| Location privacy | City + approximate public fields; contact after accept |
+| Premature contact leak | RLS on private contact columns |
+| Duplicate / spam listings | Reports storage; rate limits later |
+| Coordination conflicts | Single accepted offer per help request |
 | Offline | Optimistic UI later; MVP assumes online |
-| Scope creep | Stages 1–3 stop at foundation + docs |
 
-## Decisions needing approval
+## Repo conventions
 
-Listed in [DEVELOPMENT_ROADMAP.md](./DEVELOPMENT_ROADMAP.md).
+- English: PRs, branches, commits, technical docs, code comments  
+- Conventional Commits + `.github/pull_request_template.md`  
+- UI copy via i18n (ru/en)  

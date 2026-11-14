@@ -18,58 +18,70 @@ For each animal listing, create multiple **help requests**. Different people can
 
 | Role | Goals |
 |------|--------|
-| Reporter / author | Publish an animal case, request help types, track progress |
-| Volunteer helper | Find nearby needs, offer help on a specific task, complete it |
+| Guest | Browse feed and animal detail cards without an account |
+| Reporter / author | Publish an animal case, request help types, accept offers, track progress |
+| Volunteer helper | Find needs, offer help on a specific task, complete it after accept |
 | Foster / adopter | Respond to foster or permanent-home requests |
-| Moderator (later) | Review reports / abuse |
-
-MVP focuses on reporter + helper. Formal roles can stay soft (skills on profile) until admin tooling is needed.
+| Moderator (later) | Review reports / abuse (MVP only stores reports) |
 
 ## Core feature: multi-task help
 
 One `animal` → many `help_requests` (catch, transport, vet, foster, permanent home, food, other).
 
-Each request has its own lifecycle:
+Each request lifecycle:
 
 `Open → Accepted → In progress → Completed` (or `Cancelled`)
 
-Helpers submit `help_offers`; the author (or assignee rules — TBD) accepts one offer per request (MVP assumption: one active assignee).
+Helpers submit many `help_offers`; **only the help request author** may accept or reject. **At most one offer** is accepted per request.
+
+After accept, contact / meetup details become visible to the author and the accepted helper. Publicly, only **city + approximate location** are shown.
+
+## Locked product decisions (2026-11-14)
+
+1. Multiple offers allowed; single accept per help request  
+2. Only help request author accepts/rejects  
+3. Meetup/contact after accept only; public city + approximate location  
+4. Account deletion anonymizes PII; rescue history kept without personal data  
+5. No maps in MVP (city text)  
+6. No chat in MVP  
+7. Basic reports only (no admin panel)  
+8. Light theme only  
+9. Guest browse of feed + animal cards; auth to create/respond  
+10. Photos: ≤5 per animal, ≤5 MB, JPEG/PNG/WebP, compress when possible  
 
 ## Functional modules (MVP scope)
 
-1. **Auth + profiles** — sign up / in / out, password reset, name, city, photo, skills  
-2. **Animal feed** — search, filters (species, help type, urgency), sort, approximate location  
-3. **Create listing** — photos, species, name, description, location, condition, urgency, help types  
-4. **Animal card** — photos, description, location, author, status, tasks, history  
-5. **Help coordination** — requests, offers, accept/reject, statuses  
+1. **Auth + profiles** — sign up / in / out, password reset, name, city, photo, skills, anonymized deletion  
+2. **Animal feed** — guest-readable; search; filters (species, help type, urgency); sort; city text  
+3. **Create listing** — auth required; photos (limits above), species, name, description, city, condition, urgency, help types  
+4. **Animal card** — guest-readable public fields; tasks; history; gated contact after accept  
+5. **Help coordination** — offers; author accept/reject; statuses  
 6. **Rescue history** — timeline of updates/events  
 7. **Personal area** — my listings, requests, offers, active tasks, history  
-8. **Notifications** — in-app for MVP; push designed but optional for first release  
-9. **Reports** — report listing or user  
+8. **Notifications** — in-app for MVP; push later  
+9. **Reports** — report listing or user; store for later review  
 
-## Non-goals (stage 1–3)
+## Non-goals (MVP)
 
-- Product UI screens and business logic (blocked until architecture approval)
-- Payments / crowdfunding
-- Live chat (may use in-app notifications + external contact later — decision needed)
-- Exact private addresses of foster homes in public UI
+- Maps / map pins  
+- In-app chat  
+- Dark mode  
+- Full admin / moderation console  
+- Payments / crowdfunding  
+- Exact private addresses in public UI  
 
 ## Platforms
 
-- iOS and Android via React Native + Expo
-- Path to App Store / Google Play via EAS
+- iOS and Android via React Native + Expo  
+- Path to App Store / Google Play via EAS  
 
 ## Localization
 
-Russian and English from day one. All user-facing copy goes through i18n.
+Russian and English UI strings via i18n. Technical docs, commits, and PRs are English (see README conventions).
 
 ## Success metrics (draft)
 
-- Listings created with ≥1 help request
-- Offers submitted / accepted
-- Requests completed
-- Time from open → first offer
-
-## Open product decisions
-
-See [DEVELOPMENT_ROADMAP.md](./DEVELOPMENT_ROADMAP.md) — decisions requiring user approval.
+- Listings created with ≥1 help request  
+- Offers submitted / accepted  
+- Requests completed  
+- Time from open → first offer  
