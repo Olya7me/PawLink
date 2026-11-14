@@ -1,6 +1,6 @@
 # PawLink — Database Schema
 
-Target: **PostgreSQL via Supabase**. Migrations live under `supabase/migrations/` (skeleton until feature work applies real SQL).
+Target: **PostgreSQL via Supabase**. Migrations live under `supabase/migrations/` (`00001` schema, `00002` RLS, `00003` storage + anonymize). Apply them in the Supabase SQL Editor or via CLI — see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md).
 
 Decisions below reflect the **2026-11-14** product lock.
 
