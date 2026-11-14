@@ -7,8 +7,9 @@
 | 1 | Expo foundation, tooling, theme, i18n, Supabase skeleton | Done (PR #1) |
 | 2 | Docs (spec, architecture, schema, screens, roadmap) | Done (PR #1) |
 | 3 | Verification (typecheck, lint, test, Expo) | Done (PR #1) |
-| 4 | Auth + DB schema / RLS | In progress (`feat/auth-and-schema`) |
-| 5+ | Feed, create animal, offers, hub | Next after auth merge |
+| 4 | Auth + DB schema / RLS | Done (PR #3) |
+| 5 | Guest feed + create animal listing | In progress (`feat/animal-feed-create`) |
+| 6+ | Offers, hub, notifications, reports | Next after feed/create merge |
 
 ## Locked product decisions (2026-11-14)
 
@@ -29,10 +30,10 @@ See also [PRODUCT_SPEC.md](./PRODUCT_SPEC.md), [ARCHITECTURE.md](./ARCHITECTURE.
 
 ## MVP build order (next)
 
-1. Auth + profile CRUD  
-2. Create animal + help requests (with photo limits)  
-3. Guest-readable feed + filters  
-4. Animal detail + offers (author accept/reject; post-accept contact reveal)  
+1. Auth + profile CRUD — done  
+2. Create animal + help requests (with photo limits) — in this slice  
+3. Guest-readable feed + filters + animal detail (public fields) — in this slice  
+4. Offers (author accept/reject; post-accept contact reveal)  
 5. Personal area (my listings / tasks)  
 6. In-app notifications  
 7. Reports (store only)  
@@ -61,9 +62,9 @@ See also [PRODUCT_SPEC.md](./PRODUCT_SPEC.md), [ARCHITECTURE.md](./ARCHITECTURE.
 4. Configure Auth redirect URLs for password reset  
 5. (Optional) EAS project + `eas.json`  
 
-## Out of scope in auth/schema PR
+## Out of scope in feed/create PR
 
-- Animal feed / create form UI  
 - Offers accept/reject flows in the app  
+- Tabs / My Hub personal area  
 - Fake seed data  
 - Production EAS submit  

@@ -3,13 +3,16 @@
  */
 
 export type {
+  Animal,
   AnimalSpecies,
   AnimalStatus,
   AnimalUpdateEventType,
   HelpOfferStatus,
+  HelpRequest,
   HelpRequestStatus,
   HelpType,
   Profile,
+  PublicProfile,
   ReportStatus,
   ReportTargetType,
   UrgencyLevel,

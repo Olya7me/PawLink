@@ -376,3 +376,8 @@ export type Database = {
 
 export type Profile = Database['public']['Tables']['profiles']['Row'];
 export type ProfileUpdate = Database['public']['Tables']['profiles']['Update'];
+export type Animal = Database['public']['Tables']['animals']['Row'];
+export type AnimalInsert = Database['public']['Tables']['animals']['Insert'];
+export type HelpRequest = Database['public']['Tables']['help_requests']['Row'];
+export type HelpRequestInsert = Database['public']['Tables']['help_requests']['Insert'];
+export type PublicProfile = Database['public']['Views']['profiles_public']['Row'];

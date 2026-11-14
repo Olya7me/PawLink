@@ -36,6 +36,13 @@
           "resizeMode": "contain",
           "backgroundColor": "#F7F3EE"
         }
+      ],
+      "expo-image",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow PawLink to access your photos for animal listings."
+        }
       ]
     ],
     "experiments": {

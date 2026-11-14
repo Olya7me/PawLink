@@ -24,6 +24,13 @@ export function mapAuthError(error: unknown): string {
     if (message.includes('email not confirmed')) {
       return 'auth.errors.emailNotConfirmed';
     }
+    if (
+      message.includes('email_address_invalid') ||
+      (message.includes('email address') && message.includes('invalid')) ||
+      message.includes('invalid email')
+    ) {
+      return 'auth.errors.invalidEmail';
+    }
     if (message.includes('password')) {
       return 'auth.errors.weakPassword';
     }

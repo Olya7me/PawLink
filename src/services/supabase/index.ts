@@ -1,2 +1,12 @@
 export { isSupabaseConfigured, supabase } from './client';
-export type { Database, Json, Profile, ProfileUpdate } from './database.types';
+export type {
+  Animal,
+  AnimalInsert,
+  Database,
+  HelpRequest,
+  HelpRequestInsert,
+  Json,
+  Profile,
+  ProfileUpdate,
+  PublicProfile,
+} from './database.types';
