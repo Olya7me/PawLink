@@ -1,0 +1,12 @@
+# Supabase local config placeholder.
+# Initialize with `npx supabase init` against a real project when ready.
+# Do not commit secrets. See .env.example and docs/DATABASE_SCHEMA.md.
+
+[project]
+id = "pawlink"
+
+[api]
+enabled = true
+
+[db]
+major_version = 15
