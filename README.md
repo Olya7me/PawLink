@@ -59,6 +59,7 @@ tests/               # Jest tests
 
 - **English** for PR titles/descriptions, branch names, commit messages, technical docs, and code comments.
 - **Conventional Commits** (e.g. `feat:`, `fix:`, `docs:`, `chore:`).
+- Branch names should look author-owned (e.g. `chore/expo-foundation`, `feat/auth`); do not use agent/tooling prefixes in branch names.
 - Use the [pull request template](.github/pull_request_template.md).
 - App UI strings may be Russian and English via i18n.
 
