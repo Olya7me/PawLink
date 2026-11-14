@@ -41,6 +41,10 @@ describe('mapAuthError', () => {
     expect(mapAuthError({ message: 'Invalid login credentials' })).toBe(
       'auth.errors.invalidCredentials',
     );
+    expect(mapAuthError({ message: 'email_address_invalid' })).toBe('auth.errors.invalidEmail');
+    expect(mapAuthError({ message: 'Email address "x" is invalid' })).toBe(
+      'auth.errors.invalidEmail',
+    );
   });
 });
 

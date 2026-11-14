@@ -20,6 +20,7 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="animals/[id]" options={{ title: 'Animal' }} />
         <Stack.Screen name="sign-in" options={{ title: 'Sign in' }} />
         <Stack.Screen name="sign-up" options={{ title: 'Sign up' }} />
         <Stack.Screen name="reset-password" options={{ title: 'Reset password' }} />

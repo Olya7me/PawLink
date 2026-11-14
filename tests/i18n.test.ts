@@ -1,19 +1,35 @@
 import { en } from '@/i18n/locales/en';
 import { ru } from '@/i18n/locales/ru';
 
+function assertSameKeys(a: unknown, b: unknown, path = ''): void {
+  if (typeof a !== 'object' || a === null || typeof b !== 'object' || b === null) {
+    return;
+  }
+  const aKeys = Object.keys(a as Record<string, unknown>).sort();
+  const bKeys = Object.keys(b as Record<string, unknown>).sort();
+  expect({ path, keys: bKeys }).toEqual({ path, keys: aKeys });
+  for (const key of aKeys) {
+    assertSameKeys(
+      (a as Record<string, unknown>)[key],
+      (b as Record<string, unknown>)[key],
+      path ? `${path}.${key}` : key,
+    );
+  }
+}
+
 describe('i18n locales', () => {
   it('keeps ru keys aligned with en', () => {
-    expect(Object.keys(ru.app)).toEqual(Object.keys(en.app));
-    expect(Object.keys(ru.common)).toEqual(Object.keys(en.common));
-    expect(Object.keys(ru.shell)).toEqual(Object.keys(en.shell));
-    expect(Object.keys(ru.auth)).toEqual(Object.keys(en.auth));
-    expect(Object.keys(ru.auth.errors)).toEqual(Object.keys(en.auth.errors));
-    expect(Object.keys(ru.profile)).toEqual(Object.keys(en.profile));
-    expect(Object.keys(ru.create)).toEqual(Object.keys(en.create));
+    assertSameKeys(en, ru);
   });
 
   it('includes brand name', () => {
     expect(en.app.name).toBe('PawLink');
     expect(ru.app.name).toBe('PawLink');
+  });
+
+  it('includes feed and create animal strings', () => {
+    expect(en.animals.feed.emptyTitle).toBeTruthy();
+    expect(en.create.subtitle).toBeTruthy();
+    expect(ru.animals.helpType.permanent_home).toBeTruthy();
   });
 });
