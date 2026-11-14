@@ -1,8 +1,8 @@
 # PawLink — Screens & Navigation
 
-Product screens are **designed here**, not implemented yet. Current app has only a foundation shell (`app/index.tsx`).
+Auth MVP screens are implemented (`sign-in`, `sign-up`, `reset-password`, `profile`, auth-gated `create` shell). Feed / animal detail / offers remain designed here until their feature slices.
 
-Guest access (locked): unauthenticated users can open **Feed** and **Animal Detail**. Create, offers, and personal areas require auth.
+Guest access (locked): unauthenticated users can open **Feed** and **Animal Detail** (when built). Create, offers, and personal areas require auth.
 
 ## Navigation map (planned)
 

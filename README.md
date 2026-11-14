@@ -2,7 +2,7 @@
 
 Mobile app (iOS / Android) for coordinating help for homeless and abandoned animals. Built with **Expo**, **React Native**, **TypeScript**, and **Supabase**.
 
-> Stage 1–3: technical foundation + documentation. Product screens and business logic are not implemented in this PR.
+> Auth + database schema/RLS MVP. Apply SQL via [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md). Feed and create-animal UI come next.
 
 ## Docs
 
@@ -11,6 +11,7 @@ Mobile app (iOS / Android) for coordinating help for homeless and abandoned anim
 - [Database schema](docs/DATABASE_SCHEMA.md)
 - [Screens & flows](docs/SCREENS.md)
 - [Development roadmap](docs/DEVELOPMENT_ROADMAP.md)
+- [Supabase setup](docs/SUPABASE_SETUP.md)
 
 ## Requirements
 
@@ -43,8 +44,8 @@ Fill `.env` with your Supabase **URL** and **anon** key (never use the service r
 ## Project structure
 
 ```
-app/                 # Expo Router (minimal shell)
-src/features/        # Domain modules (empty placeholders)
+app/                 # Expo Router (auth + home shell)
+src/features/        # Domain modules (auth, profile, …)
 src/shared/          # Shared UI / utils / types
 src/services/        # Supabase client skeleton
 src/store/           # Zustand

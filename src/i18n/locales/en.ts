@@ -14,12 +14,67 @@ export const en = {
   },
   shell: {
     title: 'PawLink',
-    subtitle: 'Foundation ready. Product screens come after architecture review.',
+    subtitle: 'Browse cases as a guest. Sign in to create listings or offer help.',
+    browseHint: 'Feed screens come next — auth and schema are ready.',
+    createCta: 'Create listing',
+    profileCta: 'Profile',
+    signInCta: 'Sign in',
+    signUpCta: 'Sign up',
+    configured: 'Supabase connected',
+    notConfigured: 'Add EXPO_PUBLIC_SUPABASE_URL and ANON_KEY to .env',
+  },
+  auth: {
+    signInTitle: 'Sign in',
+    signUpTitle: 'Create account',
+    resetTitle: 'Reset password',
+    email: 'Email',
+    password: 'Password',
+    displayName: 'Display name',
+    city: 'City',
+    signIn: 'Sign in',
+    signUp: 'Sign up',
+    signOut: 'Sign out',
+    forgotPassword: 'Forgot password?',
+    noAccount: 'No account?',
+    hasAccount: 'Already have an account?',
+    checkEmail: 'Check your email to confirm the account, then sign in.',
+    resetHint: 'Enter your email and we will send a reset link.',
+    resetSent: 'If that email exists, a reset link is on the way.',
+    sendReset: 'Send reset link',
+    backToSignIn: 'Back to sign in',
+    newPasswordHint: 'Choose a new password for your account.',
+    newPassword: 'New password',
+    confirmPassword: 'Confirm password',
+    savePassword: 'Save password',
+    errors: {
+      notConfigured: 'Supabase is not configured. Check your .env file.',
+      invalidCredentials: 'Invalid email or password.',
+      emailTaken: 'An account with this email already exists.',
+      emailNotConfirmed: 'Confirm your email before signing in.',
+      weakPassword: 'Password must be at least 6 characters.',
+      invalidEmail: 'Enter a valid email address.',
+      displayNameRequired: 'Display name is required.',
+      passwordMismatch: 'Passwords do not match.',
+      rateLimited: 'Too many attempts. Try again later.',
+      generic: 'Something went wrong. Please try again.',
+    },
+  },
+  profile: {
+    title: 'Your profile',
+    skills: 'Skills',
+    skillsPlaceholder: 'transport, foster, vet…',
+    contactPhone: 'Contact phone (private)',
+    contactNote: 'Contact note (private)',
+    contactNotePlaceholder: 'Telegram @username, etc.',
+    saved: 'Profile saved.',
+    deleteAccount: 'Delete account',
+    deleteHint: 'Deletes personal data and keeps rescue history anonymized.',
+  },
+  create: {
+    title: 'Create listing',
+    gated: 'Sign in to create an animal listing. Guest browse stays open on the feed.',
+    placeholder: 'Animal create form arrives in the next feature slice.',
   },
 };
 
-export type TranslationResources = {
-  [K in keyof typeof en]: {
-    [P in keyof (typeof en)[K]]: string;
-  };
-};
+export type TranslationResources = typeof en;
