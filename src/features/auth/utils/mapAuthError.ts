@@ -4,6 +4,10 @@ import { AuthConfigError } from '../api/authApi';
  * Maps Supabase / auth errors to i18n keys under `auth.errors.*`.
  */
 export function mapAuthError(error: unknown): string {
+  if (__DEV__) {
+    console.warn('[auth]', error);
+  }
+
   if (error instanceof AuthConfigError) {
     return 'auth.errors.notConfigured';
   }
