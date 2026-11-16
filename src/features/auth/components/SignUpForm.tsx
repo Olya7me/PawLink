@@ -1,17 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native';
 
 import { Button } from '@/shared/components/Button';
+import { InlineMessage } from '@/shared/components/InlineMessage';
 import { TextField } from '@/shared/components/TextField';
-import { colors, spacing, typography } from '@/theme';
 
 import { signUpWithPassword } from '../api/authApi';
 import { signUpSchema, type SignUpInput } from '../schemas/authSchemas';
 import { mapAuthError } from '../utils/mapAuthError';
+import { AuthFormFooter } from './AuthFormFooter';
 
 export function SignUpForm() {
   const { t } = useTranslation();
@@ -105,43 +106,10 @@ export function SignUpForm() {
           />
         )}
       />
-      {formError ? <Text style={styles.error}>{formError}</Text> : null}
-      {info ? <Text style={styles.info}>{info}</Text> : null}
+      {formError ? <InlineMessage message={formError} /> : null}
+      {info ? <InlineMessage message={info} tone="info" /> : null}
       <Button label={t('auth.signUp')} loading={isSubmitting} onPress={() => void onSubmit()} />
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>{t('auth.hasAccount')}</Text>
-        <Link href="/sign-in" style={styles.linkInline}>
-          {t('auth.signIn')}
-        </Link>
-      </View>
+      <AuthFormFooter prompt={t('auth.hasAccount')} linkLabel={t('auth.signIn')} href="/sign-in" />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  error: {
-    color: colors.danger,
-    marginBottom: spacing.md,
-    fontSize: typography.size.sm,
-  },
-  info: {
-    color: colors.success,
-    marginBottom: spacing.md,
-    fontSize: typography.size.sm,
-  },
-  footer: {
-    marginTop: spacing.lg,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: spacing.xs,
-  },
-  footerText: {
-    color: colors.textSecondary,
-    fontSize: typography.size.sm,
-  },
-  linkInline: {
-    color: colors.accent,
-    fontSize: typography.size.sm,
-    fontWeight: '600',
-  },
-});

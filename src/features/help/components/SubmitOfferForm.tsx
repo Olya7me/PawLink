@@ -4,16 +4,17 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { useAuth } from '@/features/auth';
 import { mapAuthError } from '@/features/auth/utils/mapAuthError';
 import { Button } from '@/shared/components/Button';
+import { InlineMessage } from '@/shared/components/InlineMessage';
 import { TextField } from '@/shared/components/TextField';
-import { colors, spacing, typography } from '@/theme';
 
 import { submitHelpOffer } from '../api/helpApi';
 import { submitOfferSchema, type SubmitOfferInput } from '../schemas/offerSchemas';
+import { styles } from './SubmitOfferForm.styles';
 
 type SubmitOfferFormProps = {
   requestId: string;
@@ -93,7 +94,7 @@ export function SubmitOfferForm({ requestId }: SubmitOfferFormProps) {
         )}
       />
       <Text style={styles.privacy}>{t('help.offer.meetupPrivacy')}</Text>
-      {formError ? <Text style={styles.error}>{formError}</Text> : null}
+      {formError ? <InlineMessage message={formError} /> : null}
       <Button
         label={t('help.offer.submit')}
         loading={isSubmitting}
@@ -102,27 +103,3 @@ export function SubmitOfferForm({ requestId }: SubmitOfferFormProps) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  hint: {
-    fontSize: typography.size.md,
-    color: colors.textSecondary,
-    marginBottom: spacing.lg,
-    lineHeight: typography.size.md * typography.lineHeight.normal,
-  },
-  multiline: {
-    minHeight: 96,
-    textAlignVertical: 'top',
-  },
-  privacy: {
-    fontSize: typography.size.sm,
-    color: colors.textMuted,
-    marginBottom: spacing.lg,
-    marginTop: -spacing.sm,
-  },
-  error: {
-    color: colors.danger,
-    marginBottom: spacing.md,
-    fontSize: typography.size.sm,
-  },
-});

@@ -2,13 +2,16 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import { useAuth } from '@/features/auth';
 import { mapAuthError } from '@/features/auth/utils/mapAuthError';
 import { Button } from '@/shared/components/Button';
+import { ErrorRetry } from '@/shared/components/ErrorRetry';
+import { InlineMessage } from '@/shared/components/InlineMessage';
+import { LoadingBlock } from '@/shared/components/LoadingBlock';
+import { Section } from '@/shared/components/Section';
 import type { HelpRequestStatus } from '@/shared/types/domain';
-import { colors, radii, spacing, typography } from '@/theme';
 
 import {
   getAnimalCityForRequest,
@@ -17,6 +20,7 @@ import {
   withdrawHelpOffer,
 } from '../api/helpApi';
 import { ContactMeetupPanel } from './ContactMeetupPanel';
+import { styles } from './HelpRequestDetailView.styles';
 import { OfferList } from './OfferList';
 
 type HelpRequestDetailViewProps = {
@@ -64,18 +68,17 @@ export function HelpRequestDetailView({ requestId }: HelpRequestDetailViewProps)
   });
 
   if (detailQuery.isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator color={colors.accent} />
-      </View>
-    );
+    return <LoadingBlock fill />;
   }
 
   if (detailQuery.isError) {
     return (
       <View style={styles.padded}>
-        <Text style={styles.error}>{t('help.detail.error')}</Text>
-        <Button label={t('common.retry')} onPress={() => void detailQuery.refetch()} />
+        <ErrorRetry
+          message={t('help.detail.error')}
+          retryLabel={t('common.retry')}
+          onRetry={() => void detailQuery.refetch()}
+        />
       </View>
     );
   }
@@ -84,7 +87,7 @@ export function HelpRequestDetailView({ requestId }: HelpRequestDetailViewProps)
   if (!detail) {
     return (
       <View style={styles.padded}>
-        <Text style={styles.error}>{t('help.detail.notFound')}</Text>
+        <InlineMessage message={t('help.detail.notFound')} style={styles.inlineError} />
       </View>
     );
   }
@@ -130,31 +133,29 @@ export function HelpRequestDetailView({ requestId }: HelpRequestDetailViewProps)
       </Text>
 
       {detail.description ? (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t('help.detail.description')}</Text>
+        <Section title={t('help.detail.description')}>
           <Text style={styles.sectionBody}>{detail.description}</Text>
-        </View>
+        </Section>
       ) : null}
 
       {!isAuthenticated && detail.status === 'open' ? (
-        <View style={styles.section}>
+        <Section>
           <Text style={styles.muted}>{t('help.detail.signInToOffer')}</Text>
           <Button label={t('shell.signInCta')} onPress={() => router.push('/sign-in')} />
-        </View>
+        </Section>
       ) : null}
 
       {canOffer ? (
-        <View style={styles.section}>
+        <Section>
           <Button
             label={t('help.detail.offerCta')}
             onPress={() => router.push(`/requests/${requestId}/offer`)}
           />
-        </View>
+        </Section>
       ) : null}
 
       {hasPendingOffer && detail.my_offer ? (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t('help.detail.yourOffer')}</Text>
+        <Section title={t('help.detail.yourOffer')}>
           <Text style={styles.status}>{t(`help.offerStatus.${detail.my_offer.status}`)}</Text>
           {detail.my_offer.message ? (
             <Text style={styles.sectionBody}>{detail.my_offer.message}</Text>
@@ -165,14 +166,13 @@ export function HelpRequestDetailView({ requestId }: HelpRequestDetailViewProps)
             loading={withdrawMutation.isPending}
             onPress={() => withdrawMutation.mutate(detail.my_offer!.id)}
           />
-        </View>
+        </Section>
       ) : null}
 
       {detail.my_offer && detail.my_offer.status === 'accepted' ? (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t('help.detail.yourOffer')}</Text>
+        <Section title={t('help.detail.yourOffer')}>
           <Text style={styles.status}>{t('help.offerStatus.accepted')}</Text>
-        </View>
+        </Section>
       ) : null}
 
       <OfferList
@@ -182,19 +182,18 @@ export function HelpRequestDetailView({ requestId }: HelpRequestDetailViewProps)
       />
 
       {detail.accepted_offer ? (
-        <View style={styles.section}>
+        <Section>
           <ContactMeetupPanel
             acceptedOffer={detail.accepted_offer}
             peerProfileId={peerProfileId}
             canViewPrivate={canViewPrivate}
           />
-        </View>
+        </Section>
       ) : null}
 
       {(isAuthor || isAssignee) &&
       (detail.status === 'accepted' || detail.status === 'in_progress') ? (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t('help.detail.updateStatus')}</Text>
+        <Section title={t('help.detail.updateStatus')}>
           {detail.status === 'accepted' ? (
             <Button
               label={t('help.detail.markInProgress')}
@@ -217,86 +216,21 @@ export function HelpRequestDetailView({ requestId }: HelpRequestDetailViewProps)
               onPress={() => statusMutation.mutate('cancelled')}
             />
           ) : null}
-        </View>
+        </Section>
       ) : null}
 
       {isAuthor && detail.status === 'open' ? (
-        <View style={styles.section}>
+        <Section>
           <Button
             label={t('help.detail.cancelRequest')}
             variant="secondary"
             loading={statusMutation.isPending}
             onPress={() => statusMutation.mutate('cancelled')}
           />
-        </View>
+        </Section>
       ) : null}
 
-      {actionError ? <Text style={styles.error}>{actionError}</Text> : null}
+      {actionError ? <InlineMessage message={actionError} style={styles.inlineError} /> : null}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  body: {
-    padding: spacing.lg,
-    gap: spacing.sm,
-    paddingBottom: spacing.xxl,
-  },
-  centered: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: spacing.xl,
-  },
-  padded: {
-    padding: spacing.lg,
-  },
-  animalLink: {
-    fontSize: typography.size.sm,
-    color: colors.accent,
-    marginBottom: spacing.xs,
-  },
-  title: {
-    fontSize: typography.size.xl,
-    fontWeight: '700',
-    color: colors.text,
-  },
-  status: {
-    fontSize: typography.size.sm,
-    color: colors.accentPressed,
-  },
-  meta: {
-    fontSize: typography.size.sm,
-    color: colors.textMuted,
-  },
-  section: {
-    marginTop: spacing.md,
-    gap: spacing.sm,
-  },
-  sectionTitle: {
-    fontSize: typography.size.md,
-    fontWeight: '700',
-    color: colors.text,
-  },
-  sectionBody: {
-    fontSize: typography.size.md,
-    color: colors.text,
-    lineHeight: typography.size.md * typography.lineHeight.normal,
-  },
-  muted: {
-    color: colors.textMuted,
-    fontSize: typography.size.sm,
-  },
-  error: {
-    color: colors.danger,
-    marginTop: spacing.sm,
-    fontSize: typography.size.sm,
-  },
-  card: {
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radii.md,
-    padding: spacing.md,
-  },
-});

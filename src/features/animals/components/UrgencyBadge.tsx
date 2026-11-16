@@ -1,7 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import type { UrgencyLevel } from '@/shared/types/domain';
-import { colors, radii, spacing, typography } from '@/theme';
+import { colors } from '@/theme';
+
+import { styles } from './UrgencyBadge.styles';
 
 const TONE: Record<UrgencyLevel, { bg: string; fg: string }> = {
   low: { bg: colors.surfaceMuted, fg: colors.textSecondary },
@@ -23,16 +25,3 @@ export function UrgencyBadge({ level, label }: UrgencyBadgeProps) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  badge: {
-    alignSelf: 'flex-start',
-    borderRadius: radii.sm,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-  },
-  label: {
-    fontSize: typography.size.xs,
-    fontWeight: '600',
-  },
-});

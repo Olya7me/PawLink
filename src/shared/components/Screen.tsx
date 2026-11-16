@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
-import { SafeAreaView, StyleSheet, View, type ViewStyle } from 'react-native';
+import { SafeAreaView, View, type ViewStyle } from 'react-native';
 
-import { colors, spacing } from '@/theme';
+import { styles } from './Screen.styles';
 
 type ScreenProps = {
   children: ReactNode;
@@ -15,15 +15,3 @@ export function Screen({ children, style }: ScreenProps) {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.xl,
-  },
-});

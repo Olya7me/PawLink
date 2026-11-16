@@ -3,15 +3,17 @@ import { Link, router } from 'expo-router';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native';
 
 import { Button } from '@/shared/components/Button';
+import { InlineMessage } from '@/shared/components/InlineMessage';
 import { TextField } from '@/shared/components/TextField';
-import { colors, spacing, typography } from '@/theme';
 
 import { signInWithPassword } from '../api/authApi';
 import { signInSchema, type SignInInput } from '../schemas/authSchemas';
 import { mapAuthError } from '../utils/mapAuthError';
+import { AuthFormFooter } from './AuthFormFooter';
+import { styles } from './SignInForm.styles';
 
 export function SignInForm() {
   const { t } = useTranslation();
@@ -70,46 +72,12 @@ export function SignInForm() {
           />
         )}
       />
-      {formError ? <Text style={styles.error}>{formError}</Text> : null}
+      {formError ? <InlineMessage message={formError} /> : null}
       <Button label={t('auth.signIn')} loading={isSubmitting} onPress={() => void onSubmit()} />
       <Link href="/reset-password" style={styles.link}>
         {t('auth.forgotPassword')}
       </Link>
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>{t('auth.noAccount')}</Text>
-        <Link href="/sign-up" style={styles.linkInline}>
-          {t('auth.signUp')}
-        </Link>
-      </View>
+      <AuthFormFooter prompt={t('auth.noAccount')} linkLabel={t('auth.signUp')} href="/sign-up" />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  error: {
-    color: colors.danger,
-    marginBottom: spacing.md,
-    fontSize: typography.size.sm,
-  },
-  link: {
-    marginTop: spacing.md,
-    color: colors.accent,
-    fontSize: typography.size.sm,
-    textAlign: 'center',
-  },
-  footer: {
-    marginTop: spacing.lg,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: spacing.xs,
-  },
-  footerText: {
-    color: colors.textSecondary,
-    fontSize: typography.size.sm,
-  },
-  linkInline: {
-    color: colors.accent,
-    fontSize: typography.size.sm,
-    fontWeight: '600',
-  },
-});

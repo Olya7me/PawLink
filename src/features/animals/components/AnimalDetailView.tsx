@@ -1,22 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import {
-  ActivityIndicator,
-  Dimensions,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@/shared/components/Button';
-import { colors, radii, spacing, typography } from '@/theme';
+import { ErrorRetry } from '@/shared/components/ErrorRetry';
+import { InlineMessage } from '@/shared/components/InlineMessage';
+import { LoadingBlock } from '@/shared/components/LoadingBlock';
+import { Section } from '@/shared/components/Section';
+import { SurfaceCard } from '@/shared/components/SurfaceCard';
 
 import { getAnimalById } from '../api/animalsApi';
 import { getAnimalPhotoPublicUrls } from '../utils/photoUrls';
+import { styles } from './AnimalDetailView.styles';
 import { UrgencyBadge } from './UrgencyBadge';
 
 type AnimalDetailViewProps = {
@@ -31,18 +27,17 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
   });
 
   if (detailQuery.isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator color={colors.accent} />
-      </View>
-    );
+    return <LoadingBlock fill />;
   }
 
   if (detailQuery.isError) {
     return (
       <View style={styles.padded}>
-        <Text style={styles.error}>{t('animals.detail.error')}</Text>
-        <Button label={t('common.retry')} onPress={() => void detailQuery.refetch()} />
+        <ErrorRetry
+          message={t('animals.detail.error')}
+          retryLabel={t('common.retry')}
+          onRetry={() => void detailQuery.refetch()}
+        />
       </View>
     );
   }
@@ -51,7 +46,7 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
   if (!animal) {
     return (
       <View style={styles.padded}>
-        <Text style={styles.error}>{t('animals.detail.notFound')}</Text>
+        <InlineMessage message={t('animals.detail.notFound')} style={styles.inlineError} />
       </View>
     );
   }
@@ -94,21 +89,18 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
         </Text>
 
         {animal.description ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>{t('animals.fields.description')}</Text>
+          <Section title={t('animals.fields.description')}>
             <Text style={styles.sectionBody}>{animal.description}</Text>
-          </View>
+          </Section>
         ) : null}
 
         {animal.condition_notes ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>{t('animals.fields.condition')}</Text>
+          <Section title={t('animals.fields.condition')}>
             <Text style={styles.sectionBody}>{animal.condition_notes}</Text>
-          </View>
+          </Section>
         ) : null}
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t('animals.detail.helpRequests')}</Text>
+        <Section title={t('animals.detail.helpRequests')}>
           {animal.help_requests.length === 0 ? (
             <Text style={styles.muted}>{t('animals.detail.helpRequestsEmpty')}</Text>
           ) : (
@@ -116,124 +108,24 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
               <Pressable
                 key={request.id}
                 accessibilityRole="button"
-                style={({ pressed }) => [styles.requestCard, pressed ? styles.requestPressed : null]}
+                style={({ pressed }) => [pressed ? styles.requestPressed : null]}
                 onPress={() => router.push(`/requests/${request.id}`)}
               >
-                <Text style={styles.requestTitle}>{t(`animals.helpType.${request.help_type}`)}</Text>
-                <Text style={styles.requestStatus}>
-                  {t(`animals.helpRequestStatus.${request.status}`)}
-                </Text>
-                {request.description ? (
-                  <Text style={styles.sectionBody}>{request.description}</Text>
-                ) : null}
-                <Text style={styles.requestCta}>{t('animals.detail.openRequest')}</Text>
+                <SurfaceCard>
+                  <Text style={styles.requestTitle}>{t(`animals.helpType.${request.help_type}`)}</Text>
+                  <Text style={styles.requestStatus}>
+                    {t(`animals.helpRequestStatus.${request.status}`)}
+                  </Text>
+                  {request.description ? (
+                    <Text style={styles.sectionBody}>{request.description}</Text>
+                  ) : null}
+                  <Text style={styles.requestCta}>{t('animals.detail.openRequest')}</Text>
+                </SurfaceCard>
               </Pressable>
             ))
           )}
-        </View>
+        </Section>
       </View>
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  content: {
-    paddingBottom: spacing.xxl,
-  },
-  centered: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: spacing.xl,
-  },
-  padded: {
-    padding: spacing.lg,
-  },
-  hero: {
-    width: Dimensions.get('window').width,
-    height: 240,
-    backgroundColor: colors.surfaceMuted,
-  },
-  heroPlaceholder: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  body: {
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
-    gap: spacing.sm,
-  },
-  titleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: spacing.sm,
-  },
-  title: {
-    flex: 1,
-    fontSize: typography.size.xl,
-    fontWeight: '700',
-    color: colors.text,
-  },
-  meta: {
-    fontSize: typography.size.md,
-    color: colors.textSecondary,
-  },
-  status: {
-    fontSize: typography.size.sm,
-    color: colors.textMuted,
-  },
-  author: {
-    fontSize: typography.size.sm,
-    color: colors.textSecondary,
-  },
-  section: {
-    marginTop: spacing.md,
-    gap: spacing.sm,
-  },
-  sectionTitle: {
-    fontSize: typography.size.md,
-    fontWeight: '700',
-    color: colors.text,
-  },
-  sectionBody: {
-    fontSize: typography.size.md,
-    color: colors.text,
-    lineHeight: typography.size.md * typography.lineHeight.normal,
-  },
-  requestCard: {
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radii.md,
-    padding: spacing.md,
-    gap: spacing.xs,
-  },
-  requestTitle: {
-    fontSize: typography.size.md,
-    fontWeight: '600',
-    color: colors.text,
-  },
-  requestStatus: {
-    fontSize: typography.size.sm,
-    color: colors.accentPressed,
-  },
-  requestCta: {
-    marginTop: spacing.xs,
-    fontSize: typography.size.sm,
-    fontWeight: '600',
-    color: colors.accent,
-  },
-  requestPressed: {
-    opacity: 0.88,
-  },
-  muted: {
-    color: colors.textMuted,
-    fontSize: typography.size.sm,
-  },
-  error: {
-    color: colors.danger,
-    marginBottom: spacing.md,
-    fontSize: typography.size.sm,
-  },
-});

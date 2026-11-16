@@ -1,6 +1,6 @@
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
-import { colors, radii, spacing, typography } from '@/theme';
+import { styles } from './ChipGroup.styles';
 
 type ChipOption<T extends string> = {
   value: T;
@@ -58,40 +58,7 @@ export function ChipGroup<T extends string>({
           </Pressable>
         );
       })}
-      {!multiple && allowClear && value ? (
-        <View style={styles.spacer} />
-      ) : null}
+      {!multiple && allowClear && value ? <View style={styles.spacer} /> : null}
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    gap: spacing.sm,
-    paddingVertical: spacing.xs,
-  },
-  chip: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    borderRadius: radii.full,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  chipActive: {
-    backgroundColor: colors.accentSoft,
-    borderColor: colors.accent,
-  },
-  label: {
-    color: colors.textSecondary,
-    fontSize: typography.size.sm,
-    fontWeight: '500',
-  },
-  labelActive: {
-    color: colors.accentPressed,
-  },
-  spacer: {
-    width: spacing.xs,
-  },
-});
