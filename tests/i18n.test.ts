@@ -46,5 +46,15 @@ describe('i18n locales', () => {
     expect(en.animals.feed.subtitleSignedIn).toBeTruthy();
     expect(ru.animals.feed.subtitleGuest).toBeTruthy();
   });
+
+  it('includes help FAQ and maps tab strings', () => {
+    expect(en.tabs.help).toBeTruthy();
+    expect(ru.tabs.maps).toBeTruthy();
+    expect(en.faq.items.guestBrowse.question).toBeTruthy();
+    expect(ru.faq.items.cityOnly.answer).toBeTruthy();
+    expect(en.maps.soonTitle).toBeTruthy();
+    expect(ru.maps.soonBody).toBeTruthy();
+  });
 });
+
 
