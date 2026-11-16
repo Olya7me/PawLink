@@ -358,6 +358,22 @@ export type Database = {
         Args: { p_profile_id: string };
         Returns: { contact_phone: string | null; contact_note: string | null }[];
       };
+      accept_help_offer: {
+        Args: { p_offer_id: string; p_meetup_details?: string | null };
+        Returns: Database['public']['Tables']['help_offers']['Row'];
+      };
+      reject_help_offer: {
+        Args: { p_offer_id: string };
+        Returns: Database['public']['Tables']['help_offers']['Row'];
+      };
+      withdraw_help_offer: {
+        Args: { p_offer_id: string };
+        Returns: Database['public']['Tables']['help_offers']['Row'];
+      };
+      set_help_request_status: {
+        Args: { p_request_id: string; p_status: HelpRequestStatus };
+        Returns: Database['public']['Tables']['help_requests']['Row'];
+      };
     };
     Enums: {
       animal_species: AnimalSpecies;
@@ -380,4 +396,7 @@ export type Animal = Database['public']['Tables']['animals']['Row'];
 export type AnimalInsert = Database['public']['Tables']['animals']['Insert'];
 export type HelpRequest = Database['public']['Tables']['help_requests']['Row'];
 export type HelpRequestInsert = Database['public']['Tables']['help_requests']['Insert'];
+export type HelpOffer = Database['public']['Tables']['help_offers']['Row'];
+export type HelpOfferInsert = Database['public']['Tables']['help_offers']['Insert'];
 export type PublicProfile = Database['public']['Views']['profiles_public']['Row'];
+export type SafeHelpOfferRow = Database['public']['Views']['help_offers_safe']['Row'];

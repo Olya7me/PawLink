@@ -32,4 +32,10 @@ describe('i18n locales', () => {
     expect(en.create.subtitle).toBeTruthy();
     expect(ru.animals.helpType.permanent_home).toBeTruthy();
   });
+
+  it('includes help coordination strings', () => {
+    expect(en.help.offer.submit).toBeTruthy();
+    expect(ru.help.offers.accept).toBeTruthy();
+    expect(en.help.contact.title).toBeTruthy();
+  });
 });
