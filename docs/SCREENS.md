@@ -1,6 +1,6 @@
 # PawLink — Screens & Navigation
 
-Auth, guest **Feed**, **Animal Detail**, and auth-gated **Create listing** are implemented. Offers / hub / notifications remain designed here until their feature slices.
+Auth, guest **Feed**, **Animal Detail**, auth-gated **Create listing**, and **Help coordination** (request detail, submit offer, author accept/reject, post-accept contact) are implemented. Hub / notifications / reports remain designed here until their feature slices.
 
 Guest access (locked): unauthenticated users can open **Feed** and **Animal Detail**. Create, offers, and personal areas require auth.
 
@@ -98,6 +98,15 @@ Authenticated (tabs)
 - Chat threads  
 - Admin moderation console  
 - Dark mode settings  
+
+## Implemented help routes
+
+| Route | Screen |
+|-------|--------|
+| `/requests/[requestId]` | Help Request Detail (guest read; offer / author actions when signed in) |
+| `/requests/[requestId]/offer` | Submit Offer (auth) |
+
+Animal detail links each help request into `/requests/[requestId]`.
 
 ## Implementation note
 

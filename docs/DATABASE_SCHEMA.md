@@ -87,6 +87,8 @@ Indexes: `(animal_id)`, `(status)`, `(help_type)`, `(assignee_id)`.
 Unique partial index: one pending offer per `(help_request_id, offerer_id)`.  
 Partial unique index: at most one accepted offer per `help_request_id`.
 
+**Coordination RPCs** (migration `00004`): `accept_help_offer`, `reject_help_offer`, `withdraw_help_offer`, `set_help_request_status`. Prefer these over ad-hoc multi-row client updates so accept is atomic (sets assignee, rejects other pending offers, updates request status). Read offers via `help_offers_safe` so `meetup_details` is masked until accept.
+
 ### `animal_updates`
 
 Timeline / rescue history (retained after anonymization).

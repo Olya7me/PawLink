@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { Image } from 'expo-image';
+import { router } from 'expo-router';
 import {
   ActivityIndicator,
   Dimensions,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -111,7 +113,12 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
             <Text style={styles.muted}>{t('animals.detail.helpRequestsEmpty')}</Text>
           ) : (
             animal.help_requests.map((request) => (
-              <View key={request.id} style={styles.requestCard}>
+              <Pressable
+                key={request.id}
+                accessibilityRole="button"
+                style={({ pressed }) => [styles.requestCard, pressed ? styles.requestPressed : null]}
+                onPress={() => router.push(`/requests/${request.id}`)}
+              >
                 <Text style={styles.requestTitle}>{t(`animals.helpType.${request.help_type}`)}</Text>
                 <Text style={styles.requestStatus}>
                   {t(`animals.helpRequestStatus.${request.status}`)}
@@ -119,7 +126,8 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
                 {request.description ? (
                   <Text style={styles.sectionBody}>{request.description}</Text>
                 ) : null}
-              </View>
+                <Text style={styles.requestCta}>{t('animals.detail.openRequest')}</Text>
+              </Pressable>
             ))
           )}
         </View>
@@ -209,6 +217,15 @@ const styles = StyleSheet.create({
   requestStatus: {
     fontSize: typography.size.sm,
     color: colors.accentPressed,
+  },
+  requestCta: {
+    marginTop: spacing.xs,
+    fontSize: typography.size.sm,
+    fontWeight: '600',
+    color: colors.accent,
+  },
+  requestPressed: {
+    opacity: 0.88,
   },
   muted: {
     color: colors.textMuted,

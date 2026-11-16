@@ -7,6 +7,7 @@ export type {
   AnimalSpecies,
   AnimalStatus,
   AnimalUpdateEventType,
+  HelpOffer,
   HelpOfferStatus,
   HelpRequest,
   HelpRequestStatus,

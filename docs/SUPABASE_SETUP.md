@@ -20,13 +20,14 @@ Use the **anon** key only. Do not put the service role key in the app or in git.
 ### Option A — Supabase SQL Editor (recommended for MVP)
 
 1. Open [Supabase Dashboard](https://supabase.com/dashboard) → your project → **SQL Editor**.
-2. Run the three files **in order**, each as a separate query (or paste them one after another in one run):
+2. Run the migration files **in order**, each as a separate query (or paste them one after another in one run):
 
 | Order | File |
 |------:|------|
 | 1 | [`supabase/migrations/00001_schema.sql`](../supabase/migrations/00001_schema.sql) |
 | 2 | [`supabase/migrations/00002_rls.sql`](../supabase/migrations/00002_rls.sql) |
 | 3 | [`supabase/migrations/00003_storage_and_anonymize.sql`](../supabase/migrations/00003_storage_and_anonymize.sql) |
+| 4 | [`supabase/migrations/00004_help_coordination_rpcs.sql`](../supabase/migrations/00004_help_coordination_rpcs.sql) — required for accept/reject/withdraw offers and status transitions |
 
 3. Confirm under **Table Editor** that `profiles`, `animals`, `help_requests`, `help_offers`, `animal_updates`, `notifications`, and `reports` exist.
 4. Confirm under **Storage** that buckets `animal-photos` and `avatars` exist.
@@ -65,3 +66,8 @@ The repo already includes hand-written types aligned with these migrations.
 - Column protection for `contact_*` and `meetup_details` (RPC / safe views)
 - Storage buckets + size/MIME limits
 - `anonymize_account()` for account deletion
+- Help coordination RPCs (`accept_help_offer`, `reject_help_offer`, `withdraw_help_offer`, `set_help_request_status`) and a fixed `help_offers_safe` view
+
+### Already applied 00001–00003?
+
+If your project already ran the first three migrations, run **only** [`00004_help_coordination_rpcs.sql`](../supabase/migrations/00004_help_coordination_rpcs.sql) in the SQL Editor.
