@@ -60,6 +60,12 @@ describe('i18n locales', () => {
     expect(en.maps.soonTitle).toBeTruthy();
     expect(ru.maps.soonBody).toBeTruthy();
   });
+
+  it('includes notifications chrome strings', () => {
+    expect(en.notifications.title).toBeTruthy();
+    expect(ru.notifications.markAllRead).toBeTruthy();
+    expect(en.notifications.bellUnread).toContain('{{count}}');
+  });
 });
 
 

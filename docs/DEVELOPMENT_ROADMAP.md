@@ -37,8 +37,8 @@ See also [PRODUCT_SPEC.md](./PRODUCT_SPEC.md), [ARCHITECTURE.md](./ARCHITECTURE.
 2. Create animal + help requests (with photo limits) — done  
 3. Guest-readable feed + filters + animal detail (public fields) — done  
 4. Offers (author accept/reject; post-accept contact reveal) — done  
-5. Personal area (tabs: feed + my activity / listings / offers) — in this slice  
-6. In-app notifications  
+5. Personal area (tabs: feed + my activity / listings / offers) — done  
+6. In-app notifications — done (no push yet)  
 7. Reports (store only)  
 8. Polish, EAS preview builds  
 9. Push notifications (optional stretch)  
@@ -65,15 +65,15 @@ See also [PRODUCT_SPEC.md](./PRODUCT_SPEC.md), [ARCHITECTURE.md](./ARCHITECTURE.
 4. Configure Auth redirect URLs for password reset  
 5. (Optional) EAS project + `eas.json`  
 
-## Out of scope in tab-navigation PR
+## Out of scope in notifications PR
 
-- In-app notifications  
+- Push notifications (Expo Notifications)  
 - Reports UI  
 - Photo replace on edit  
 - Fake seed data  
 - Production EAS submit  
 
-## Manual setup after this slice
+## Manual setup after notifications slice
 
-1. Ensure migrations `00001`–`00004` are applied (see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)).  
-2. Smoke-test tabs, safe-area header, profile icon, My activity create/edit, and offer list on Android emulator.
+1. Apply migration `00008_in_app_notifications.sql` in SQL Editor if not already (see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)).  
+2. Smoke-test: new offer → author inbox; accept/reject → offerer; status change → peer; bell badge + mark read + deep-link.

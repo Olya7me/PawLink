@@ -18,6 +18,16 @@ export const styles = StyleSheet.create({
     paddingBottom: spacing.xxl,
     gap: spacing.md,
   },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: spacing.md,
+  },
+  titleBlock: {
+    flex: 1,
+    gap: spacing.xs,
+  },
   title: {
     fontSize: typography.size.xl,
     fontWeight: '700',

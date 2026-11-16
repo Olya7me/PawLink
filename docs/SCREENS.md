@@ -1,6 +1,6 @@
 # PawLink — Screens & Navigation
 
-Auth, guest **Feed**, **Animal Detail**, auth-gated **Create listing**, **My activity**, **Help** FAQ (from Supabase `faq_items`), **Maps** placeholder (copy from `app_copy`), filter catalogs / photo limits from Supabase (`lookup_options`, `app_config`), and **Help coordination** (request detail, submit offer, author accept/reject, post-accept contact) are implemented. Notifications / reports remain designed here until their feature slices.
+Auth, guest **Feed**, **Animal Detail**, auth-gated **Create listing**, **My activity**, **Help** FAQ (from Supabase `faq_items`), **Maps** placeholder (copy from `app_copy`), filter catalogs / photo limits from Supabase (`lookup_options`, `app_config`), **Help coordination**, and **in-app notifications** (inbox + unread badge; no push yet) are implemented. Reports remain designed here until their feature slice.
 
 Guest access (locked): unauthenticated users can open **Feed**, **Animal Detail**, **Help**, and **Maps**. Create, offers, edit, and personal areas require auth.
 
@@ -9,10 +9,10 @@ Guest access (locked): unauthenticated users can open **Feed**, **Animal Detail*
 ```
 Root Stack
 ├── (tabs) — bottom tabs
-│   ├── Feed — brand header + profile icon (signed-in) / sign-in (guest)
+│   ├── Feed — brand header + bell (unread badge) + profile icon (signed-in) / sign-in (guest)
 │   │   ├── Collapsible filters (city, species, urgency, help type, sort)
 │   │   └── Animal cards → Animal Detail (stack)
-│   ├── My activity — auth-aware
+│   ├── My activity — auth-aware (+ bell)
 │   │   ├── Create publication CTA
 │   │   ├── Favorites (Избранное) → Animal Detail
 │   │   ├── My publications (open / edit)
@@ -24,7 +24,8 @@ Root Stack
 │   └── Help requests → `/requests/[requestId]`
 ├── Edit listing `/animals/[id]/edit` (author, auth)
 ├── Create `/create` (auth)
-├── Profile `/profile` (auth) — opened from feed header icon
+├── Profile `/profile` (auth) — opened from feed header icon; link to Notifications
+├── Notifications `/notifications` (auth) — inbox; tap → request/animal; mark read
 ├── Help Request Detail `/requests/[requestId]`
 │   ├── Submit Offer (auth)
 │   ├── Offer List (author)
@@ -53,7 +54,8 @@ Root Stack
 | Offer List | Author reviews pending offers; accept one | Auth (author) |
 | Contact / meetup | Post-accept private details | Auth (author + assignee) |
 | New Animal | Media (≤5), details, city text, help types | Auth |
-| Profile View/Edit | Name, city, photo, skills | Auth |
+| Profile View/Edit | Name, city, photo, skills; link to notifications | Auth |
+| Notifications | In-app inbox; unread highlight; mark all read; deep-link to request/animal | Auth |
 | Not Found | Invalid route | Guest |
 
 ## Key user flows
@@ -80,14 +82,14 @@ Root Stack
 - Chat threads  
 - Admin moderation console  
 - Dark mode settings  
-- In-app notifications list (planned)  
+- Push notifications (Expo Notifications) — after in-app inbox  
 - Help feedback form (FAQ from Supabase this pass; no feedback form yet)  
 
 ### Backend content (editable without an app release)
 
 - **FAQ:** `faq_items` — migration `00005_faq_items.sql`; title/subtitle/empty/error stay in i18n.
 - **Filter catalogs:** `lookup_options` — migration `00006_remote_content.sql`; field chrome (`animals.filters.*`) stays in i18n.
-- **Marketing / empty copy:** `app_copy` (Maps soon, feed/activity empties) — same migration; tab titles stay in i18n.
+- **Marketing / empty copy:** `app_copy` (Maps soon, feed/activity empties, notification empty + templates) — migrations `00006`–`00008`; tab titles stay in i18n.
 - **Limits:** `app_config` (`max_animal_photos`, `max_photo_bytes`, `allowed_photo_mime_types`).
 - How to run / edit in Table Editor: [SUPABASE_SETUP.md](./SUPABASE_SETUP.md). Ownership rule: [ARCHITECTURE.md](./ARCHITECTURE.md#content--data-ownership-project-wide).
 

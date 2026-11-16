@@ -71,6 +71,16 @@ export const en = {
     addAccessibility: 'Add to favorites',
     removeAccessibility: 'Remove from favorites',
   },
+  notifications: {
+    title: 'Notifications',
+    subtitle: 'Offers and status updates that involve you.',
+    guestBody: 'Sign in to see your notifications.',
+    openInbox: 'Notifications',
+    markAllRead: 'Mark all read',
+    error: 'Could not load notifications.',
+    bellAccessibility: 'Notifications',
+    bellUnread: 'Notifications, {{count}} unread',
+  },
   auth: {
     signInTitle: 'Sign in',
     signUpTitle: 'Create account',

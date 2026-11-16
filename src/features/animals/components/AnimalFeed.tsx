@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '@/features/auth';
 import { useAppCopy } from '@/features/content';
+import { NotificationBellButton } from '@/features/notifications';
 import { Button } from '@/shared/components/Button';
 import { EmptyState } from '@/shared/components/EmptyState';
 import { ErrorRetry } from '@/shared/components/ErrorRetry';
@@ -46,13 +47,16 @@ export function AnimalFeed() {
             <Text style={styles.subtitle}>{subtitle}</Text>
           </View>
           {isAuthenticated ? (
-            <IconButton
-              icon="person-circle-outline"
-              accessibilityLabel={t('shell.profileCta')}
-              onPress={() => router.push('/profile')}
-              color={colors.accent}
-              size={28}
-            />
+            <View style={styles.headerActions}>
+              <NotificationBellButton />
+              <IconButton
+                icon="person-circle-outline"
+                accessibilityLabel={t('shell.profileCta')}
+                onPress={() => router.push('/profile')}
+                color={colors.accent}
+                size={28}
+              />
+            </View>
           ) : (
             <Button
               label={t('shell.signInCta')}

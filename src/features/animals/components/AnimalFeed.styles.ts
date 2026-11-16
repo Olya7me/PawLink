@@ -29,6 +29,11 @@ export const styles = StyleSheet.create({
     flex: 1,
     gap: spacing.xs,
   },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
   brand: {
     fontSize: typography.size.display,
     fontWeight: '700',

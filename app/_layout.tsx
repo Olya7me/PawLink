@@ -27,6 +27,7 @@ export default function RootLayout() {
         <Stack.Screen name="sign-up" options={{ title: 'Sign up' }} />
         <Stack.Screen name="reset-password" options={{ title: 'Reset password' }} />
         <Stack.Screen name="profile" options={{ title: 'Profile' }} />
+        <Stack.Screen name="notifications" options={{ title: 'Notifications' }} />
         <Stack.Screen name="create" options={{ title: 'Create' }} />
         <Stack.Screen name="+not-found" />
       </Stack>

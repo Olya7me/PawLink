@@ -17,6 +17,8 @@ describe('content fallbacks', () => {
   it('returns seeded app copy', () => {
     expect(fallbackAppCopy('maps.soonTitle', 'en')).toBe('Maps coming soon');
     expect(fallbackAppCopy('maps.soonTitle', 'ru')).toBe('Карты скоро');
+    expect(fallbackAppCopy('notifications.emptyTitle', 'en')).toBe('No notifications yet');
+    expect(fallbackAppCopy('notifications.offer_accepted.title', 'ru')).toBe('Ваш отклик приняли');
   });
 
   it('parses app_config rows with fallbacks', () => {
