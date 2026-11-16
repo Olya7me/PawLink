@@ -15,7 +15,7 @@ export default function CreateScreen() {
 
   if (isLoading || !isAuthenticated) {
     return (
-      <Screen style={styles.centered}>
+      <Screen style={styles.centered} edges={['left', 'right', 'bottom']}>
         <LoadingBlock message={t('create.gated')} />
       </Screen>
     );

@@ -15,7 +15,7 @@ export default function ProfileScreen() {
 
   if (isLoading || !isAuthenticated) {
     return (
-      <Screen style={styles.centered}>
+      <Screen style={styles.centered} edges={['left', 'right', 'bottom']}>
         <LoadingBlock />
       </Screen>
     );

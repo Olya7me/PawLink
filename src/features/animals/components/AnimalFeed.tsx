@@ -8,6 +8,7 @@ import { useAuth } from '@/features/auth';
 import { Button } from '@/shared/components/Button';
 import { EmptyState } from '@/shared/components/EmptyState';
 import { ErrorRetry } from '@/shared/components/ErrorRetry';
+import { IconButton } from '@/shared/components/IconButton';
 import { LoadingBlock } from '@/shared/components/LoadingBlock';
 import { isSupabaseConfigured } from '@/services/supabase';
 import { colors } from '@/theme';
@@ -30,42 +31,32 @@ export function AnimalFeed() {
     enabled: isSupabaseConfigured,
   });
 
+  const subtitle = isAuthenticated
+    ? t('animals.feed.subtitleSignedIn')
+    : t('animals.feed.subtitleGuest');
+
   const header = (
     <View>
       <View style={styles.topBar}>
-        <View style={styles.brandBlock}>
-          <Text style={styles.brand}>{t('app.name')}</Text>
-          <Text style={styles.subtitle}>{t('animals.feed.subtitle')}</Text>
-        </View>
-        <View style={styles.actions}>
+        <View style={styles.brandRow}>
+          <View style={styles.brandBlock}>
+            <Text style={styles.brand}>{t('app.name')}</Text>
+            <Text style={styles.subtitle}>{subtitle}</Text>
+          </View>
           {isAuthenticated ? (
-            <>
-              <Button
-                label={t('shell.createCta')}
-                onPress={() => router.push('/create')}
-                style={styles.actionButton}
-              />
-              <Button
-                label={t('shell.profileCta')}
-                variant="secondary"
-                onPress={() => router.push('/profile')}
-                style={styles.actionButton}
-              />
-            </>
+            <IconButton
+              icon="person-circle-outline"
+              accessibilityLabel={t('shell.profileCta')}
+              onPress={() => router.push('/profile')}
+              color={colors.accent}
+              size={28}
+            />
           ) : (
-            <>
-              <Button
-                label={t('shell.signInCta')}
-                onPress={() => router.push('/sign-in')}
-                style={styles.actionButton}
-              />
-              <Button
-                label={t('shell.createCta')}
-                variant="ghost"
-                onPress={() => router.push('/create')}
-                style={styles.actionButton}
-              />
-            </>
+            <Button
+              label={t('shell.signInCta')}
+              onPress={() => router.push('/sign-in')}
+              style={styles.signInButton}
+            />
           )}
         </View>
       </View>

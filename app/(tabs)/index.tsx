@@ -5,7 +5,7 @@ import { styles } from './_index.styles';
 
 export default function FeedScreen() {
   return (
-    <Screen style={styles.screen}>
+    <Screen padded={false} edges={['top', 'left', 'right']} style={styles.screen}>
       <AnimalFeed />
     </Screen>
   );

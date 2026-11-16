@@ -14,7 +14,7 @@ type FormScreenProps = {
 
 export function FormScreen({ title, subtitle, children, contentStyle }: FormScreenProps) {
   return (
-    <Screen style={styles.screen}>
+    <Screen style={styles.screen} edges={['left', 'right', 'bottom']}>
       <ScrollView
         contentContainerStyle={[styles.content, contentStyle]}
         keyboardShouldPersistTaps="handled"

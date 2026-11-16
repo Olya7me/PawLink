@@ -12,4 +12,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.xl,
   },
+  contentFlush: {
+    flex: 1,
+  },
 });

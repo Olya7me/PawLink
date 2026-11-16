@@ -114,14 +114,15 @@ App (Expo)
 - User deletion: anonymize profile and scrub PII; keep historical rows (see DATABASE_SCHEMA)  
 - Reports table for abuse (no admin UI in MVP)  
 
-## Navigation model (planned)
+## Navigation model
 
 See [SCREENS.md](./SCREENS.md). High level:
 
-- Public: Feed + Animal Detail (guest-readable)
-- Auth stack for sign-in / sign-up when needed
-- Authenticated tabs: Feed | Create | My tasks | Profile
-- Stacks for help request, offers, settings
+- Root Stack + Expo Router **bottom tabs**: Feed | My activity
+- Feed: guest-readable; signed-in users get a profile icon (not a text twin button); filters collapse by default
+- My activity: create CTA, author’s listings (edit), offers the user made
+- Stack screens: Animal Detail, Edit listing, Create, Profile, Help request / offer, Auth
+- Product locks unchanged: light theme, city text (no maps), no chat, one accepted offer (author accepts), meetup/contact after accept only
 
 ## Risks
 

@@ -18,7 +18,7 @@ export default function SubmitOfferScreen() {
 
   if (isLoading || !isAuthenticated) {
     return (
-      <Screen style={styles.centered}>
+      <Screen style={styles.centered} edges={['left', 'right', 'bottom']}>
         <LoadingBlock message={t('help.offer.gated')} />
       </Screen>
     );
@@ -26,7 +26,7 @@ export default function SubmitOfferScreen() {
 
   if (!requestId) {
     return (
-      <Screen style={styles.centered}>
+      <Screen style={styles.centered} edges={['left', 'right', 'bottom']}>
         <InlineMessage message={t('help.detail.notFound')} style={styles.error} />
       </Screen>
     );

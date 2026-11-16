@@ -15,7 +15,7 @@ export default function HelpRequestScreen() {
 
   if (!requestId) {
     return (
-      <Screen style={styles.centered}>
+      <Screen style={styles.centered} edges={['left', 'right', 'bottom']}>
         <InlineMessage message={t('help.detail.notFound')} style={styles.error} />
       </Screen>
     );
@@ -24,7 +24,7 @@ export default function HelpRequestScreen() {
   return (
     <>
       <Stack.Screen options={{ title: t('help.detail.title') }} />
-      <Screen style={styles.screen}>
+      <Screen style={styles.screen} edges={['left', 'right', 'bottom']}>
         <ScrollView keyboardShouldPersistTaps="handled">
           <HelpRequestDetailView requestId={requestId} />
         </ScrollView>
