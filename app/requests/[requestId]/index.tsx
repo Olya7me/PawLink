@@ -1,10 +1,12 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { ScrollView, StyleSheet, Text } from 'react-native';
+import { ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { HelpRequestDetailView } from '@/features/help';
+import { InlineMessage } from '@/shared/components/InlineMessage';
 import { Screen } from '@/shared/components/Screen';
-import { colors, typography } from '@/theme';
+
+import { styles } from './_index.styles';
 
 export default function HelpRequestScreen() {
   const { t } = useTranslation();
@@ -14,7 +16,7 @@ export default function HelpRequestScreen() {
   if (!requestId) {
     return (
       <Screen style={styles.centered}>
-        <Text style={styles.error}>{t('help.detail.notFound')}</Text>
+        <InlineMessage message={t('help.detail.notFound')} style={styles.error} />
       </Screen>
     );
   }
@@ -30,18 +32,3 @@ export default function HelpRequestScreen() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: {
-    paddingHorizontal: 0,
-    paddingVertical: 0,
-  },
-  centered: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  error: {
-    color: colors.danger,
-    fontSize: typography.size.md,
-  },
-});

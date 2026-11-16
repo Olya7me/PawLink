@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
-import { colors, radii, spacing, typography } from '@/theme';
+import { LoadingBlock } from '@/shared/components/LoadingBlock';
 
 import { getPeerContact, type SafeHelpOffer } from '../api/helpApi';
+import { styles } from './ContactMeetupPanel.styles';
 
 type ContactMeetupPanelProps = {
   acceptedOffer: SafeHelpOffer;
@@ -51,7 +52,7 @@ export function ContactMeetupPanel({
       <View style={styles.block}>
         <Text style={styles.label}>{t('help.contact.peer')}</Text>
         {contactQuery.isLoading ? (
-          <ActivityIndicator color={colors.accent} />
+          <LoadingBlock style={styles.loader} />
         ) : contactQuery.data ? (
           <>
             {contactQuery.data.contact_phone ? (
@@ -75,38 +76,3 @@ export function ContactMeetupPanel({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  box: {
-    backgroundColor: colors.accentSoft,
-    borderRadius: radii.md,
-    padding: spacing.md,
-    gap: spacing.sm,
-  },
-  title: {
-    fontSize: typography.size.md,
-    fontWeight: '700',
-    color: colors.text,
-  },
-  subtitle: {
-    fontSize: typography.size.sm,
-    color: colors.textSecondary,
-  },
-  block: {
-    gap: spacing.xs,
-  },
-  label: {
-    fontSize: typography.size.sm,
-    fontWeight: '600',
-    color: colors.textSecondary,
-  },
-  body: {
-    fontSize: typography.size.md,
-    color: colors.text,
-    lineHeight: typography.size.md * typography.lineHeight.normal,
-  },
-  muted: {
-    fontSize: typography.size.sm,
-    color: colors.textMuted,
-  },
-});

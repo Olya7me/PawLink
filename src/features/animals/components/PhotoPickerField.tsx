@@ -1,12 +1,13 @@
 import { Image } from 'expo-image';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/shared/components/Button';
-import { colors, radii, spacing, typography } from '@/theme';
+import { InlineMessage } from '@/shared/components/InlineMessage';
 
 import { MAX_ANIMAL_PHOTOS } from '../constants';
 import type { LocalPhoto } from '../utils/photos';
+import { styles } from './PhotoPickerField.styles';
 
 type PhotoPickerFieldProps = {
   photos: LocalPhoto[];
@@ -47,64 +48,7 @@ export function PhotoPickerField({ photos, error, onAdd, onRemove }: PhotoPicker
           style={styles.addButton}
         />
       ) : null}
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+      {error ? <InlineMessage message={error} style={styles.error} /> : null}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  wrap: {
-    marginBottom: spacing.md,
-  },
-  label: {
-    fontSize: typography.size.sm,
-    color: colors.textSecondary,
-    marginBottom: spacing.xs,
-  },
-  hint: {
-    fontSize: typography.size.xs,
-    color: colors.textMuted,
-    marginBottom: spacing.sm,
-  },
-  row: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-  },
-  thumbWrap: {
-    width: 88,
-    height: 88,
-    borderRadius: radii.md,
-    overflow: 'hidden',
-    backgroundColor: colors.surfaceMuted,
-  },
-  thumb: {
-    width: '100%',
-    height: '100%',
-  },
-  remove: {
-    position: 'absolute',
-    top: 4,
-    right: 4,
-    width: 24,
-    height: 24,
-    borderRadius: radii.full,
-    backgroundColor: colors.overlay,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  removeText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '700',
-    lineHeight: 18,
-  },
-  addButton: {
-    marginTop: spacing.sm,
-  },
-  error: {
-    marginTop: spacing.xs,
-    color: colors.danger,
-    fontSize: typography.size.sm,
-  },
-});

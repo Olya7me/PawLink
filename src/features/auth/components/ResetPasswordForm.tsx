@@ -4,15 +4,16 @@ import * as Linking from 'expo-linking';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { Button } from '@/shared/components/Button';
+import { InlineMessage } from '@/shared/components/InlineMessage';
 import { TextField } from '@/shared/components/TextField';
-import { colors, spacing, typography } from '@/theme';
 
 import { requestPasswordReset } from '../api/authApi';
 import { resetPasswordSchema, type ResetPasswordInput } from '../schemas/authSchemas';
 import { mapAuthError } from '../utils/mapAuthError';
+import { styles } from './ResetPasswordForm.styles';
 
 export function ResetPasswordForm() {
   const { t } = useTranslation();
@@ -59,8 +60,8 @@ export function ResetPasswordForm() {
           />
         )}
       />
-      {formError ? <Text style={styles.error}>{formError}</Text> : null}
-      {info ? <Text style={styles.info}>{info}</Text> : null}
+      {formError ? <InlineMessage message={formError} /> : null}
+      {info ? <InlineMessage message={info} tone="info" /> : null}
       <Button label={t('auth.sendReset')} loading={isSubmitting} onPress={() => void onSubmit()} />
       <Link href="/sign-in" style={styles.link}>
         {t('auth.backToSignIn')}
@@ -68,28 +69,3 @@ export function ResetPasswordForm() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  hint: {
-    color: colors.textSecondary,
-    marginBottom: spacing.lg,
-    fontSize: typography.size.md,
-    lineHeight: typography.size.md * typography.lineHeight.normal,
-  },
-  error: {
-    color: colors.danger,
-    marginBottom: spacing.md,
-    fontSize: typography.size.sm,
-  },
-  info: {
-    color: colors.success,
-    marginBottom: spacing.md,
-    fontSize: typography.size.sm,
-  },
-  link: {
-    marginTop: spacing.md,
-    color: colors.accent,
-    fontSize: typography.size.sm,
-    textAlign: 'center',
-  },
-});

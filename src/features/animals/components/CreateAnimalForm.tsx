@@ -4,20 +4,22 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { useAuth } from '@/features/auth';
 import { mapAuthError } from '@/features/auth/utils/mapAuthError';
 import { Button } from '@/shared/components/Button';
+import { ChipGroup } from '@/shared/components/ChipGroup';
+import { FieldLabel } from '@/shared/components/FieldLabel';
+import { InlineMessage } from '@/shared/components/InlineMessage';
 import { TextField } from '@/shared/components/TextField';
 import type { AnimalSpecies, HelpType, UrgencyLevel } from '@/shared/types/domain';
-import { colors, spacing, typography } from '@/theme';
 
 import { createAnimalListing } from '../api/animalsApi';
 import { ANIMAL_SPECIES, HELP_TYPES, URGENCY_LEVELS } from '../constants';
 import { createAnimalSchema, type CreateAnimalInput } from '../schemas/animalSchemas';
 import { PhotoValidationError, pickAnimalPhotos, type LocalPhoto } from '../utils/photos';
-import { ChipGroup } from './ChipGroup';
+import { styles } from './CreateAnimalForm.styles';
 import { PhotoPickerField } from './PhotoPickerField';
 
 export function CreateAnimalForm() {
@@ -103,7 +105,7 @@ export function CreateAnimalForm() {
         onRemove={(id) => setPhotos((current) => current.filter((photo) => photo.id !== id))}
       />
 
-      <Text style={styles.label}>{t('animals.fields.species')}</Text>
+      <FieldLabel>{t('animals.fields.species')}</FieldLabel>
       <Controller
         control={control}
         name="species"
@@ -196,7 +198,7 @@ export function CreateAnimalForm() {
         )}
       />
 
-      <Text style={styles.label}>{t('animals.fields.urgency')}</Text>
+      <FieldLabel>{t('animals.fields.urgency')}</FieldLabel>
       <Controller
         control={control}
         name="urgency"
@@ -213,7 +215,7 @@ export function CreateAnimalForm() {
         )}
       />
 
-      <Text style={styles.label}>{t('animals.fields.helpTypes')}</Text>
+      <FieldLabel>{t('animals.fields.helpTypes')}</FieldLabel>
       <Text style={styles.hint}>{t('animals.fields.helpTypesHint')}</Text>
       <Controller
         control={control}
@@ -231,10 +233,10 @@ export function CreateAnimalForm() {
         )}
       />
       {errors.helpTypes ? (
-        <Text style={styles.error}>{t('animals.errors.helpTypesRequired')}</Text>
+        <InlineMessage message={t('animals.errors.helpTypesRequired')} />
       ) : null}
 
-      {formError ? <Text style={styles.error}>{formError}</Text> : null}
+      {formError ? <InlineMessage message={formError} /> : null}
 
       <Button
         label={t('animals.create.submit')}
@@ -245,30 +247,3 @@ export function CreateAnimalForm() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  label: {
-    marginTop: spacing.sm,
-    marginBottom: spacing.xs,
-    fontSize: typography.size.sm,
-    color: colors.textSecondary,
-  },
-  hint: {
-    fontSize: typography.size.xs,
-    color: colors.textMuted,
-    marginBottom: spacing.xs,
-  },
-  multiline: {
-    minHeight: 96,
-    textAlignVertical: 'top',
-  },
-  error: {
-    color: colors.danger,
-    marginTop: spacing.sm,
-    marginBottom: spacing.sm,
-    fontSize: typography.size.sm,
-  },
-  submit: {
-    marginTop: spacing.lg,
-  },
-});

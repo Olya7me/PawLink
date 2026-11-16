@@ -4,14 +4,16 @@ import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { signOut } from '@/features/auth';
 import { useAuth } from '@/features/auth/hooks/AuthProvider';
 import { mapAuthError } from '@/features/auth/utils/mapAuthError';
 import { Button } from '@/shared/components/Button';
+import { ErrorRetry } from '@/shared/components/ErrorRetry';
+import { InlineMessage } from '@/shared/components/InlineMessage';
+import { LoadingBlock } from '@/shared/components/LoadingBlock';
 import { TextField } from '@/shared/components/TextField';
-import { colors, spacing, typography } from '@/theme';
 
 import { anonymizeOwnAccount, fetchOwnProfile, updateOwnProfile } from '../api/profileApi';
 import {
@@ -20,6 +22,7 @@ import {
   skillsToText,
   type ProfileInput,
 } from '../schemas/profileSchemas';
+import { styles } from './ProfileForm.styles';
 
 export function ProfileForm() {
   const { t } = useTranslation();
@@ -110,19 +113,16 @@ export function ProfileForm() {
   };
 
   if (profileQuery.isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator color={colors.accent} />
-      </View>
-    );
+    return <LoadingBlock />;
   }
 
   if (profileQuery.isError) {
     return (
-      <View>
-        <Text style={styles.error}>{t(mapAuthError(profileQuery.error))}</Text>
-        <Button label={t('common.retry')} onPress={() => void profileQuery.refetch()} />
-      </View>
+      <ErrorRetry
+        message={t(mapAuthError(profileQuery.error))}
+        retryLabel={t('common.retry')}
+        onRetry={() => void profileQuery.refetch()}
+      />
     );
   }
 
@@ -192,8 +192,8 @@ export function ProfileForm() {
           />
         )}
       />
-      {formError ? <Text style={styles.error}>{formError}</Text> : null}
-      {info ? <Text style={styles.info}>{info}</Text> : null}
+      {formError ? <InlineMessage message={formError} /> : null}
+      {info ? <InlineMessage message={info} tone="info" /> : null}
       <Button label={t('common.save')} loading={isSubmitting} onPress={() => void onSubmit()} />
       <Button
         label={t('auth.signOut')}
@@ -213,29 +213,3 @@ export function ProfileForm() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  centered: {
-    paddingVertical: spacing.xxl,
-    alignItems: 'center',
-  },
-  error: {
-    color: colors.danger,
-    marginBottom: spacing.md,
-    fontSize: typography.size.sm,
-  },
-  info: {
-    color: colors.success,
-    marginBottom: spacing.md,
-    fontSize: typography.size.sm,
-  },
-  spaced: {
-    marginTop: spacing.md,
-  },
-  deleteHint: {
-    marginTop: spacing.sm,
-    color: colors.textMuted,
-    fontSize: typography.size.sm,
-    lineHeight: typography.size.sm * typography.lineHeight.normal,
-  },
-});

@@ -1,14 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { mapAuthError } from '@/features/auth/utils/mapAuthError';
 import { Button } from '@/shared/components/Button';
+import { ErrorRetry } from '@/shared/components/ErrorRetry';
+import { InlineMessage } from '@/shared/components/InlineMessage';
+import { LoadingBlock } from '@/shared/components/LoadingBlock';
+import { Section } from '@/shared/components/Section';
+import { SurfaceCard } from '@/shared/components/SurfaceCard';
 import { TextField } from '@/shared/components/TextField';
-import { colors, radii, spacing, typography } from '@/theme';
 
 import { acceptHelpOffer, listOffersForRequest, rejectHelpOffer } from '../api/helpApi';
+import { styles } from './OfferList.styles';
 
 type OfferListProps = {
   requestId: string;
@@ -64,18 +69,17 @@ export function OfferList({ requestId, isAuthor, requestIsOpen }: OfferListProps
   }
 
   if (offersQuery.isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator color={colors.accent} />
-      </View>
-    );
+    return <LoadingBlock />;
   }
 
   if (offersQuery.isError) {
     return (
       <View style={styles.section}>
-        <Text style={styles.error}>{t('help.offers.error')}</Text>
-        <Button label={t('common.retry')} onPress={() => void offersQuery.refetch()} />
+        <ErrorRetry
+          message={t('help.offers.error')}
+          retryLabel={t('common.retry')}
+          onRetry={() => void offersQuery.refetch()}
+        />
       </View>
     );
   }
@@ -83,8 +87,7 @@ export function OfferList({ requestId, isAuthor, requestIsOpen }: OfferListProps
   const offers = offersQuery.data ?? [];
 
   return (
-    <View style={styles.section}>
-      <Text style={styles.title}>{t('help.offers.title')}</Text>
+    <Section title={t('help.offers.title')} style={styles.section}>
       {offers.length === 0 ? (
         <Text style={styles.muted}>{t('help.offers.empty')}</Text>
       ) : (
@@ -98,7 +101,7 @@ export function OfferList({ requestId, isAuthor, requestIsOpen }: OfferListProps
           const busy = busyOfferId === offer.id;
 
           return (
-            <View key={offer.id} style={styles.card}>
+            <SurfaceCard key={offer.id}>
               <Text style={styles.offerer}>{offererName}</Text>
               <Text style={styles.status}>{t(`help.offerStatus.${offer.status}`)}</Text>
               {offer.message ? <Text style={styles.message}>{offer.message}</Text> : null}
@@ -141,68 +144,11 @@ export function OfferList({ requestId, isAuthor, requestIsOpen }: OfferListProps
                   </View>
                 </>
               ) : null}
-            </View>
+            </SurfaceCard>
           );
         })
       )}
-      {actionError ? <Text style={styles.error}>{actionError}</Text> : null}
-    </View>
+      {actionError ? <InlineMessage message={actionError} style={styles.actionError} /> : null}
+    </Section>
   );
 }
-
-const styles = StyleSheet.create({
-  section: {
-    gap: spacing.sm,
-  },
-  centered: {
-    paddingVertical: spacing.lg,
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: typography.size.md,
-    fontWeight: '700',
-    color: colors.text,
-  },
-  card: {
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radii.md,
-    padding: spacing.md,
-    gap: spacing.xs,
-  },
-  offerer: {
-    fontSize: typography.size.md,
-    fontWeight: '600',
-    color: colors.text,
-  },
-  status: {
-    fontSize: typography.size.sm,
-    color: colors.accentPressed,
-  },
-  message: {
-    fontSize: typography.size.md,
-    color: colors.text,
-    lineHeight: typography.size.md * typography.lineHeight.normal,
-  },
-  multiline: {
-    minHeight: 72,
-    textAlignVertical: 'top',
-  },
-  row: {
-    flexDirection: 'row',
-    gap: spacing.sm,
-    marginTop: spacing.xs,
-  },
-  rowButton: {
-    flex: 1,
-  },
-  muted: {
-    color: colors.textMuted,
-    fontSize: typography.size.sm,
-  },
-  error: {
-    color: colors.danger,
-    fontSize: typography.size.sm,
-  },
-});

@@ -1,12 +1,8 @@
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  type TextInputProps,
-} from 'react-native';
+import { Text, TextInput, View, type TextInputProps } from 'react-native';
 
-import { colors, radii, spacing, typography } from '@/theme';
+import { colors } from '@/theme';
+
+import { styles } from './TextField.styles';
 
 type TextFieldProps = TextInputProps & {
   label: string;
@@ -26,32 +22,3 @@ export function TextField({ label, error, style, ...props }: TextFieldProps) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  wrap: {
-    marginBottom: spacing.md,
-  },
-  label: {
-    fontSize: typography.size.sm,
-    color: colors.textSecondary,
-    marginBottom: spacing.xs,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    borderRadius: radii.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm + 4,
-    fontSize: typography.size.md,
-    color: colors.text,
-  },
-  inputError: {
-    borderColor: colors.danger,
-  },
-  error: {
-    marginTop: spacing.xs,
-    color: colors.danger,
-    fontSize: typography.size.sm,
-  },
-});

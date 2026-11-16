@@ -30,7 +30,7 @@
 ## Feature-based layout
 
 ```
-app/                    # Expo Router routes only
+app/                    # Expo Router routes only (+ colocated *.styles.ts)
 src/
   features/             # Domain modules (auth, animals, help, …)
   shared/               # UI primitives, hooks, types, utils
@@ -44,20 +44,27 @@ supabase/               # Migrations + config skeleton
 tests/
 ```
 
-**Deviation from template:** `@/*` maps to `src/*` (not repo root). Routes stay in top-level `app/` (Expo default). Template `components/` and demo tabs were removed — no product screens yet.
+**Deviation from template:** `@/*` maps to `src/*` (not repo root). Routes stay in top-level `app/` (Expo default). Template `components/` and demo tabs were removed.
 
-### Feature module convention (when implementing)
+### Feature module convention
 
 ```
 src/features/<name>/
   api/          # Supabase queries / mutations
-  components/   # Feature-specific UI
+  components/   # Feature-specific UI (+ colocated ComponentName.styles.ts)
   hooks/
   types/
   schemas/      # Zod
 ```
 
 Keep routes thin: `app/...` composes feature components.
+
+### Styles & shared UI
+
+- **Do not** keep `StyleSheet.create` in the same file as a component or screen.
+- Colocate styles as `ComponentName.styles.ts` next to `ComponentName.tsx` (or `styles.ts` inside a small feature folder when several files share one sheet).
+- Route files follow the same rule; under `app/`, prefix style modules with `_` so Expo Router ignores them (e.g. `app/profile.tsx` → `app/_profile.styles.ts`).
+- Put reusable presentational pieces in `src/shared/components/` (buttons, inputs, chips, section headers, empty/loading/error states, form screen chrome). Extract only what is duplicated or clearly reusable — avoid a large unused design system.
 
 ## State boundaries
 
@@ -79,7 +86,8 @@ Do not mirror server lists into Zustand.
 
 ## UI / UX patterns
 
-- Loading / error / empty states in `shared/components` (to be added with first feature)
+- Loading / error / empty states: `LoadingBlock`, `ErrorRetry`, `EmptyState`, `InlineMessage` in `src/shared/components`
+- Form screens: prefer `FormScreen` + `ScreenTitle` for title + scroll chrome
 - Errors: map Supabase / network errors to i18n keys; never show raw secrets
 - Design tokens in `src/theme` — warm neutrals `#F7F3EE`, accent coral `#E07A5F`
 - **Light theme only** — `userInterfaceStyle: light` in `app.json`

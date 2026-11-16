@@ -1,9 +1,10 @@
 import { Link, Stack } from 'expo-router';
-import { StyleSheet, Text } from 'react-native';
+import { Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { Screen } from '@/shared/components/Screen';
-import { colors, spacing, typography } from '@/theme';
+
+import { styles } from './_not-found.styles';
 
 export default function NotFoundScreen() {
   const { t } = useTranslation();
@@ -20,22 +21,3 @@ export default function NotFoundScreen() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: typography.size.lg,
-    color: colors.text,
-    marginBottom: spacing.md,
-  },
-  link: {
-    marginTop: spacing.sm,
-  },
-  linkText: {
-    fontSize: typography.size.md,
-    color: colors.accent,
-  },
-});

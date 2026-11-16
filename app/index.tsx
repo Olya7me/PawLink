@@ -1,7 +1,7 @@
-import { StyleSheet } from 'react-native';
-
 import { AnimalFeed } from '@/features/animals';
 import { Screen } from '@/shared/components/Screen';
+
+import { styles } from './_index.styles';
 
 export default function FeedScreen() {
   return (
@@ -10,10 +10,3 @@ export default function FeedScreen() {
     </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: {
-    paddingHorizontal: 0,
-    paddingVertical: 0,
-  },
-});
