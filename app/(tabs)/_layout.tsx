@@ -41,6 +41,24 @@ export default function TabsLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="help"
+        options={{
+          title: t('tabs.help'),
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="help-circle-outline" size={size} color={String(color)} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="maps"
+        options={{
+          title: t('tabs.maps'),
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="map-outline" size={size} color={String(color)} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

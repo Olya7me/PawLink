@@ -1,8 +1,8 @@
 # PawLink — Screens & Navigation
 
-Auth, guest **Feed**, **Animal Detail**, auth-gated **Create listing**, **My activity**, and **Help coordination** (request detail, submit offer, author accept/reject, post-accept contact) are implemented. Notifications / reports remain designed here until their feature slices.
+Auth, guest **Feed**, **Animal Detail**, auth-gated **Create listing**, **My activity**, static **Help** FAQ, **Maps** placeholder, and **Help coordination** (request detail, submit offer, author accept/reject, post-accept contact) are implemented. Notifications / reports remain designed here until their feature slices.
 
-Guest access (locked): unauthenticated users can open **Feed** and **Animal Detail**. Create, offers, edit, and personal areas require auth.
+Guest access (locked): unauthenticated users can open **Feed**, **Animal Detail**, **Help**, and **Maps**. Create, offers, edit, and personal areas require auth.
 
 ## Navigation map (current)
 
@@ -12,10 +12,12 @@ Root Stack
 │   ├── Feed — brand header + profile icon (signed-in) / sign-in (guest)
 │   │   ├── Collapsible filters (city, species, urgency, help type, sort)
 │   │   └── Animal cards → Animal Detail (stack)
-│   └── My activity — auth-aware
-│       ├── Create publication CTA
-│       ├── My publications (open / edit)
-│       └── Offers I made → Help Request Detail
+│   ├── My activity — auth-aware
+│   │   ├── Create publication CTA
+│   │   ├── My publications (open / edit)
+│   │   └── Offers I made → Help Request Detail
+│   ├── Help — static FAQ (collapsible Q&A, ru/en)
+│   └── Maps — placeholder (“soon”; city text in MVP, no map SDK)
 ├── Animal Detail `/animals/[id]`
 │   └── Help requests → `/requests/[requestId]`
 ├── Edit listing `/animals/[id]/edit` (author, auth)
@@ -37,6 +39,8 @@ Root Stack
 |--------|---------|------|
 | Feed (tab) | Browse listings; collapsible filters | Guest |
 | My activity (tab) | My listings + my offers + create CTA | Guest sees sign-in gate |
+| Help (tab) | Popular FAQ (static, i18n) | Guest |
+| Maps (tab) | Placeholder until maps; city text remains MVP location | Guest |
 | Sign In | Email/password (Supabase Auth) | Guest |
 | Sign Up | Create account | Guest |
 | Reset Password | Request / confirm reset | Guest |
@@ -70,11 +74,13 @@ Root Stack
 
 ## Out of scope screens (MVP)
 
-- Map picker / map browse  
+- Map SDK / map picker (Maps tab is a placeholder; city text stays the location model)  
 - Chat threads  
 - Admin moderation console  
 - Dark mode settings  
 - In-app notifications list (planned)  
+- Help feedback form (FAQ only this pass)  
+
 
 ## Implemented help routes
 
