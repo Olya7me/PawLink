@@ -72,6 +72,16 @@ export const ru: TranslationResources = {
     addAccessibility: 'Добавить в избранное',
     removeAccessibility: 'Убрать из избранного',
   },
+  notifications: {
+    title: 'Уведомления',
+    subtitle: 'Отклики и изменения статусов, которые вас касаются.',
+    guestBody: 'Войдите, чтобы видеть уведомления.',
+    openInbox: 'Уведомления',
+    markAllRead: 'Прочитать все',
+    error: 'Не удалось загрузить уведомления.',
+    bellAccessibility: 'Уведомления',
+    bellUnread: 'Уведомления, непрочитанных: {{count}}',
+  },
   auth: {
     signInTitle: 'Вход',
     signUpTitle: 'Регистрация',

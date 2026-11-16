@@ -79,6 +79,7 @@ Hardcode on the client only **true local UI chrome**: navigation labels, button 
 | Help FAQ Q&A | `faq_items` | `faq.title`, empty/error |
 | Species / urgency / help type / feed sort / status labels | `lookup_options` | Filter field titles (`animals.filters.*`) |
 | Maps “soon” + feed/activity empty marketing | `app_copy` | Tab titles, loading/retry |
+| Notification titles/bodies + empty inbox | `app_copy` (+ `notifications` rows) | Inbox chrome (`notifications.*` i18n) |
 | Max photos, max bytes, allowed MIME | `app_config` | Validation message templates with `{{count}}` / `{{mb}}` |
 
 Offline/error UX uses seeded fallbacks in `src/features/content/fallbacks.ts` that match migration `00006` seeds. Prefer fetching via TanStack Query (`features/content`) over growing locale blobs of editorial text.
@@ -87,7 +88,7 @@ Edits for MVP: Table Editor / SQL (service role); no client write policies for c
 
 ## State boundaries
 
-- **Server state** (animals, requests, offers, FAQ, lookup catalogs, app copy/config, profile from DB) → TanStack Query  
+- **Server state** (animals, requests, offers, notifications, FAQ, lookup catalogs, app copy/config, profile from DB) → TanStack Query  
 - **Auth session** → Supabase Auth + thin hook (future `features/auth`)  
 - **Client prefs** (language override) → Zustand  
 - **Form draft state** → React Hook Form  

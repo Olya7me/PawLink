@@ -102,6 +102,51 @@ const COPY: Record<string, Record<AppLanguage, string>> = {
     en: 'Tap the heart on a listing in the feed to save it here.',
     ru: 'Нажмите сердце на карточке в ленте, чтобы сохранить её здесь.',
   },
+  'notifications.emptyTitle': { en: 'No notifications yet', ru: 'Пока нет уведомлений' },
+  'notifications.emptyBody': {
+    en: 'You will see updates here when someone offers help or a status changes.',
+    ru: 'Здесь появятся обновления, когда кто-то предложит помощь или изменится статус.',
+  },
+  'notifications.offer_created.title': {
+    en: 'New offer on your request',
+    ru: 'Новый отклик на ваш запрос',
+  },
+  'notifications.offer_created.body': {
+    en: 'Someone offered help on “{{request_title}}”.',
+    ru: 'Кто-то предложил помощь по запросу «{{request_title}}».',
+  },
+  'notifications.offer_accepted.title': {
+    en: 'Your offer was accepted',
+    ru: 'Ваш отклик приняли',
+  },
+  'notifications.offer_accepted.body': {
+    en: 'You were accepted for “{{request_title}}”. Meetup details are now available.',
+    ru: 'Вас приняли на запрос «{{request_title}}». Детали встречи уже доступны.',
+  },
+  'notifications.offer_rejected.title': {
+    en: 'Your offer was not selected',
+    ru: 'Ваш отклик не выбран',
+  },
+  'notifications.offer_rejected.body': {
+    en: 'Another helper was chosen for “{{request_title}}”, or the author declined.',
+    ru: 'Для запроса «{{request_title}}» выбрали другого помощника или автор отклонил отклик.',
+  },
+  'notifications.help_request_status.title': {
+    en: 'Help request updated',
+    ru: 'Статус запроса обновлён',
+  },
+  'notifications.help_request_status.body': {
+    en: '“{{request_title}}” is now {{status}}.',
+    ru: 'Запрос «{{request_title}}» теперь: {{status}}.',
+  },
+  'notifications.animal_status.title': {
+    en: 'Listing status changed',
+    ru: 'Статус объявления изменён',
+  },
+  'notifications.animal_status.body': {
+    en: '“{{animal_label}}” is now {{status}}.',
+    ru: 'Объявление «{{animal_label}}» теперь: {{status}}.',
+  },
 };
 
 const KEYS_BY_CATEGORY: Record<LookupCategory, readonly string[]> = {

@@ -113,12 +113,14 @@ Timeline / rescue history (retained after anonymization).
 |--------|------|-------|
 | id | uuid PK | |
 | user_id | uuid FK → profiles | ON DELETE CASCADE |
-| type | text | |
-| title | text | |
-| body | text | |
-| payload | jsonb | deep-link ids |
-| read_at | timestamptz | nullable |
+| type | text | `offer_created` / `offer_accepted` / `offer_rejected` / `help_request_status` / `animal_status` |
+| title | text | English fallback resolved from `app_copy` at insert |
+| body | text | English fallback; nullable |
+| payload | jsonb | `animal_id`, `help_request_id`, `offer_id`, `status`, localized `titles`/`bodies`, `title_key`/`body_key`/`vars` |
+| read_at | timestamptz | nullable; client marks read |
 | created_at | timestamptz | |
+
+Inserts are **server-side only** (security definer `create_notification` via offer/status RPCs and triggers). Migration: `00008_in_app_notifications.sql`. Clients may SELECT/UPDATE own rows (mark `read_at`); no INSERT/DELETE policies for authenticated.
 
 ### `reports`
 
@@ -143,7 +145,7 @@ Basic moderation store (no admin panel in MVP).
 4. `help_requests`: public read of non-private fields; insert as authenticated; status changes by creator / assignee per rules.  
 5. `help_offers`: insert as authenticated self; **accept/reject only by `help_requests.created_by`**; `meetup_details` readable only by request author + accepted offerer after accept.  
 6. `animal_updates`: readable with the animal; insert by participants.  
-7. `notifications`: select/update only own rows.  
+7. `notifications`: select/update only own rows; **no client insert/delete** (server triggers/RPCs only).  
 8. `reports`: insert as authenticated self; no public read of others’ reports.
 9. `faq_items`: **SELECT** published rows for anon + authenticated; **no client writes** (dashboard / service role only).
 10. `lookup_options`: **SELECT** active rows for anon + authenticated; **no client writes**.

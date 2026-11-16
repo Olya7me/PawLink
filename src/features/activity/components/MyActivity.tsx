@@ -8,6 +8,7 @@ import { useAuth } from '@/features/auth';
 import { useAppCopy, useLookupOptions } from '@/features/content';
 import { favoritesListQueryKey, listFavoriteAnimals } from '@/features/favorites';
 import { listOffersByOfferer, type MyOfferItem } from '@/features/help';
+import { NotificationBellButton } from '@/features/notifications';
 import { Button } from '@/shared/components/Button';
 import { EmptyState } from '@/shared/components/EmptyState';
 import { ErrorRetry } from '@/shared/components/ErrorRetry';
@@ -184,8 +185,13 @@ export function MyActivity() {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.accent} />
       }
     >
-      <Text style={styles.title}>{t('activity.title')}</Text>
-      <Text style={styles.subtitle}>{t('activity.subtitle')}</Text>
+      <View style={styles.titleRow}>
+        <View style={styles.titleBlock}>
+          <Text style={styles.title}>{t('activity.title')}</Text>
+          <Text style={styles.subtitle}>{t('activity.subtitle')}</Text>
+        </View>
+        <NotificationBellButton />
+      </View>
 
       <Button
         label={t('activity.createCta')}

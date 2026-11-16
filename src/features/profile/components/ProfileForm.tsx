@@ -196,6 +196,12 @@ export function ProfileForm() {
       {info ? <InlineMessage message={info} tone="info" /> : null}
       <Button label={t('common.save')} loading={isSubmitting} onPress={() => void onSubmit()} />
       <Button
+        label={t('notifications.openInbox')}
+        variant="secondary"
+        onPress={() => router.push('/notifications')}
+        style={styles.spaced}
+      />
+      <Button
         label={t('auth.signOut')}
         variant="secondary"
         loading={signingOut}
