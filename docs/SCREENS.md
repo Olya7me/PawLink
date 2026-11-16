@@ -14,11 +14,13 @@ Root Stack
 │   │   └── Animal cards → Animal Detail (stack)
 │   ├── My activity — auth-aware
 │   │   ├── Create publication CTA
+│   │   ├── Favorites (Избранное) → Animal Detail
 │   │   ├── My publications (open / edit)
 │   │   └── Offers I made → Help Request Detail
 │   ├── Help — FAQ from Supabase (collapsible Q&A by locale; chrome via i18n)
 │   └── Maps — placeholder (“soon” copy from `app_copy`; city text in MVP, no map SDK)
 ├── Animal Detail `/animals/[id]`
+│   ├── Favorite heart toggle (auth; guests → sign-in)
 │   └── Help requests → `/requests/[requestId]`
 ├── Edit listing `/animals/[id]/edit` (author, auth)
 ├── Create `/create` (auth)
@@ -37,14 +39,14 @@ Root Stack
 
 | Screen | Purpose | Auth |
 |--------|---------|------|
-| Feed (tab) | Browse listings; collapsible filters from `lookup_options` | Guest |
-| My activity (tab) | My listings + my offers + create CTA; empty copy from `app_copy` | Guest sees sign-in gate |
+| Feed (tab) | Browse listings; heart on cards; filters from `lookup_options` | Guest (favorite needs auth) |
+| My activity (tab) | Favorites + my listings + my offers + create CTA; empty copy from `app_copy` | Guest sees sign-in gate |
 | Help (tab) | Popular FAQ from `faq_items` (TanStack Query); UI chrome via i18n | Guest |
 | Maps (tab) | Placeholder until maps (`app_copy` soon text); city text remains MVP location | Guest |
 | Sign In | Email/password (Supabase Auth) | Guest |
 | Sign Up | Create account | Guest |
 | Reset Password | Request / confirm reset | Guest |
-| Animal Detail | Photos, info, tasks, author (public) | Guest |
+| Animal Detail | Photos, info, tasks, author (public); favorite heart | Guest (favorite needs auth) |
 | Edit listing | Author updates public fields + status | Auth (author) |
 | Help Request Detail | Status, description, offer CTA | Guest read; actions auth |
 | Submit Offer | Message + submit | Auth |

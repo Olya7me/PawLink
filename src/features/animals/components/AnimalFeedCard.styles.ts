@@ -11,6 +11,9 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: spacing.md,
   },
+  media: {
+    position: 'relative',
+  },
   image: {
     width: '100%',
     height: 160,

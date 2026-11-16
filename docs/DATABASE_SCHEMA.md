@@ -1,6 +1,6 @@
 # PawLink — Database Schema
 
-Target: **PostgreSQL via Supabase**. Migrations live under `supabase/migrations/` (`00001` schema → `00006` remote content). Apply them in the Supabase SQL Editor or via CLI — see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md).
+Target: **PostgreSQL via Supabase**. Migrations live under `supabase/migrations/` (`00001` schema → `00007` favorites). Apply them in the Supabase SQL Editor or via CLI — see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md).
 
 Decisions below reflect the **2026-11-14** product lock.
 
@@ -13,7 +13,8 @@ auth.users
 profiles ──< animals >── help_requests >── help_offers
               │                  │
               └── animal_updates ┘
-              
+
+profiles ──< favorites >── animals
 profiles ──< notifications
 profiles ──< reports (as reporter)
 
@@ -147,6 +148,17 @@ Basic moderation store (no admin panel in MVP).
 9. `faq_items`: **SELECT** published rows for anon + authenticated; **no client writes** (dashboard / service role only).
 10. `lookup_options`: **SELECT** active rows for anon + authenticated; **no client writes**.
 11. `app_copy` / `app_config`: **SELECT** all rows for anon + authenticated; **no client writes**.
+12. `favorites`: **SELECT / INSERT / DELETE** own rows only (`user_id = auth.uid()`); no anon access; no UPDATE.
+
+### `favorites`
+
+| Column | Type | Notes |
+|--------|------|-------|
+| user_id | uuid PK (composite) | FK → `profiles.id` ON DELETE CASCADE |
+| animal_id | uuid PK (composite) | FK → `animals.id` ON DELETE CASCADE |
+| created_at | timestamptz | default now(); list order newest first |
+
+Unique primary key `(user_id, animal_id)`. Indexes: `(user_id, created_at desc)`, `(animal_id)`. Favorited entity is the **animal** (feed cards are animals). Migration: `00007_favorites.sql` (also seeds `app_copy` empty-state keys for Favorites).
 
 ### `faq_items`
 

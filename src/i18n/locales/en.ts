@@ -46,22 +46,30 @@ export const en = {
 
   activity: {
     title: 'My activity',
-    subtitle: 'Your publications and help offers live here.',
-    guestBody: 'Sign in to see your listings, edit them, and track offers you made.',
+    subtitle: 'Your favorites, publications, and help offers live here.',
+    guestBody: 'Sign in to see your favorites, listings, and offers you made.',
     createCta: 'Create publication',
+    favorites: 'Favorites',
     myListings: 'My publications',
     myOffers: 'Offers I made',
     open: 'Open',
     edit: 'Edit',
     openRequest: 'Open request',
     // empty marketing copy: prefer app_copy
+    favoritesEmptyTitle: 'No favorites yet',
+    favoritesEmptyBody: 'Tap the heart on a listing in the feed to save it here.',
     listingsEmptyTitle: 'No publications yet',
     listingsEmptyBody: 'Create a publication to ask for help with an animal.',
     offersEmptyTitle: 'No offers yet',
     offersEmptyBody: 'Browse the feed and offer help on an open request.',
+    favoritesError: 'Could not load your favorites.',
     listingsError: 'Could not load your publications.',
     offersError: 'Could not load your offers.',
     unknownAnimal: 'Animal',
+  },
+  favorites: {
+    addAccessibility: 'Add to favorites',
+    removeAccessibility: 'Remove from favorites',
   },
   auth: {
     signInTitle: 'Sign in',

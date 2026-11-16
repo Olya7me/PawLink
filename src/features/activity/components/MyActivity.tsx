@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { listAnimalsByAuthor, type AnimalListItem } from '@/features/animals';
 import { useAuth } from '@/features/auth';
 import { useAppCopy, useLookupOptions } from '@/features/content';
+import { favoritesListQueryKey, listFavoriteAnimals } from '@/features/favorites';
 import { listOffersByOfferer, type MyOfferItem } from '@/features/help';
 import { Button } from '@/shared/components/Button';
 import { EmptyState } from '@/shared/components/EmptyState';
@@ -85,6 +86,32 @@ function OfferRow({ offer }: { offer: MyOfferItem }) {
   );
 }
 
+function FavoriteRow({ animal }: { animal: AnimalListItem }) {
+  const { t } = useTranslation();
+  const { labelFor } = useLookupOptions();
+  const title = animal.name?.trim() || labelFor('species', animal.species);
+
+  return (
+    <SurfaceCard style={styles.rowCard}>
+      <View style={styles.rowBody}>
+        <Text style={styles.rowTitle} numberOfLines={1}>
+          {title}
+        </Text>
+        <Text style={styles.rowMeta}>
+          {animal.city} · {labelFor('animal_status', animal.status)} ·{' '}
+          {labelFor('urgency', animal.urgency)}
+        </Text>
+      </View>
+      <Button
+        label={t('activity.open')}
+        variant="secondary"
+        onPress={() => router.push(`/animals/${animal.id}`)}
+        style={styles.rowButton}
+      />
+    </SurfaceCard>
+  );
+}
+
 export function MyActivity() {
   const { t } = useTranslation();
   const copy = useAppCopy();
@@ -102,11 +129,19 @@ export function MyActivity() {
     enabled: isSupabaseConfigured && Boolean(user?.id),
   });
 
-  const refreshing = listingsQuery.isRefetching || offersQuery.isRefetching;
+  const favoritesQuery = useQuery({
+    queryKey: favoritesListQueryKey(user?.id),
+    queryFn: () => listFavoriteAnimals(user!.id),
+    enabled: isSupabaseConfigured && Boolean(user?.id),
+  });
+
+  const refreshing =
+    listingsQuery.isRefetching || offersQuery.isRefetching || favoritesQuery.isRefetching;
 
   const onRefresh = () => {
     void listingsQuery.refetch();
     void offersQuery.refetch();
+    void favoritesQuery.refetch();
   };
 
   if (authLoading) {
@@ -138,7 +173,8 @@ export function MyActivity() {
 
   const listingsError = listingsQuery.isError;
   const offersError = offersQuery.isError;
-  const loading = listingsQuery.isLoading || offersQuery.isLoading;
+  const favoritesError = favoritesQuery.isError;
+  const loading = listingsQuery.isLoading || offersQuery.isLoading || favoritesQuery.isLoading;
 
   return (
     <ScrollView
@@ -158,6 +194,31 @@ export function MyActivity() {
       />
 
       {loading ? <LoadingBlock message={t('common.loading')} /> : null}
+
+      {favoritesError ? (
+        <ErrorRetry
+          message={t('activity.favoritesError')}
+          retryLabel={t('common.retry')}
+          onRetry={() => void favoritesQuery.refetch()}
+        />
+      ) : null}
+
+      {!loading && !favoritesError ? (
+        <Section title={t('activity.favorites')}>
+          {(favoritesQuery.data ?? []).length === 0 ? (
+            <EmptyState
+              title={copy.get('activity.favoritesEmptyTitle')}
+              body={copy.get('activity.favoritesEmptyBody')}
+            />
+          ) : (
+            <View style={styles.stack}>
+              {(favoritesQuery.data ?? []).map((animal) => (
+                <FavoriteRow key={animal.id} animal={animal} />
+              ))}
+            </View>
+          )}
+        </Section>
+      ) : null}
 
       {listingsError ? (
         <ErrorRetry

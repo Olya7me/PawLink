@@ -452,6 +452,39 @@ export type Database = {
         };
         Relationships: [];
       };
+      favorites: {
+        Row: {
+          user_id: string;
+          animal_id: string;
+          created_at: string;
+        };
+        Insert: {
+          user_id: string;
+          animal_id: string;
+          created_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          animal_id?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'favorites_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'favorites_animal_id_fkey';
+            columns: ['animal_id'];
+            isOneToOne: false;
+            referencedRelation: 'animals';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
     };
     Views: {
       profiles_public: {
@@ -533,3 +566,5 @@ export type SafeHelpOfferRow = Database['public']['Views']['help_offers_safe']['
 export type FaqItem = Database['public']['Tables']['faq_items']['Row'];
 export type AppCopy = Database['public']['Tables']['app_copy']['Row'];
 export type AppConfig = Database['public']['Tables']['app_config']['Row'];
+export type Favorite = Database['public']['Tables']['favorites']['Row'];
+export type FavoriteInsert = Database['public']['Tables']['favorites']['Insert'];

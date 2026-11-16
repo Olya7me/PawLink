@@ -29,6 +29,11 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: spacing.sm,
   },
+  titleActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
   title: {
     flex: 1,
     fontSize: typography.size.xl,

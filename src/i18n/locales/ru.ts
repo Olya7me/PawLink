@@ -47,21 +47,30 @@ export const ru: TranslationResources = {
 
   activity: {
     title: 'Моя активность',
-    subtitle: 'Здесь ваши объявления и отклики на помощь.',
-    guestBody: 'Войдите, чтобы видеть объявления, редактировать их и отслеживать свои отклики.',
+    subtitle: 'Здесь избранное, объявления и отклики на помощь.',
+    guestBody: 'Войдите, чтобы видеть избранное, объявления и свои отклики.',
     createCta: 'Создать объявление',
+    favorites: 'Избранное',
     myListings: 'Мои объявления',
     myOffers: 'Мои отклики',
     open: 'Открыть',
     edit: 'Изменить',
     openRequest: 'К запросу',
+    // empty marketing copy: prefer app_copy
+    favoritesEmptyTitle: 'Пока нет избранного',
+    favoritesEmptyBody: 'Нажмите сердце на карточке в ленте, чтобы сохранить её здесь.',
     listingsEmptyTitle: 'Пока нет объявлений',
     listingsEmptyBody: 'Создайте объявление, чтобы попросить помощь животному.',
     offersEmptyTitle: 'Пока нет откликов',
     offersEmptyBody: 'Откройте ленту и предложите помощь по открытому запросу.',
+    favoritesError: 'Не удалось загрузить избранное.',
     listingsError: 'Не удалось загрузить ваши объявления.',
     offersError: 'Не удалось загрузить ваши отклики.',
     unknownAnimal: 'Животное',
+  },
+  favorites: {
+    addAccessibility: 'Добавить в избранное',
+    removeAccessibility: 'Убрать из избранного',
   },
   auth: {
     signInTitle: 'Вход',
