@@ -32,38 +32,9 @@ export const en = {
   faq: {
     title: 'Help',
     subtitle: 'Answers to common questions about using PawLink.',
-    items: {
-      guestBrowse: {
-        question: 'Can I browse without an account?',
-        answer:
-          'Yes. Guests can open the feed and animal details. Sign in when you want to create a listing or offer help.',
-      },
-      createListing: {
-        question: 'How do I publish a listing?',
-        answer:
-          'Sign in, open My activity, then Create publication. Add photos, city, description, and the help types you need.',
-      },
-      offerHelp: {
-        question: 'How do I offer help?',
-        answer:
-          'Open a listing, choose an open help request, and send a short message. Meetup and contact details stay private until the author accepts.',
-      },
-      acceptOffer: {
-        question: 'What happens when an offer is accepted?',
-        answer:
-          'The author can accept one offer per request. After accept, both parties see private meetup and contact notes to coordinate.',
-      },
-      cityOnly: {
-        question: 'Why is location only a city?',
-        answer:
-          'MVP uses city text only — no map picker. Share a district or landmark in the approximate area field, never a private address.',
-      },
-      privacy: {
-        question: 'Who sees my phone or Telegram?',
-        answer:
-          'Private contact fields on your profile stay hidden until an offer is accepted. Guests and other helpers cannot see them before that.',
-      },
-    },
+    emptyTitle: 'No FAQ yet',
+    emptyBody: 'Help articles will appear here when they are published.',
+    error: 'Could not load the FAQ. Check your connection and try again.',
   },
   maps: {
     title: 'Maps',

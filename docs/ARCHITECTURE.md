@@ -66,9 +66,19 @@ Keep routes thin: `app/...` composes feature components.
 - Route files follow the same rule; under `app/`, prefix style modules with `_` so Expo Router ignores them (e.g. `app/profile.tsx` → `app/_profile.styles.ts`).
 - Put reusable presentational pieces in `src/shared/components/` (buttons, inputs, chips, section headers, empty/loading/error states, form screen chrome). Extract only what is duplicated or clearly reusable — avoid a large unused design system.
 
+## Content & data ownership (project-wide)
+
+**Prefer Supabase for anything the app can fetch remotely** — domain data, lists, configs, and user-facing copy that may change without an app release (FAQ, future CMS-like texts, reference lists, feature flags/config rows). Do **not** hardcode that content in the frontend when a table/API is practical.
+
+Hardcode on the client only **true local UI chrome**: navigation labels, button labels, form field labels, validation/error chrome, empty/loading/retry strings that describe UI state (not editorial content), and other short i18n strings that are inseparable from the component.
+
+**Example:** Help FAQ Q&A lives in `faq_items` (locale + published + sort_order); Help tab chrome (`faq.title`, empty/error) stays in i18n. Apply the same split for future features — migrate fetchable copy/lists to the backend rather than growing locale blobs of editorial text.
+
+Edits for MVP: Table Editor / SQL (service role); no client write policies for content tables unless an admin product is built.
+
 ## State boundaries
 
-- **Server state** (animals, requests, offers, profile from DB) → TanStack Query  
+- **Server state** (animals, requests, offers, FAQ, profile from DB) → TanStack Query  
 - **Auth session** → Supabase Auth + thin hook (future `features/auth`)  
 - **Client prefs** (language override) → Zustand  
 - **Form draft state** → React Hook Form  
@@ -118,11 +128,12 @@ App (Expo)
 
 See [SCREENS.md](./SCREENS.md). High level:
 
-- Root Stack + Expo Router **bottom tabs**: Feed | My activity
+- Root Stack + Expo Router **bottom tabs**: Feed | My activity | Help | Maps
 - Feed: guest-readable; signed-in users get a profile icon (not a text twin button); filters collapse by default
 - My activity: create CTA, author’s listings (edit), offers the user made
+- Help: FAQ from Supabase `faq_items` by locale; Maps: placeholder (city text in MVP)
 - Stack screens: Animal Detail, Edit listing, Create, Profile, Help request / offer, Auth
-- Product locks unchanged: light theme, city text (no maps), no chat, one accepted offer (author accepts), meetup/contact after accept only
+- Product locks unchanged: light theme, city text (no maps SDK), no chat, one accepted offer (author accepts), meetup/contact after accept only
 
 ## Risks
 
@@ -138,4 +149,4 @@ See [SCREENS.md](./SCREENS.md). High level:
 
 - English: PRs, branches, commits, technical docs, code comments  
 - Conventional Commits + `.github/pull_request_template.md`  
-- UI copy via i18n (ru/en)  
+- UI chrome via i18n (ru/en); fetchable/editorial content from Supabase (see Content & data ownership)  

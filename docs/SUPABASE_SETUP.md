@@ -28,8 +28,9 @@ Use the **anon** key only. Do not put the service role key in the app or in git.
 | 2 | [`supabase/migrations/00002_rls.sql`](../supabase/migrations/00002_rls.sql) |
 | 3 | [`supabase/migrations/00003_storage_and_anonymize.sql`](../supabase/migrations/00003_storage_and_anonymize.sql) |
 | 4 | [`supabase/migrations/00004_help_coordination_rpcs.sql`](../supabase/migrations/00004_help_coordination_rpcs.sql) — required for accept/reject/withdraw offers and status transitions |
+| 5 | [`supabase/migrations/00005_faq_items.sql`](../supabase/migrations/00005_faq_items.sql) — Help FAQ table, RLS, and seed rows |
 
-3. Confirm under **Table Editor** that `profiles`, `animals`, `help_requests`, `help_offers`, `animal_updates`, `notifications`, and `reports` exist.
+3. Confirm under **Table Editor** that `profiles`, `animals`, `help_requests`, `help_offers`, `animal_updates`, `notifications`, `reports`, and `faq_items` exist.
 4. Confirm under **Storage** that buckets `animal-photos` and `avatars` exist.
 
 ### Option B — Supabase CLI (if the project is linked)
@@ -67,7 +68,20 @@ The repo already includes hand-written types aligned with these migrations.
 - Storage buckets + size/MIME limits
 - `anonymize_account()` for account deletion
 - Help coordination RPCs (`accept_help_offer`, `reject_help_offer`, `withdraw_help_offer`, `set_help_request_status`) and a fixed `help_offers_safe` view
+- `faq_items` table (published FAQ for the Help tab), public SELECT of published rows only, seed Q&A in en/ru
 
-### Already applied 00001–00003?
+### Already applied earlier migrations?
 
-If your project already ran the first three migrations, run **only** [`00004_help_coordination_rpcs.sql`](../supabase/migrations/00004_help_coordination_rpcs.sql) in the SQL Editor.
+| If you already ran… | Run next in SQL Editor |
+|---------------------|------------------------|
+| 00001–00003 only | [`00004_help_coordination_rpcs.sql`](../supabase/migrations/00004_help_coordination_rpcs.sql), then [`00005_faq_items.sql`](../supabase/migrations/00005_faq_items.sql) |
+| 00001–00004 | **Only** [`00005_faq_items.sql`](../supabase/migrations/00005_faq_items.sql) |
+
+### Edit FAQ content (Table Editor)
+
+1. Open **Table Editor** → `faq_items`.
+2. Each row is one Q&A for one locale (`en` or `ru`). Pair locales with the same `slug`.
+3. Edit `question` / `answer` text; use `sort_order` for display order (lower first).
+4. Set `published` to `false` to hide a row from the app (RLS only exposes published rows to anon/authenticated).
+5. Add a new pair of rows (en + ru) when adding a topic; keep `slug` stable across locales.
+6. Client apps cannot insert/update/delete FAQ rows — use the dashboard (service role). No in-app admin UI yet.

@@ -21,6 +21,19 @@ export type HelpOfferStatus = 'pending' | 'accepted' | 'rejected' | 'withdrawn';
 export type AnimalUpdateEventType = 'comment' | 'status_change' | 'photo' | 'system';
 export type ReportTargetType = 'animal' | 'profile';
 export type ReportStatus = 'open' | 'reviewed' | 'dismissed';
+export type FaqLocale = 'en' | 'ru';
+
+export type FaqItemRow = {
+  id: string;
+  slug: string;
+  locale: FaqLocale;
+  question: string;
+  answer: string;
+  sort_order: number;
+  published: boolean;
+  created_at: string;
+  updated_at: string;
+};
 
 export type ProfileRow = {
   id: string;
@@ -322,6 +335,32 @@ export type Database = {
         };
         Relationships: [];
       };
+      faq_items: {
+        Row: FaqItemRow;
+        Insert: {
+          id?: string;
+          slug: string;
+          locale: FaqLocale;
+          question: string;
+          answer: string;
+          sort_order?: number;
+          published?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          locale?: FaqLocale;
+          question?: string;
+          answer?: string;
+          sort_order?: number;
+          published?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       profiles_public: {
@@ -400,3 +439,4 @@ export type HelpOffer = Database['public']['Tables']['help_offers']['Row'];
 export type HelpOfferInsert = Database['public']['Tables']['help_offers']['Insert'];
 export type PublicProfile = Database['public']['Views']['profiles_public']['Row'];
 export type SafeHelpOfferRow = Database['public']['Views']['help_offers_safe']['Row'];
+export type FaqItem = Database['public']['Tables']['faq_items']['Row'];

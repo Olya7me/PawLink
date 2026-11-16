@@ -1,6 +1,6 @@
 # PawLink — Database Schema
 
-Target: **PostgreSQL via Supabase**. Migrations live under `supabase/migrations/` (`00001` schema, `00002` RLS, `00003` storage + anonymize). Apply them in the Supabase SQL Editor or via CLI — see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md).
+Target: **PostgreSQL via Supabase**. Migrations live under `supabase/migrations/` (`00001` schema → `00005` FAQ). Apply them in the Supabase SQL Editor or via CLI — see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md).
 
 Decisions below reflect the **2026-11-14** product lock.
 
@@ -16,6 +16,8 @@ profiles ──< animals >── help_requests >── help_offers
               
 profiles ──< notifications
 profiles ──< reports (as reporter)
+
+faq_items (standalone content; public read when published)
 ```
 
 ## Tables
@@ -141,6 +143,19 @@ Basic moderation store (no admin panel in MVP).
 6. `animal_updates`: readable with the animal; insert by participants.  
 7. `notifications`: select/update only own rows.  
 8. `reports`: insert as authenticated self; no public read of others’ reports.
+9. `faq_items`: **SELECT** published rows for anon + authenticated; **no client writes** (dashboard / service role only).
+
+### `faq_items`
+
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid PK | |
+| slug | text | Stable key pairing en/ru rows; unique with locale |
+| locale | text | `en` \| `ru` |
+| question / answer | text | Editorial FAQ body (not app i18n chrome) |
+| sort_order | int | Ascending display order |
+| published | boolean | default true; unpublished hidden by RLS |
+| created_at / updated_at | timestamptz | |
 
 ## Storage
 
