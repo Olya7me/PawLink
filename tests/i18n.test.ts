@@ -43,6 +43,10 @@ describe('i18n locales', () => {
     expect(en.tabs.feed).toBeTruthy();
     expect(ru.tabs.activity).toBeTruthy();
     expect(en.activity.createCta).toBeTruthy();
+    expect(en.activity.favorites).toBeTruthy();
+    expect(ru.activity.favorites).toBe('Избранное');
+    expect(en.favorites.addAccessibility).toBeTruthy();
+    expect(ru.favorites.removeAccessibility).toBeTruthy();
     expect(en.animals.feed.subtitleSignedIn).toBeTruthy();
     expect(ru.animals.feed.subtitleGuest).toBeTruthy();
   });

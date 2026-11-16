@@ -97,6 +97,11 @@ const COPY: Record<string, Record<AppLanguage, string>> = {
     en: 'Browse the feed and offer help on an open request.',
     ru: 'Откройте ленту и предложите помощь по открытому запросу.',
   },
+  'activity.favoritesEmptyTitle': { en: 'No favorites yet', ru: 'Пока нет избранного' },
+  'activity.favoritesEmptyBody': {
+    en: 'Tap the heart on a listing in the feed to save it here.',
+    ru: 'Нажмите сердце на карточке в ленте, чтобы сохранить её здесь.',
+  },
 };
 
 const KEYS_BY_CATEGORY: Record<LookupCategory, readonly string[]> = {

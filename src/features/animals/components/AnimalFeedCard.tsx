@@ -3,6 +3,7 @@ import { Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { useLookupOptions } from '@/features/content';
+import { FavoriteButton } from '@/features/favorites';
 
 import type { AnimalListItem } from '../api/animalsApi';
 import { getAnimalPhotoPublicUrls } from '../utils/photoUrls';
@@ -25,13 +26,16 @@ export function AnimalFeedCard({ animal, onPress }: AnimalFeedCardProps) {
 
   return (
     <Pressable accessibilityRole="button" onPress={onPress} style={styles.card}>
-      {photos[0] ? (
-        <Image source={{ uri: photos[0] }} style={styles.image} contentFit="cover" />
-      ) : (
-        <View style={[styles.image, styles.imagePlaceholder]}>
-          <Text style={styles.placeholderText}>{t('animals.noPhoto')}</Text>
-        </View>
-      )}
+      <View style={styles.media}>
+        {photos[0] ? (
+          <Image source={{ uri: photos[0] }} style={styles.image} contentFit="cover" />
+        ) : (
+          <View style={[styles.image, styles.imagePlaceholder]}>
+            <Text style={styles.placeholderText}>{t('animals.noPhoto')}</Text>
+          </View>
+        )}
+        <FavoriteButton animalId={animal.id} overlay />
+      </View>
       <View style={styles.body}>
         <View style={styles.headerRow}>
           <Text style={styles.title} numberOfLines={1}>

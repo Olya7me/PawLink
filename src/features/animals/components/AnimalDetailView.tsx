@@ -5,6 +5,7 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { useLookupOptions } from '@/features/content';
+import { FavoriteButton } from '@/features/favorites';
 import { ErrorRetry } from '@/shared/components/ErrorRetry';
 import { InlineMessage } from '@/shared/components/InlineMessage';
 import { LoadingBlock } from '@/shared/components/LoadingBlock';
@@ -76,7 +77,10 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
       <View style={styles.body}>
         <View style={styles.titleRow}>
           <Text style={styles.title}>{title}</Text>
-          <UrgencyBadge level={animal.urgency} label={labelFor('urgency', animal.urgency)} />
+          <View style={styles.titleActions}>
+            <FavoriteButton animalId={animal.id} />
+            <UrgencyBadge level={animal.urgency} label={labelFor('urgency', animal.urgency)} />
+          </View>
         </View>
 
         <Text style={styles.meta}>
