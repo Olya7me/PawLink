@@ -21,17 +21,8 @@ export const styles = StyleSheet.create({
   headerRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     gap: spacing.md,
-  },
-  headerText: {
-    flex: 1,
-    gap: spacing.xs,
-  },
-  title: {
-    fontSize: typography.size.xl,
-    fontWeight: '700',
-    color: colors.text,
   },
   subtitle: {
     fontSize: typography.size.md,

@@ -32,6 +32,7 @@ export const styles = StyleSheet.create({
   headerActions: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexShrink: 0,
     gap: spacing.sm,
   },
   brand: {

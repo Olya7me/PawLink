@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
-import { colors, radii, spacing, typography } from '@/theme';
+import { colors } from '@/theme';
 
 export const styles = StyleSheet.create({
   wrap: {
@@ -8,22 +8,27 @@ export const styles = StyleSheet.create({
   },
   badge: {
     position: 'absolute',
-    top: 4,
-    right: 4,
+    top: 2,
+    right: 2,
     minWidth: 18,
     height: 18,
-    borderRadius: radii.full,
+    borderRadius: 9,
     backgroundColor: colors.danger,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: spacing.xs,
+    paddingHorizontal: 4,
     borderWidth: 2,
     borderColor: colors.surface,
   },
   badgeText: {
     color: colors.surface,
-    fontSize: typography.size.xs,
+    fontSize: 10,
     fontWeight: '700',
-    lineHeight: typography.size.xs,
+    lineHeight: 12,
+    textAlign: 'center',
+    ...Platform.select({
+      android: { includeFontPadding: false },
+      default: {},
+    }),
   },
 });

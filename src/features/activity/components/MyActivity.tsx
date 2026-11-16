@@ -156,8 +156,13 @@ export function MyActivity() {
   if (!isAuthenticated) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{t('activity.title')}</Text>
-        <Text style={styles.subtitle}>{t('activity.guestBody')}</Text>
+        <View style={styles.titleRow}>
+          <View style={styles.titleBlock}>
+            <Text style={styles.title}>{t('activity.title')}</Text>
+            <Text style={styles.subtitle}>{t('activity.guestBody')}</Text>
+          </View>
+          <NotificationBellButton />
+        </View>
         <Button label={t('shell.signInCta')} onPress={() => router.push('/sign-in')} />
       </View>
     );

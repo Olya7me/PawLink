@@ -42,13 +42,10 @@ export function AnimalFeed() {
     <View>
       <View style={styles.topBar}>
         <View style={styles.brandRow}>
-          <View style={styles.brandBlock}>
-            <Text style={styles.brand}>{t('app.name')}</Text>
-            <Text style={styles.subtitle}>{subtitle}</Text>
-          </View>
-          {isAuthenticated ? (
-            <View style={styles.headerActions}>
-              <NotificationBellButton />
+          <Text style={styles.brand}>{t('app.name')}</Text>
+          <View style={styles.headerActions}>
+            <NotificationBellButton />
+            {isAuthenticated ? (
               <IconButton
                 icon="person-circle-outline"
                 accessibilityLabel={t('shell.profileCta')}
@@ -56,15 +53,16 @@ export function AnimalFeed() {
                 color={colors.accent}
                 size={28}
               />
-            </View>
-          ) : (
-            <Button
-              label={t('shell.signInCta')}
-              onPress={() => router.push('/sign-in')}
-              style={styles.signInButton}
-            />
-          )}
+            ) : (
+              <Button
+                label={t('shell.signInCta')}
+                onPress={() => router.push('/sign-in')}
+                style={styles.signInButton}
+              />
+            )}
+          </View>
         </View>
+        <Text style={styles.subtitle}>{subtitle}</Text>
       </View>
 
       {!isSupabaseConfigured ? <Text style={styles.warning}>{t('shell.notConfigured')}</Text> : null}

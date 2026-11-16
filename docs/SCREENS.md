@@ -9,7 +9,7 @@ Guest access (locked): unauthenticated users can open **Feed**, **Animal Detail*
 ```
 Root Stack
 ├── (tabs) — bottom tabs
-│   ├── Feed — brand header + bell (unread badge) + profile icon (signed-in) / sign-in (guest)
+│   ├── Feed — brand header + bell always (unread badge when signed in) + profile icon (signed-in) / sign-in (guest)
 │   │   ├── Collapsible filters (city, species, urgency, help type, sort)
 │   │   └── Animal cards → Animal Detail (stack)
 │   ├── My activity — auth-aware (+ bell)

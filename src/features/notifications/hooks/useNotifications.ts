@@ -13,6 +13,57 @@ import {
   notificationsUnreadQueryKey,
 } from '../api/notificationsApi';
 
+type RealtimeShare = {
+  channel: ReturnType<typeof supabase.channel>;
+  refs: number;
+  listeners: Set<() => void>;
+};
+
+/** One Realtime channel per user — tabs keep multiple bells mounted. */
+const notificationRealtimeByUser = new Map<string, RealtimeShare>();
+
+function retainNotificationsRealtime(userId: string, onChange: () => void): () => void {
+  let share = notificationRealtimeByUser.get(userId);
+
+  if (!share) {
+    const listeners = new Set<() => void>();
+    const channel = supabase
+      .channel(`notifications:${userId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'notifications',
+          filter: `user_id=eq.${userId}`,
+        },
+        () => {
+          listeners.forEach((listener) => listener());
+        },
+      )
+      .subscribe();
+
+    share = { channel, refs: 0, listeners };
+    notificationRealtimeByUser.set(userId, share);
+  }
+
+  share.refs += 1;
+  share.listeners.add(onChange);
+
+  return () => {
+    const current = notificationRealtimeByUser.get(userId);
+    if (!current) return;
+
+    current.listeners.delete(onChange);
+    current.refs -= 1;
+
+    if (current.refs <= 0) {
+      void supabase.removeChannel(current.channel);
+      notificationRealtimeByUser.delete(userId);
+    }
+  };
+}
+
 export function useNotificationsInbox() {
   const { user, isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
@@ -34,26 +85,10 @@ export function useNotificationsInbox() {
   useEffect(() => {
     if (!enabled || !userId) return;
 
-    const channel = supabase
-      .channel(`notifications:${userId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'notifications',
-          filter: `user_id=eq.${userId}`,
-        },
-        () => {
-          void queryClient.invalidateQueries({ queryKey: notificationsListQueryKey(userId) });
-          void queryClient.invalidateQueries({ queryKey: notificationsUnreadQueryKey(userId) });
-        },
-      )
-      .subscribe();
-
-    return () => {
-      void supabase.removeChannel(channel);
-    };
+    return retainNotificationsRealtime(userId, () => {
+      void queryClient.invalidateQueries({ queryKey: notificationsListQueryKey(userId) });
+      void queryClient.invalidateQueries({ queryKey: notificationsUnreadQueryKey(userId) });
+    });
   }, [enabled, queryClient, userId]);
 
   const markReadMutation = useMutation({
@@ -101,25 +136,9 @@ export function useUnreadNotificationCount() {
   useEffect(() => {
     if (!enabled || !userId) return;
 
-    const channel = supabase
-      .channel(`notifications-badge:${userId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'notifications',
-          filter: `user_id=eq.${userId}`,
-        },
-        () => {
-          void queryClient.invalidateQueries({ queryKey: notificationsUnreadQueryKey(userId) });
-        },
-      )
-      .subscribe();
-
-    return () => {
-      void supabase.removeChannel(channel);
-    };
+    return retainNotificationsRealtime(userId, () => {
+      void queryClient.invalidateQueries({ queryKey: notificationsUnreadQueryKey(userId) });
+    });
   }, [enabled, queryClient, userId]);
 
   return {

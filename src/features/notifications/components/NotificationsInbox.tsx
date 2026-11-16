@@ -85,7 +85,6 @@ export function NotificationsInbox() {
   if (!isAuthenticated) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{t('notifications.title')}</Text>
         <Text style={styles.subtitle}>{t('notifications.guestBody')}</Text>
         <Button label={t('shell.signInCta')} onPress={() => router.push('/sign-in')} />
       </View>
@@ -95,7 +94,6 @@ export function NotificationsInbox() {
   if (!isSupabaseConfigured) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{t('notifications.title')}</Text>
         <Text style={styles.warning}>{t('shell.notConfigured')}</Text>
       </View>
     );
@@ -127,12 +125,8 @@ export function NotificationsInbox() {
         />
       }
     >
-      <View style={styles.headerRow}>
-        <View style={styles.headerText}>
-          <Text style={styles.title}>{t('notifications.title')}</Text>
-          <Text style={styles.subtitle}>{t('notifications.subtitle')}</Text>
-        </View>
-        {unreadCount > 0 ? (
+      {unreadCount > 0 ? (
+        <View style={styles.headerRow}>
           <Button
             label={t('notifications.markAllRead')}
             variant="secondary"
@@ -140,8 +134,8 @@ export function NotificationsInbox() {
             disabled={isMarkingAll}
             style={styles.markAll}
           />
-        ) : null}
-      </View>
+        </View>
+      ) : null}
 
       {listQuery.isLoading ? <LoadingBlock message={t('common.loading')} /> : null}
 
