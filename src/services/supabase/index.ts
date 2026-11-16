@@ -3,6 +3,8 @@ export type {
   Animal,
   AnimalInsert,
   Database,
+  FaqItem,
+  FaqLocale,
   HelpRequest,
   HelpRequestInsert,
   Json,

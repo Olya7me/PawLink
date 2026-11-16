@@ -47,11 +47,12 @@ describe('i18n locales', () => {
     expect(ru.animals.feed.subtitleGuest).toBeTruthy();
   });
 
-  it('includes help FAQ and maps tab strings', () => {
+  it('includes help FAQ chrome and maps tab strings', () => {
     expect(en.tabs.help).toBeTruthy();
     expect(ru.tabs.maps).toBeTruthy();
-    expect(en.faq.items.guestBrowse.question).toBeTruthy();
-    expect(ru.faq.items.cityOnly.answer).toBeTruthy();
+    expect(en.faq.title).toBeTruthy();
+    expect(en.faq.emptyTitle).toBeTruthy();
+    expect(ru.faq.error).toBeTruthy();
     expect(en.maps.soonTitle).toBeTruthy();
     expect(ru.maps.soonBody).toBeTruthy();
   });

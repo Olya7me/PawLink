@@ -1,6 +1,6 @@
 # PawLink — Screens & Navigation
 
-Auth, guest **Feed**, **Animal Detail**, auth-gated **Create listing**, **My activity**, static **Help** FAQ, **Maps** placeholder, and **Help coordination** (request detail, submit offer, author accept/reject, post-accept contact) are implemented. Notifications / reports remain designed here until their feature slices.
+Auth, guest **Feed**, **Animal Detail**, auth-gated **Create listing**, **My activity**, **Help** FAQ (from Supabase `faq_items`), **Maps** placeholder, and **Help coordination** (request detail, submit offer, author accept/reject, post-accept contact) are implemented. Notifications / reports remain designed here until their feature slices.
 
 Guest access (locked): unauthenticated users can open **Feed**, **Animal Detail**, **Help**, and **Maps**. Create, offers, edit, and personal areas require auth.
 
@@ -16,7 +16,7 @@ Root Stack
 │   │   ├── Create publication CTA
 │   │   ├── My publications (open / edit)
 │   │   └── Offers I made → Help Request Detail
-│   ├── Help — static FAQ (collapsible Q&A, ru/en)
+│   ├── Help — FAQ from Supabase (collapsible Q&A by locale; chrome via i18n)
 │   └── Maps — placeholder (“soon”; city text in MVP, no map SDK)
 ├── Animal Detail `/animals/[id]`
 │   └── Help requests → `/requests/[requestId]`
@@ -39,7 +39,7 @@ Root Stack
 |--------|---------|------|
 | Feed (tab) | Browse listings; collapsible filters | Guest |
 | My activity (tab) | My listings + my offers + create CTA | Guest sees sign-in gate |
-| Help (tab) | Popular FAQ (static, i18n) | Guest |
+| Help (tab) | Popular FAQ from `faq_items` (TanStack Query); UI chrome via i18n | Guest |
 | Maps (tab) | Placeholder until maps; city text remains MVP location | Guest |
 | Sign In | Email/password (Supabase Auth) | Guest |
 | Sign Up | Create account | Guest |
@@ -79,7 +79,13 @@ Root Stack
 - Admin moderation console  
 - Dark mode settings  
 - In-app notifications list (planned)  
-- Help feedback form (FAQ only this pass)  
+- Help feedback form (FAQ from Supabase this pass; no feedback form yet)  
+
+### Help FAQ (backend content)
+
+- Table: `faq_items` — see migration `00005_faq_items.sql` and [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) (run in SQL Editor; edit rows in Table Editor).
+- App loads published rows for the active locale via TanStack Query; title/subtitle/empty/error stay in i18n.
+- Project rule: prefer Supabase for fetchable copy/lists/configs — see [ARCHITECTURE.md](./ARCHITECTURE.md#content--data-ownership-project-wide).
 
 
 ## Implemented help routes
