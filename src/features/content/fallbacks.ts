@@ -1,0 +1,150 @@
+import type { AppLanguage } from '@/i18n';
+import type { AnimalSpecies, AnimalStatus, HelpType, UrgencyLevel } from '@/shared/types/domain';
+
+export type LookupCategory =
+  | 'species'
+  | 'urgency'
+  | 'help_type'
+  | 'feed_sort'
+  | 'animal_status';
+
+export type FeedSort = 'newest' | 'oldest' | 'urgency';
+
+export type LookupOption = {
+  category: LookupCategory;
+  option_key: string;
+  label: string;
+  sort_order: number;
+};
+
+export type AppConfigValues = {
+  maxAnimalPhotos: number;
+  maxPhotoBytes: number;
+  allowedPhotoMimeTypes: string[];
+};
+
+export const FALLBACK_SPECIES: AnimalSpecies[] = ['dog', 'cat', 'other'];
+export const FALLBACK_URGENCY: UrgencyLevel[] = ['low', 'medium', 'high', 'critical'];
+export const FALLBACK_HELP_TYPES: HelpType[] = [
+  'catch',
+  'transport',
+  'vet',
+  'foster',
+  'permanent_home',
+  'food',
+  'other',
+];
+export const FALLBACK_FEED_SORT: FeedSort[] = ['newest', 'oldest', 'urgency'];
+export const FALLBACK_ANIMAL_STATUS: AnimalStatus[] = ['active', 'resolved', 'archived'];
+
+export const FALLBACK_APP_CONFIG: AppConfigValues = {
+  maxAnimalPhotos: 5,
+  maxPhotoBytes: 5 * 1024 * 1024,
+  allowedPhotoMimeTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
+};
+
+const LABELS: Record<LookupCategory, Record<string, Record<AppLanguage, string>>> = {
+  species: {
+    dog: { en: 'Dog', ru: 'Собака' },
+    cat: { en: 'Cat', ru: 'Кошка' },
+    other: { en: 'Other', ru: 'Другое' },
+  },
+  urgency: {
+    low: { en: 'Low', ru: 'Низкая' },
+    medium: { en: 'Medium', ru: 'Средняя' },
+    high: { en: 'High', ru: 'Высокая' },
+    critical: { en: 'Critical', ru: 'Критическая' },
+  },
+  help_type: {
+    catch: { en: 'Catch', ru: 'Отлов' },
+    transport: { en: 'Transport', ru: 'Транспорт' },
+    vet: { en: 'Vet care', ru: 'Ветпомощь' },
+    foster: { en: 'Foster', ru: 'Передержка' },
+    permanent_home: { en: 'Permanent home', ru: 'Постоянный дом' },
+    food: { en: 'Food', ru: 'Корм' },
+    other: { en: 'Other', ru: 'Другое' },
+  },
+  feed_sort: {
+    newest: { en: 'Newest', ru: 'Сначала новые' },
+    oldest: { en: 'Oldest', ru: 'Сначала старые' },
+    urgency: { en: 'Urgency', ru: 'По срочности' },
+  },
+  animal_status: {
+    active: { en: 'Active', ru: 'Активно' },
+    resolved: { en: 'Resolved', ru: 'Решено' },
+    archived: { en: 'Archived', ru: 'В архиве' },
+  },
+};
+
+const COPY: Record<string, Record<AppLanguage, string>> = {
+  'maps.soonTitle': { en: 'Maps coming soon', ru: 'Карты скоро' },
+  'maps.soonBody': {
+    en: 'Listings use city as text in this MVP. A map view will land in a later release.',
+    ru: 'В этом MVP объявления используют город текстом. Карта появится в следующих версиях.',
+  },
+  'animals.feed.emptyTitle': { en: 'No listings yet', ru: 'Пока нет объявлений' },
+  'animals.feed.emptyBody': {
+    en: 'Try clearing filters, or create the first listing from My activity.',
+    ru: 'Сбросьте фильтры или создайте первое объявление во вкладке «Моё».',
+  },
+  'activity.listingsEmptyTitle': { en: 'No publications yet', ru: 'Пока нет объявлений' },
+  'activity.listingsEmptyBody': {
+    en: 'Create a publication to ask for help with an animal.',
+    ru: 'Создайте объявление, чтобы попросить помощь животному.',
+  },
+  'activity.offersEmptyTitle': { en: 'No offers yet', ru: 'Пока нет откликов' },
+  'activity.offersEmptyBody': {
+    en: 'Browse the feed and offer help on an open request.',
+    ru: 'Откройте ленту и предложите помощь по открытому запросу.',
+  },
+};
+
+const KEYS_BY_CATEGORY: Record<LookupCategory, readonly string[]> = {
+  species: FALLBACK_SPECIES,
+  urgency: FALLBACK_URGENCY,
+  help_type: FALLBACK_HELP_TYPES,
+  feed_sort: FALLBACK_FEED_SORT,
+  animal_status: FALLBACK_ANIMAL_STATUS,
+};
+
+export function fallbackLookupOptions(
+  locale: AppLanguage,
+  category?: LookupCategory,
+): LookupOption[] {
+  const categories = category ? [category] : (Object.keys(KEYS_BY_CATEGORY) as LookupCategory[]);
+  const rows: LookupOption[] = [];
+  for (const cat of categories) {
+    KEYS_BY_CATEGORY[cat].forEach((key, index) => {
+      rows.push({
+        category: cat,
+        option_key: key,
+        label: LABELS[cat][key]?.[locale] ?? key,
+        sort_order: (index + 1) * 10,
+      });
+    });
+  }
+  return rows;
+}
+
+export function fallbackLookupLabel(
+  category: LookupCategory,
+  key: string,
+  locale: AppLanguage,
+): string {
+  return LABELS[category]?.[key]?.[locale] ?? key;
+}
+
+export function fallbackAppCopy(key: string, locale: AppLanguage): string {
+  return COPY[key]?.[locale] ?? key;
+}
+
+export function fallbackAppCopyMap(locale: AppLanguage): Record<string, string> {
+  const map: Record<string, string> = {};
+  for (const key of Object.keys(COPY)) {
+    const value = COPY[key]?.[locale];
+    if (value) {
+      map[key] = value;
+    }
+  }
+  return map;
+}

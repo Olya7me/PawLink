@@ -1,7 +1,7 @@
 import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
 
-import { MAX_ANIMAL_PHOTOS, MAX_PHOTO_BYTES } from '../constants';
+import { FALLBACK_APP_CONFIG, type AppConfigValues } from '@/features/content';
 
 export type LocalPhoto = {
   id: string;
@@ -11,6 +11,11 @@ export type LocalPhoto = {
   byteSize: number;
 };
 
+export type PhotoLimits = Pick<
+  AppConfigValues,
+  'maxAnimalPhotos' | 'maxPhotoBytes' | 'allowedPhotoMimeTypes'
+>;
+
 export class PhotoValidationError extends Error {
   constructor(public readonly code: 'tooMany' | 'tooLarge' | 'badType' | 'permission') {
     super(code);
@@ -18,12 +23,13 @@ export class PhotoValidationError extends Error {
   }
 }
 
-const ALLOWED_MIME = new Set(['image/jpeg', 'image/jpg', 'image/png', 'image/webp']);
-
-function normalizeMime(raw: string | undefined | null): LocalPhoto['mimeType'] | null {
+function normalizeMime(
+  raw: string | undefined | null,
+  allowed: Set<string>,
+): LocalPhoto['mimeType'] | null {
   if (!raw) return 'image/jpeg';
   const lower = raw.toLowerCase();
-  if (!ALLOWED_MIME.has(lower)) return null;
+  if (!allowed.has(lower)) return null;
   if (lower === 'image/jpg' || lower === 'image/jpeg') return 'image/jpeg';
   if (lower === 'image/png') return 'image/png';
   return 'image/webp';
@@ -35,8 +41,12 @@ function extensionFor(mime: LocalPhoto['mimeType']): string {
   return 'jpg';
 }
 
-async function compressAsset(asset: ImagePicker.ImagePickerAsset): Promise<LocalPhoto> {
-  const mime = normalizeMime(asset.mimeType);
+async function compressAsset(
+  asset: ImagePicker.ImagePickerAsset,
+  limits: PhotoLimits,
+  allowed: Set<string>,
+): Promise<LocalPhoto> {
+  const mime = normalizeMime(asset.mimeType, allowed);
   if (!mime) {
     throw new PhotoValidationError('badType');
   }
@@ -44,20 +54,15 @@ async function compressAsset(asset: ImagePicker.ImagePickerAsset): Promise<Local
   const format =
     mime === 'image/png' ? SaveFormat.PNG : mime === 'image/webp' ? SaveFormat.WEBP : SaveFormat.JPEG;
 
-  const result = await manipulateAsync(
-    asset.uri,
-    [{ resize: { width: 1280 } }],
-    {
-      compress: 0.7,
-      format,
-    },
-  );
+  const result = await manipulateAsync(asset.uri, [{ resize: { width: 1280 } }], {
+    compress: 0.7,
+    format,
+  });
 
   const size = result.uri.startsWith('data:')
     ? Math.ceil((result.uri.length * 3) / 4)
     : (asset.fileSize ?? 0);
 
-  // Re-check size via fetch when possible (native file URIs).
   let byteSize = size;
   try {
     const response = await fetch(result.uri);
@@ -67,7 +72,7 @@ async function compressAsset(asset: ImagePicker.ImagePickerAsset): Promise<Local
     // Fall back to picker metadata / estimate.
   }
 
-  if (byteSize > MAX_PHOTO_BYTES) {
+  if (byteSize > limits.maxPhotoBytes) {
     throw new PhotoValidationError('tooLarge');
   }
 
@@ -81,8 +86,11 @@ async function compressAsset(asset: ImagePicker.ImagePickerAsset): Promise<Local
   };
 }
 
-export async function pickAnimalPhotos(currentCount: number): Promise<LocalPhoto[]> {
-  const remaining = MAX_ANIMAL_PHOTOS - currentCount;
+export async function pickAnimalPhotos(
+  currentCount: number,
+  limits: PhotoLimits = FALLBACK_APP_CONFIG,
+): Promise<LocalPhoto[]> {
+  const remaining = limits.maxAnimalPhotos - currentCount;
   if (remaining <= 0) {
     throw new PhotoValidationError('tooMany');
   }
@@ -91,6 +99,8 @@ export async function pickAnimalPhotos(currentCount: number): Promise<LocalPhoto
   if (!permission.granted) {
     throw new PhotoValidationError('permission');
   }
+
+  const allowed = new Set(limits.allowedPhotoMimeTypes.map((item) => item.toLowerCase()));
 
   const result = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ['images'],
@@ -103,20 +113,17 @@ export async function pickAnimalPhotos(currentCount: number): Promise<LocalPhoto
     return [];
   }
 
-  if (currentCount + result.assets.length > MAX_ANIMAL_PHOTOS) {
+  if (currentCount + result.assets.length > limits.maxAnimalPhotos) {
     throw new PhotoValidationError('tooMany');
   }
 
   const photos: LocalPhoto[] = [];
   for (const asset of result.assets) {
-    if (asset.fileSize && asset.fileSize > MAX_PHOTO_BYTES) {
-      // Still try compress; only fail if still too large after.
-    }
-    const mime = normalizeMime(asset.mimeType);
+    const mime = normalizeMime(asset.mimeType, allowed);
     if (!mime) {
       throw new PhotoValidationError('badType');
     }
-    photos.push(await compressAsset(asset));
+    photos.push(await compressAsset(asset, limits, allowed));
   }
   return photos;
 }

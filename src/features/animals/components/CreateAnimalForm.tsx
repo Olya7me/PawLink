@@ -8,6 +8,7 @@ import { Text, View } from 'react-native';
 
 import { useAuth } from '@/features/auth';
 import { mapAuthError } from '@/features/auth/utils/mapAuthError';
+import { useAppConfig, useLookupOptions } from '@/features/content';
 import { Button } from '@/shared/components/Button';
 import { ChipGroup } from '@/shared/components/ChipGroup';
 import { FieldLabel } from '@/shared/components/FieldLabel';
@@ -16,7 +17,6 @@ import { TextField } from '@/shared/components/TextField';
 import type { AnimalSpecies, HelpType, UrgencyLevel } from '@/shared/types/domain';
 
 import { createAnimalListing } from '../api/animalsApi';
-import { ANIMAL_SPECIES, HELP_TYPES, URGENCY_LEVELS } from '../constants';
 import { createAnimalSchema, type CreateAnimalInput } from '../schemas/animalSchemas';
 import { PhotoValidationError, pickAnimalPhotos, type LocalPhoto } from '../utils/photos';
 import { styles } from './CreateAnimalForm.styles';
@@ -26,6 +26,8 @@ export function CreateAnimalForm() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const { speciesOptions, urgencyOptions, helpTypeOptions } = useLookupOptions();
+  const photoLimits = useAppConfig();
   const [photos, setPhotos] = useState<LocalPhoto[]>([]);
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
@@ -50,7 +52,11 @@ export function CreateAnimalForm() {
 
   const mapPhotoError = (error: unknown): string => {
     if (error instanceof PhotoValidationError) {
-      return t(`animals.photos.${error.code}`);
+      const maxMb = Math.round(photoLimits.maxPhotoBytes / (1024 * 1024));
+      return t(`animals.photos.${error.code}`, {
+        count: photoLimits.maxAnimalPhotos,
+        mb: maxMb,
+      });
     }
     return t('animals.photos.generic');
   };
@@ -58,7 +64,7 @@ export function CreateAnimalForm() {
   const onAddPhotos = async () => {
     setPhotoError(null);
     try {
-      const next = await pickAnimalPhotos(photos.length);
+      const next = await pickAnimalPhotos(photos.length, photoLimits);
       if (next.length) {
         setPhotos((current) => [...current, ...next]);
       }
@@ -111,10 +117,7 @@ export function CreateAnimalForm() {
         name="species"
         render={({ field: { value, onChange } }) => (
           <ChipGroup
-            options={ANIMAL_SPECIES.map((option) => ({
-              value: option,
-              label: t(`animals.species.${option}`),
-            }))}
+            options={speciesOptions}
             value={value}
             allowClear={false}
             onChange={(next) => onChange((next as AnimalSpecies) ?? 'dog')}
@@ -204,10 +207,7 @@ export function CreateAnimalForm() {
         name="urgency"
         render={({ field: { value, onChange } }) => (
           <ChipGroup
-            options={URGENCY_LEVELS.map((option) => ({
-              value: option,
-              label: t(`animals.urgency.${option}`),
-            }))}
+            options={urgencyOptions}
             value={value}
             allowClear={false}
             onChange={(next) => onChange((next as UrgencyLevel) ?? 'medium')}
@@ -223,10 +223,7 @@ export function CreateAnimalForm() {
         render={({ field: { value, onChange } }) => (
           <ChipGroup
             multiple
-            options={HELP_TYPES.map((option) => ({
-              value: option,
-              label: t(`animals.helpType.${option}`),
-            }))}
+            options={helpTypeOptions}
             value={value}
             onChange={(next) => onChange((next as HelpType[]) ?? [])}
           />

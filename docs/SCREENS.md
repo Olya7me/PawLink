@@ -1,6 +1,6 @@
 # PawLink — Screens & Navigation
 
-Auth, guest **Feed**, **Animal Detail**, auth-gated **Create listing**, **My activity**, **Help** FAQ (from Supabase `faq_items`), **Maps** placeholder, and **Help coordination** (request detail, submit offer, author accept/reject, post-accept contact) are implemented. Notifications / reports remain designed here until their feature slices.
+Auth, guest **Feed**, **Animal Detail**, auth-gated **Create listing**, **My activity**, **Help** FAQ (from Supabase `faq_items`), **Maps** placeholder (copy from `app_copy`), filter catalogs / photo limits from Supabase (`lookup_options`, `app_config`), and **Help coordination** (request detail, submit offer, author accept/reject, post-accept contact) are implemented. Notifications / reports remain designed here until their feature slices.
 
 Guest access (locked): unauthenticated users can open **Feed**, **Animal Detail**, **Help**, and **Maps**. Create, offers, edit, and personal areas require auth.
 
@@ -17,7 +17,7 @@ Root Stack
 │   │   ├── My publications (open / edit)
 │   │   └── Offers I made → Help Request Detail
 │   ├── Help — FAQ from Supabase (collapsible Q&A by locale; chrome via i18n)
-│   └── Maps — placeholder (“soon”; city text in MVP, no map SDK)
+│   └── Maps — placeholder (“soon” copy from `app_copy`; city text in MVP, no map SDK)
 ├── Animal Detail `/animals/[id]`
 │   └── Help requests → `/requests/[requestId]`
 ├── Edit listing `/animals/[id]/edit` (author, auth)
@@ -37,10 +37,10 @@ Root Stack
 
 | Screen | Purpose | Auth |
 |--------|---------|------|
-| Feed (tab) | Browse listings; collapsible filters | Guest |
-| My activity (tab) | My listings + my offers + create CTA | Guest sees sign-in gate |
+| Feed (tab) | Browse listings; collapsible filters from `lookup_options` | Guest |
+| My activity (tab) | My listings + my offers + create CTA; empty copy from `app_copy` | Guest sees sign-in gate |
 | Help (tab) | Popular FAQ from `faq_items` (TanStack Query); UI chrome via i18n | Guest |
-| Maps (tab) | Placeholder until maps; city text remains MVP location | Guest |
+| Maps (tab) | Placeholder until maps (`app_copy` soon text); city text remains MVP location | Guest |
 | Sign In | Email/password (Supabase Auth) | Guest |
 | Sign Up | Create account | Guest |
 | Reset Password | Request / confirm reset | Guest |
@@ -58,7 +58,7 @@ Root Stack
 
 ### Publish a case
 
-1. Sign in → My activity → Create publication → fill animal form (city text, ≤5 photos) → select help types → publish → open detail.
+1. Sign in → My activity → Create publication → fill animal form (city text, photos capped by `app_config`) → select help types from `lookup_options` → publish → open detail.
 
 ### Help someone
 
@@ -81,11 +81,13 @@ Root Stack
 - In-app notifications list (planned)  
 - Help feedback form (FAQ from Supabase this pass; no feedback form yet)  
 
-### Help FAQ (backend content)
+### Backend content (editable without an app release)
 
-- Table: `faq_items` — see migration `00005_faq_items.sql` and [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) (run in SQL Editor; edit rows in Table Editor).
-- App loads published rows for the active locale via TanStack Query; title/subtitle/empty/error stay in i18n.
-- Project rule: prefer Supabase for fetchable copy/lists/configs — see [ARCHITECTURE.md](./ARCHITECTURE.md#content--data-ownership-project-wide).
+- **FAQ:** `faq_items` — migration `00005_faq_items.sql`; title/subtitle/empty/error stay in i18n.
+- **Filter catalogs:** `lookup_options` — migration `00006_remote_content.sql`; field chrome (`animals.filters.*`) stays in i18n.
+- **Marketing / empty copy:** `app_copy` (Maps soon, feed/activity empties) — same migration; tab titles stay in i18n.
+- **Limits:** `app_config` (`max_animal_photos`, `max_photo_bytes`, `allowed_photo_mime_types`).
+- How to run / edit in Table Editor: [SUPABASE_SETUP.md](./SUPABASE_SETUP.md). Ownership rule: [ARCHITECTURE.md](./ARCHITECTURE.md#content--data-ownership-project-wide).
 
 
 ## Implemented help routes

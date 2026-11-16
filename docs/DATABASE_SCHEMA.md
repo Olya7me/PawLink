@@ -1,6 +1,6 @@
 # PawLink — Database Schema
 
-Target: **PostgreSQL via Supabase**. Migrations live under `supabase/migrations/` (`00001` schema → `00005` FAQ). Apply them in the Supabase SQL Editor or via CLI — see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md).
+Target: **PostgreSQL via Supabase**. Migrations live under `supabase/migrations/` (`00001` schema → `00006` remote content). Apply them in the Supabase SQL Editor or via CLI — see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md).
 
 Decisions below reflect the **2026-11-14** product lock.
 
@@ -18,6 +18,7 @@ profiles ──< notifications
 profiles ──< reports (as reporter)
 
 faq_items (standalone content; public read when published)
+lookup_options / app_copy / app_config (public read catalogs + copy + limits)
 ```
 
 ## Tables
@@ -144,6 +145,8 @@ Basic moderation store (no admin panel in MVP).
 7. `notifications`: select/update only own rows.  
 8. `reports`: insert as authenticated self; no public read of others’ reports.
 9. `faq_items`: **SELECT** published rows for anon + authenticated; **no client writes** (dashboard / service role only).
+10. `lookup_options`: **SELECT** active rows for anon + authenticated; **no client writes**.
+11. `app_copy` / `app_config`: **SELECT** all rows for anon + authenticated; **no client writes**.
 
 ### `faq_items`
 
@@ -156,6 +159,44 @@ Basic moderation store (no admin panel in MVP).
 | sort_order | int | Ascending display order |
 | published | boolean | default true; unpublished hidden by RLS |
 | created_at / updated_at | timestamptz | |
+
+### `lookup_options`
+
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid PK | |
+| category | text | `species`, `urgency`, `help_type`, `feed_sort`, `animal_status` |
+| option_key | text | Stable key (matches Postgres enum where applicable) |
+| locale | text | `en` \| `ru` |
+| label | text | Display label |
+| sort_order | int | Ascending chip order |
+| active | boolean | RLS exposes active rows only |
+| created_at / updated_at | timestamptz | |
+
+Unique `(category, option_key, locale)`.
+
+### `app_copy`
+
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid PK | |
+| key | text | e.g. `maps.soonTitle`, `animals.feed.emptyBody` |
+| locale | text | `en` \| `ru` |
+| value | text | Marketing / empty-state body |
+| created_at / updated_at | timestamptz | |
+
+Unique `(key, locale)`.
+
+### `app_config`
+
+| Column | Type | Notes |
+|--------|------|-------|
+| key | text PK | e.g. `max_animal_photos` |
+| value | jsonb | Number, string array, etc. |
+| description | text | Optional admin note |
+| updated_at | timestamptz | |
+
+Public SELECT for all three; no client writes.
 
 ## Storage
 

@@ -8,6 +8,7 @@ import { Text, View } from 'react-native';
 
 import { useAuth } from '@/features/auth';
 import { mapAuthError } from '@/features/auth/utils/mapAuthError';
+import { useLookupOptions } from '@/features/content';
 import { Button } from '@/shared/components/Button';
 import { ChipGroup } from '@/shared/components/ChipGroup';
 import { ErrorRetry } from '@/shared/components/ErrorRetry';
@@ -18,11 +19,8 @@ import { TextField } from '@/shared/components/TextField';
 import type { AnimalSpecies, AnimalStatus, UrgencyLevel } from '@/shared/types/domain';
 
 import { getAnimalById, updateAnimalListing } from '../api/animalsApi';
-import { ANIMAL_SPECIES, URGENCY_LEVELS } from '../constants';
 import { updateAnimalSchema, type UpdateAnimalInput } from '../schemas/animalSchemas';
 import { styles } from './EditAnimalForm.styles';
-
-const ANIMAL_STATUSES: AnimalStatus[] = ['active', 'resolved', 'archived'];
 
 type EditAnimalFormProps = {
   animalId: string;
@@ -32,6 +30,7 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const { speciesOptions, urgencyOptions, animalStatusOptions } = useLookupOptions();
   const [formError, setFormError] = useState<string | null>(null);
 
   const detailQuery = useQuery({
@@ -130,10 +129,7 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
         name="species"
         render={({ field: { value, onChange } }) => (
           <ChipGroup
-            options={ANIMAL_SPECIES.map((option) => ({
-              value: option,
-              label: t(`animals.species.${option}`),
-            }))}
+            options={speciesOptions}
             value={value}
             allowClear={false}
             onChange={(next) => onChange((next as AnimalSpecies) ?? 'dog')}
@@ -223,10 +219,7 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
         name="urgency"
         render={({ field: { value, onChange } }) => (
           <ChipGroup
-            options={URGENCY_LEVELS.map((option) => ({
-              value: option,
-              label: t(`animals.urgency.${option}`),
-            }))}
+            options={urgencyOptions}
             value={value}
             allowClear={false}
             onChange={(next) => onChange((next as UrgencyLevel) ?? 'medium')}
@@ -240,10 +233,7 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
         name="status"
         render={({ field: { value, onChange } }) => (
           <ChipGroup
-            options={ANIMAL_STATUSES.map((option) => ({
-              value: option,
-              label: t(`animals.status.${option}`),
-            }))}
+            options={animalStatusOptions}
             value={value}
             allowClear={false}
             onChange={(next) => onChange((next as AnimalStatus) ?? 'active')}

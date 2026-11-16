@@ -72,13 +72,22 @@ Keep routes thin: `app/...` composes feature components.
 
 Hardcode on the client only **true local UI chrome**: navigation labels, button labels, form field labels, validation/error chrome, empty/loading/retry strings that describe UI state (not editorial content), and other short i18n strings that are inseparable from the component.
 
-**Example:** Help FAQ Q&A lives in `faq_items` (locale + published + sort_order); Help tab chrome (`faq.title`, empty/error) stays in i18n. Apply the same split for future features — migrate fetchable copy/lists to the backend rather than growing locale blobs of editorial text.
+**Examples already on Supabase:**
+
+| Content | Table | Client chrome that stays in i18n |
+|---------|-------|----------------------------------|
+| Help FAQ Q&A | `faq_items` | `faq.title`, empty/error |
+| Species / urgency / help type / feed sort / status labels | `lookup_options` | Filter field titles (`animals.filters.*`) |
+| Maps “soon” + feed/activity empty marketing | `app_copy` | Tab titles, loading/retry |
+| Max photos, max bytes, allowed MIME | `app_config` | Validation message templates with `{{count}}` / `{{mb}}` |
+
+Offline/error UX uses seeded fallbacks in `src/features/content/fallbacks.ts` that match migration `00006` seeds. Prefer fetching via TanStack Query (`features/content`) over growing locale blobs of editorial text.
 
 Edits for MVP: Table Editor / SQL (service role); no client write policies for content tables unless an admin product is built.
 
 ## State boundaries
 
-- **Server state** (animals, requests, offers, FAQ, profile from DB) → TanStack Query  
+- **Server state** (animals, requests, offers, FAQ, lookup catalogs, app copy/config, profile from DB) → TanStack Query  
 - **Auth session** → Supabase Auth + thin hook (future `features/auth`)  
 - **Client prefs** (language override) → Zustand  
 - **Form draft state** → React Hook Form  
@@ -131,7 +140,8 @@ See [SCREENS.md](./SCREENS.md). High level:
 - Root Stack + Expo Router **bottom tabs**: Feed | My activity | Help | Maps
 - Feed: guest-readable; signed-in users get a profile icon (not a text twin button); filters collapse by default
 - My activity: create CTA, author’s listings (edit), offers the user made
-- Help: FAQ from Supabase `faq_items` by locale; Maps: placeholder (city text in MVP)
+- Help: FAQ from Supabase `faq_items` by locale; Maps: placeholder copy from `app_copy` (city text in MVP)
+- Feed/create filters and photo limits load from `lookup_options` / `app_config`
 - Stack screens: Animal Detail, Edit listing, Create, Profile, Help request / offer, Auth
 - Product locks unchanged: light theme, city text (no maps SDK), no chat, one accepted offer (author accepts), meetup/contact after accept only
 

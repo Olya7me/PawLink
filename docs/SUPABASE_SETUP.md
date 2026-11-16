@@ -29,8 +29,9 @@ Use the **anon** key only. Do not put the service role key in the app or in git.
 | 3 | [`supabase/migrations/00003_storage_and_anonymize.sql`](../supabase/migrations/00003_storage_and_anonymize.sql) |
 | 4 | [`supabase/migrations/00004_help_coordination_rpcs.sql`](../supabase/migrations/00004_help_coordination_rpcs.sql) — required for accept/reject/withdraw offers and status transitions |
 | 5 | [`supabase/migrations/00005_faq_items.sql`](../supabase/migrations/00005_faq_items.sql) — Help FAQ table, RLS, and seed rows |
+| 6 | [`supabase/migrations/00006_remote_content.sql`](../supabase/migrations/00006_remote_content.sql) — lookup catalogs, `app_copy`, `app_config` |
 
-3. Confirm under **Table Editor** that `profiles`, `animals`, `help_requests`, `help_offers`, `animal_updates`, `notifications`, `reports`, and `faq_items` exist.
+3. Confirm under **Table Editor** that `profiles`, `animals`, `help_requests`, `help_offers`, `animal_updates`, `notifications`, `reports`, `faq_items`, `lookup_options`, `app_copy`, and `app_config` exist.
 4. Confirm under **Storage** that buckets `animal-photos` and `avatars` exist.
 
 ### Option B — Supabase CLI (if the project is linked)
@@ -69,13 +70,15 @@ The repo already includes hand-written types aligned with these migrations.
 - `anonymize_account()` for account deletion
 - Help coordination RPCs (`accept_help_offer`, `reject_help_offer`, `withdraw_help_offer`, `set_help_request_status`) and a fixed `help_offers_safe` view
 - `faq_items` table (published FAQ for the Help tab), public SELECT of published rows only, seed Q&A in en/ru
+- `lookup_options`, `app_copy`, `app_config` (filter/catalog labels, marketing empty copy, photo limits) — public SELECT; no client writes
 
 ### Already applied earlier migrations?
 
 | If you already ran… | Run next in SQL Editor |
 |---------------------|------------------------|
-| 00001–00003 only | [`00004_help_coordination_rpcs.sql`](../supabase/migrations/00004_help_coordination_rpcs.sql), then [`00005_faq_items.sql`](../supabase/migrations/00005_faq_items.sql) |
-| 00001–00004 | **Only** [`00005_faq_items.sql`](../supabase/migrations/00005_faq_items.sql) |
+| 00001–00003 only | [`00004_help_coordination_rpcs.sql`](../supabase/migrations/00004_help_coordination_rpcs.sql), then [`00005_faq_items.sql`](../supabase/migrations/00005_faq_items.sql), then [`00006_remote_content.sql`](../supabase/migrations/00006_remote_content.sql) |
+| 00001–00004 | [`00005_faq_items.sql`](../supabase/migrations/00005_faq_items.sql), then [`00006_remote_content.sql`](../supabase/migrations/00006_remote_content.sql) |
+| 00001–00005 | **Only** [`00006_remote_content.sql`](../supabase/migrations/00006_remote_content.sql) |
 
 ### Edit FAQ content (Table Editor)
 
@@ -85,3 +88,10 @@ The repo already includes hand-written types aligned with these migrations.
 4. Set `published` to `false` to hide a row from the app (RLS only exposes published rows to anon/authenticated).
 5. Add a new pair of rows (en + ru) when adding a topic; keep `slug` stable across locales.
 6. Client apps cannot insert/update/delete FAQ rows — use the dashboard (service role). No in-app admin UI yet.
+
+### Edit catalogs, copy, and config (Table Editor)
+
+1. **`lookup_options`** — filter/form labels for stable keys (`species`, `urgency`, `help_type`, `feed_sort`, `animal_status`). Edit `label` / `sort_order`; set `active` to `false` to hide. Do **not** invent new `option_key` values that are not in the matching Postgres enum (except `feed_sort`, which is client-only).
+2. **`app_copy`** — marketing / empty-state strings keyed by `key` + `locale` (e.g. `maps.soonTitle`, `animals.feed.emptyBody`). Edit `value` text only; keep keys stable so the app can resolve them.
+3. **`app_config`** — locale-independent limits: `max_animal_photos`, `max_photo_bytes`, `allowed_photo_mime_types` (JSONB). Changing these updates client validation UX; storage/DB hard checks in earlier migrations may still need a separate migration if you raise limits above those constraints.
+4. All three tables are public **read** for anon/authenticated; writes stay in the dashboard (service role).
