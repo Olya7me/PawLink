@@ -14,7 +14,7 @@ export type {
   HelpType,
   Profile,
   PublicProfile,
+  ReportKind,
   ReportStatus,
-  ReportTargetType,
   UrgencyLevel,
 } from '@/services/supabase/database.types';

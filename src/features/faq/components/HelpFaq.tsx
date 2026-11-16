@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
+import { FeedbackSection } from '@/features/reports';
 import type { AppLanguage } from '@/i18n';
 import { EmptyState } from '@/shared/components/EmptyState';
 import { ErrorRetry } from '@/shared/components/ErrorRetry';
@@ -41,9 +42,11 @@ export function HelpFaq() {
       <ScrollView
         style={styles.list}
         contentContainerStyle={styles.content}
+        keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
         {header}
+        <FeedbackSection />
       </ScrollView>
     );
   }
@@ -61,16 +64,20 @@ export function HelpFaq() {
 
   if (faqQuery.isError) {
     return (
-      <View style={styles.list}>
-        <View style={styles.content}>
-          {header}
-          <ErrorRetry
-            message={t('faq.error')}
-            retryLabel={t('common.retry')}
-            onRetry={() => void faqQuery.refetch()}
-          />
-        </View>
-      </View>
+      <ScrollView
+        style={styles.list}
+        contentContainerStyle={styles.content}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        {header}
+        <ErrorRetry
+          message={t('faq.error')}
+          retryLabel={t('common.retry')}
+          onRetry={() => void faqQuery.refetch()}
+        />
+        <FeedbackSection />
+      </ScrollView>
     );
   }
 
@@ -80,6 +87,7 @@ export function HelpFaq() {
     <ScrollView
       style={styles.list}
       contentContainerStyle={styles.content}
+      keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
     >
       {header}
@@ -97,6 +105,7 @@ export function HelpFaq() {
           ))}
         </View>
       )}
+      <FeedbackSection />
     </ScrollView>
   );
 }

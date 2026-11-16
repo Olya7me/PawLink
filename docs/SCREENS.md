@@ -1,6 +1,6 @@
 # PawLink — Screens & Navigation
 
-Auth, guest **Feed**, **Animal Detail**, auth-gated **Create listing**, **My activity**, **Help** FAQ (from Supabase `faq_items`), **Maps** placeholder (copy from `app_copy`), filter catalogs / photo limits from Supabase (`lookup_options`, `app_config`), **Help coordination**, and **in-app notifications** (inbox + unread badge; no push yet) are implemented. Reports remain designed here until their feature slice.
+Auth, guest **Feed**, **Animal Detail**, auth-gated **Create listing**, **My activity**, **Help** (FAQ from `faq_items` + feedback form → `reports`), **Maps** placeholder (copy from `app_copy`), filter catalogs / photo limits from Supabase (`lookup_options`, `app_config`), **Help coordination**, **in-app notifications** (inbox + unread badge; no push yet), and **listing reports** (⋯ → report form) are implemented.
 
 Guest access (locked): unauthenticated users can open **Feed**, **Animal Detail**, **Help**, and **Maps**. Create, offers, edit, and personal areas require auth.
 
@@ -17,11 +17,13 @@ Root Stack
 │   │   ├── Favorites (Избранное) → Animal Detail
 │   │   ├── My publications (open / edit)
 │   │   └── Offers I made → Help Request Detail
-│   ├── Help — FAQ from Supabase (collapsible Q&A by locale; chrome via i18n)
+│   ├── Help — FAQ from Supabase + feedback form (auth to submit; chrome via i18n)
 │   └── Maps — placeholder (“soon” copy from `app_copy`; city text in MVP, no map SDK)
 ├── Animal Detail `/animals/[id]`
 │   ├── Favorite heart toggle (auth; guests → sign-in)
+│   ├── ⋯ overflow → «Report» / «Пожаловаться» → `/animals/[id]/report` (auth)
 │   └── Help requests → `/requests/[requestId]`
+├── Report listing `/animals/[id]/report` (auth) — reason chips + comment; `animal_id` attached
 ├── Edit listing `/animals/[id]/edit` (author, auth)
 ├── Create `/create` (auth)
 ├── Profile `/profile` (auth) — opened from feed header icon; link to Notifications
@@ -42,12 +44,13 @@ Root Stack
 |--------|---------|------|
 | Feed (tab) | Browse listings; heart on cards; filters from `lookup_options` | Guest (favorite needs auth) |
 | My activity (tab) | Favorites + my listings + my offers + create CTA; empty copy from `app_copy` | Guest sees sign-in gate |
-| Help (tab) | Popular FAQ from `faq_items` (TanStack Query); UI chrome via i18n | Guest |
+| Help (tab) | FAQ from `faq_items` + feedback form → `reports` (`kind=feedback`) | Guest browse; submit needs auth |
 | Maps (tab) | Placeholder until maps (`app_copy` soon text); city text remains MVP location | Guest |
 | Sign In | Email/password (Supabase Auth) | Guest |
 | Sign Up | Create account | Guest |
 | Reset Password | Request / confirm reset | Guest |
-| Animal Detail | Photos, info, tasks, author (public); favorite heart | Guest (favorite needs auth) |
+| Animal Detail | Photos, info, tasks, author (public); favorite heart; ⋯ report menu | Guest (favorite/report need auth) |
+| Report listing | Reason (`report_reason`) + comment; stores `listing_report` | Auth |
 | Edit listing | Author updates public fields + status | Auth (author) |
 | Help Request Detail | Status, description, offer CTA | Guest read; actions auth |
 | Submit Offer | Message + submit | Auth |
@@ -80,16 +83,16 @@ Root Stack
 
 - Map SDK / map picker (Maps tab is a placeholder; city text stays the location model)  
 - Chat threads  
-- Admin moderation console  
+- Admin moderation console (Olga reviews `reports` in Table Editor)  
 - Dark mode settings  
 - Push notifications (Expo Notifications) — after in-app inbox  
-- Help feedback form (FAQ from Supabase this pass; no feedback form yet)  
+- In-app user-profile report UI (`user_report` kind is schema-ready; UI later)  
 
 ### Backend content (editable without an app release)
 
 - **FAQ:** `faq_items` — migration `00005_faq_items.sql`; title/subtitle/empty/error stay in i18n.
-- **Filter catalogs:** `lookup_options` — migration `00006_remote_content.sql`; field chrome (`animals.filters.*`) stays in i18n.
-- **Marketing / empty copy:** `app_copy` (Maps soon, feed/activity empties, notification empty + templates) — migrations `00006`–`00008`; tab titles stay in i18n.
+- **Filter catalogs + report reasons:** `lookup_options` — migrations `00006` + `00009` (`report_reason`); field chrome stays in i18n.
+- **Marketing / empty copy:** `app_copy` (Maps soon, feed/activity empties, notification templates, report hints) — migrations `00006`–`00009`; tab titles stay in i18n.
 - **Limits:** `app_config` (`max_animal_photos`, `max_photo_bytes`, `allowed_photo_mime_types`).
 - How to run / edit in Table Editor: [SUPABASE_SETUP.md](./SUPABASE_SETUP.md). Ownership rule: [ARCHITECTURE.md](./ARCHITECTURE.md#content--data-ownership-project-wide).
 
@@ -101,8 +104,9 @@ Root Stack
 | `/requests/[requestId]` | Help Request Detail (guest read; offer / author actions when signed in) |
 | `/requests/[requestId]/offer` | Submit Offer (auth) |
 | `/animals/[id]/edit` | Edit listing (author) |
+| `/animals/[id]/report` | Report listing (auth) |
 
-Animal detail links each help request into `/requests/[requestId]`.
+Animal detail links each help request into `/requests/[requestId]` and exposes ⋯ → report.
 
 ## Implementation note
 

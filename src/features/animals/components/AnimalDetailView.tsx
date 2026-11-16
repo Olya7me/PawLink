@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useLookupOptions } from '@/features/content';
 import { FavoriteButton } from '@/features/favorites';
+import { ReportMenuButton } from '@/features/reports';
 import { ErrorRetry } from '@/shared/components/ErrorRetry';
 import { InlineMessage } from '@/shared/components/InlineMessage';
 import { LoadingBlock } from '@/shared/components/LoadingBlock';
@@ -79,6 +80,7 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
           <Text style={styles.title}>{title}</Text>
           <View style={styles.titleActions}>
             <FavoriteButton animalId={animal.id} />
+            <ReportMenuButton animalId={animal.id} />
             <UrgencyBadge level={animal.urgency} label={labelFor('urgency', animal.urgency)} />
           </View>
         </View>

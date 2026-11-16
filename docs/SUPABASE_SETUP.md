@@ -32,6 +32,7 @@ Use the **anon** key only. Do not put the service role key in the app or in git.
 | 6 | [`supabase/migrations/00006_remote_content.sql`](../supabase/migrations/00006_remote_content.sql) — lookup catalogs, `app_copy`, `app_config` |
 | 7 | [`supabase/migrations/00007_favorites.sql`](../supabase/migrations/00007_favorites.sql) — `favorites` table + owner-only RLS; seeds Favorites empty `app_copy` |
 | 8 | [`supabase/migrations/00008_in_app_notifications.sql`](../supabase/migrations/00008_in_app_notifications.sql) — notification templates, server-side inserts (triggers + RPC hooks), harden RLS, realtime |
+| 9 | [`supabase/migrations/00009_feedback_and_reports.sql`](../supabase/migrations/00009_feedback_and_reports.sql) — evolve `reports` for feedback/listing/user kinds; seed `report_reason` + report hints |
 
 3. Confirm under **Table Editor** that `profiles`, `animals`, `help_requests`, `help_offers`, `animal_updates`, `notifications`, `reports`, `faq_items`, `lookup_options`, `app_copy`, `app_config`, and `favorites` exist.
 4. Confirm under **Storage** that buckets `animal-photos` and `avatars` exist.
@@ -75,16 +76,18 @@ The repo already includes hand-written types aligned with these migrations.
 - `lookup_options`, `app_copy`, `app_config` (filter/catalog labels, marketing empty copy, photo limits) — public SELECT; no client writes
 - `favorites` table (`user_id`, `animal_id`) with owner-only RLS; Favorites empty-state rows in `app_copy`
 - In-app notifications: `create_notification` + triggers/RPC hooks for offer/status events; `app_copy` notification templates; clients cannot insert notifications
+- Feedback + reports: `reports.kind` (`feedback` / `listing_report` / `user_report`), typed `animal_id` / `reported_user_id`, `body`; `lookup_options` category `report_reason`; report hint rows in `app_copy`
 
 ### Already applied earlier migrations?
 
 | If you already ran… | Run next in SQL Editor |
 |---------------------|------------------------|
-| 00001–00003 only | [`00004`](../supabase/migrations/00004_help_coordination_rpcs.sql) → [`00005`](../supabase/migrations/00005_faq_items.sql) → [`00006`](../supabase/migrations/00006_remote_content.sql) → [`00007`](../supabase/migrations/00007_favorites.sql) → [`00008`](../supabase/migrations/00008_in_app_notifications.sql) |
-| 00001–00004 | [`00005`](../supabase/migrations/00005_faq_items.sql) → [`00006`](../supabase/migrations/00006_remote_content.sql) → [`00007`](../supabase/migrations/00007_favorites.sql) → [`00008`](../supabase/migrations/00008_in_app_notifications.sql) |
-| 00001–00005 | [`00006`](../supabase/migrations/00006_remote_content.sql) → [`00007`](../supabase/migrations/00007_favorites.sql) → [`00008`](../supabase/migrations/00008_in_app_notifications.sql) |
-| 00001–00006 | [`00007_favorites.sql`](../supabase/migrations/00007_favorites.sql) → [`00008_in_app_notifications.sql`](../supabase/migrations/00008_in_app_notifications.sql) |
-| 00001–00007 | **Only** [`00008_in_app_notifications.sql`](../supabase/migrations/00008_in_app_notifications.sql) |
+| 00001–00003 only | [`00004`](../supabase/migrations/00004_help_coordination_rpcs.sql) → … → [`00009`](../supabase/migrations/00009_feedback_and_reports.sql) |
+| 00001–00004 | [`00005`](../supabase/migrations/00005_faq_items.sql) → … → [`00009`](../supabase/migrations/00009_feedback_and_reports.sql) |
+| 00001–00005 | [`00006`](../supabase/migrations/00006_remote_content.sql) → [`00007`](../supabase/migrations/00007_favorites.sql) → [`00008`](../supabase/migrations/00008_in_app_notifications.sql) → [`00009`](../supabase/migrations/00009_feedback_and_reports.sql) |
+| 00001–00006 | [`00007`](../supabase/migrations/00007_favorites.sql) → [`00008`](../supabase/migrations/00008_in_app_notifications.sql) → [`00009`](../supabase/migrations/00009_feedback_and_reports.sql) |
+| 00001–00007 | [`00008`](../supabase/migrations/00008_in_app_notifications.sql) → [`00009`](../supabase/migrations/00009_feedback_and_reports.sql) |
+| 00001–00008 | **Only** [`00009_feedback_and_reports.sql`](../supabase/migrations/00009_feedback_and_reports.sql) |
 
 ### Edit FAQ content (Table Editor)
 
@@ -97,15 +100,30 @@ The repo already includes hand-written types aligned with these migrations.
 
 ### Edit catalogs, copy, and config (Table Editor)
 
-1. **`lookup_options`** — filter/form labels for stable keys (`species`, `urgency`, `help_type`, `feed_sort`, `animal_status`). Edit `label` / `sort_order`; set `active` to `false` to hide. Do **not** invent new `option_key` values that are not in the matching Postgres enum (except `feed_sort`, which is client-only).
-2. **`app_copy`** — marketing / empty-state strings keyed by `key` + `locale` (e.g. `maps.soonTitle`, `animals.feed.emptyBody`, `activity.favoritesEmptyTitle`, `notifications.offer_accepted.title`). Edit `value` text only; keep keys stable so the app can resolve them. Notification templates support `{{request_title}}`, `{{animal_label}}`, `{{status}}`.
+1. **`lookup_options`** — filter/form labels for stable keys (`species`, `urgency`, `help_type`, `feed_sort`, `animal_status`, `report_reason`). Edit `label` / `sort_order`; set `active` to `false` to hide. Do **not** invent new `option_key` values that are not in the matching Postgres enum (except `feed_sort` and `report_reason`, which are client/catalog keys).
+2. **`app_copy`** — marketing / empty-state strings keyed by `key` + `locale` (e.g. `maps.soonTitle`, `animals.feed.emptyBody`, `activity.favoritesEmptyTitle`, `notifications.offer_accepted.title`, `reports.feedback.hint`). Edit `value` text only; keep keys stable so the app can resolve them. Notification templates support `{{request_title}}`, `{{animal_label}}`, `{{status}}`.
 3. **`app_config`** — locale-independent limits: `max_animal_photos`, `max_photo_bytes`, `allowed_photo_mime_types` (JSONB). Changing these updates client validation UX; storage/DB hard checks in earlier migrations may still need a separate migration if you raise limits above those constraints.
 4. All three tables are public **read** for anon/authenticated; writes stay in the dashboard (service role).
 
-### Olga: apply in-app notifications (SQL Editor)
+### Olga: read feedback and listing reports (Table Editor)
 
-If migrations `00001`–`00007` are already applied, open **SQL Editor** and run the full contents of [`00008_in_app_notifications.sql`](../supabase/migrations/00008_in_app_notifications.sql) once. Then spot-check:
+There is **no email and no admin UI**. Submissions land in Supabase:
 
-1. **Table Editor → `app_copy`**: keys starting with `notifications.` exist for `en` and `ru`.
-2. Accept/reject an offer (or insert a pending offer) and confirm a row appears under **`notifications`** for the other party — not forged from the client.
-3. In the app, open the bell / Notifications screen, mark read, and confirm `read_at` updates.
+1. Open [Supabase Dashboard](https://supabase.com/dashboard) → your PawLink project → **Table Editor** → **`reports`**.
+2. Filter or sort by `created_at` (newest first) or `status` (`open` = pending).
+3. Columns to read:
+   - `kind` — `feedback` (Help tab), `listing_report` (animal ⋯ menu), or `user_report` (schema-ready; UI later)
+   - `reason` — stable key from `lookup_options` category `report_reason` (labels editable there)
+   - `body` — free-text message / comment
+   - `animal_id` — set for listing reports (open that UUID in `animals` if needed)
+   - `reporter_id` — signed-in user who submitted
+   - `status` — change to `reviewed` / `dismissed` manually when you handle it (service role / dashboard)
+4. To edit reason labels without an app release: **Table Editor → `lookup_options`**, filter `category = report_reason`.
+
+### Olga: apply feedback/reports migration (SQL Editor)
+
+If migrations `00001`–`00008` are already applied, open **SQL Editor** and run the full contents of [`00009_feedback_and_reports.sql`](../supabase/migrations/00009_feedback_and_reports.sql) once. Then spot-check:
+
+1. **Table Editor → `reports`**: columns include `kind`, `animal_id`, `reported_user_id`, `body` (no `target_type` / `target_id` / `details`).
+2. **Table Editor → `lookup_options`**: rows with `category = report_reason` for `en` and `ru`.
+3. In the app (signed in): Help → send feedback; Animal detail → ⋯ → Report — confirm new rows appear under **`reports`**.

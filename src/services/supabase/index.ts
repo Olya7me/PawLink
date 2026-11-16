@@ -17,4 +17,8 @@ export type {
   Profile,
   ProfileUpdate,
   PublicProfile,
+  Report,
+  ReportInsert,
+  ReportKind,
+  ReportStatus,
 } from './database.types';

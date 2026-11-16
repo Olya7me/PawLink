@@ -12,6 +12,7 @@ describe('content fallbacks', () => {
     const rows = fallbackLookupOptions('en', 'species');
     expect(rows.map((row) => row.option_key)).toEqual([...FALLBACK_SPECIES]);
     expect(fallbackLookupLabel('species', 'dog', 'ru')).toBe('Собака');
+    expect(fallbackLookupLabel('report_reason', 'spam', 'ru')).toBe('Спам или реклама');
   });
 
   it('returns seeded app copy', () => {
@@ -19,6 +20,7 @@ describe('content fallbacks', () => {
     expect(fallbackAppCopy('maps.soonTitle', 'ru')).toBe('Карты скоро');
     expect(fallbackAppCopy('notifications.emptyTitle', 'en')).toBe('No notifications yet');
     expect(fallbackAppCopy('notifications.offer_accepted.title', 'ru')).toBe('Ваш отклик приняли');
+    expect(fallbackAppCopy('reports.feedback.hint', 'en')).toContain('improve');
   });
 
   it('parses app_config rows with fallbacks', () => {

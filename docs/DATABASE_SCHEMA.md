@@ -1,6 +1,6 @@
 # PawLink — Database Schema
 
-Target: **PostgreSQL via Supabase**. Migrations live under `supabase/migrations/` (`00001` schema → `00007` favorites). Apply them in the Supabase SQL Editor or via CLI — see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md).
+Target: **PostgreSQL via Supabase**. Migrations live under `supabase/migrations/` (`00001` schema → `00009` feedback/reports). Apply them in the Supabase SQL Editor or via CLI — see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md).
 
 Decisions below reflect the **2026-11-14** product lock.
 
@@ -124,18 +124,21 @@ Inserts are **server-side only** (security definer `create_notification` via off
 
 ### `reports`
 
-Basic moderation store (no admin panel in MVP).
+Unified store for Help-tab **feedback**, **listing reports**, and (schema-ready) **user reports**. No admin panel in MVP — Olga reviews rows in **Table Editor**. Migration: `00009_feedback_and_reports.sql` (evolves the original `00001` shape).
 
 | Column | Type | Notes |
 |--------|------|-------|
 | id | uuid PK | |
-| reporter_id | uuid FK → profiles | ON DELETE SET NULL |
-| target_type | enum | animal / profile |
-| target_id | uuid | |
-| reason | text | |
-| details | text | |
-| status | enum | open / reviewed / dismissed |
+| reporter_id | uuid FK → profiles | ON DELETE SET NULL; **required on insert** (`auth.uid()`); guests must sign in |
+| kind | enum | `feedback` / `listing_report` / `user_report` |
+| animal_id | uuid FK → animals | nullable; **required** when `kind = listing_report` |
+| reported_user_id | uuid FK → profiles | nullable; **required** when `kind = user_report` |
+| reason | text | Stable `lookup_options.option_key` for category `report_reason` |
+| body | text | Message / comment; required in app for feedback |
+| status | enum | `open` (pending review) / `reviewed` / `dismissed`; default `open` |
 | created_at | timestamptz | |
+
+Check constraint: feedback has no targets; listing reports require `animal_id`; user reports require `reported_user_id`. Indexes: `(kind)`, `(animal_id)`, `(reported_user_id)`, `(status)`, `(created_at desc)`.
 
 ## Auth & RLS (principles)
 
@@ -146,7 +149,7 @@ Basic moderation store (no admin panel in MVP).
 5. `help_offers`: insert as authenticated self; **accept/reject only by `help_requests.created_by`**; `meetup_details` readable only by request author + accepted offerer after accept.  
 6. `animal_updates`: readable with the animal; insert by participants.  
 7. `notifications`: select/update only own rows; **no client insert/delete** (server triggers/RPCs only).  
-8. `reports`: insert as authenticated self; no public read of others’ reports.
+8. `reports`: insert as authenticated self (`reporter_id = auth.uid()`); select **own** rows only; no public read of others’ reports; no client update/delete (dashboard / service role for moderation status).
 9. `faq_items`: **SELECT** published rows for anon + authenticated; **no client writes** (dashboard / service role only).
 10. `lookup_options`: **SELECT** active rows for anon + authenticated; **no client writes**.
 11. `app_copy` / `app_config`: **SELECT** all rows for anon + authenticated; **no client writes**.
@@ -179,7 +182,7 @@ Unique primary key `(user_id, animal_id)`. Indexes: `(user_id, created_at desc)`
 | Column | Type | Notes |
 |--------|------|-------|
 | id | uuid PK | |
-| category | text | `species`, `urgency`, `help_type`, `feed_sort`, `animal_status` |
+| category | text | `species`, `urgency`, `help_type`, `feed_sort`, `animal_status`, `report_reason` |
 | option_key | text | Stable key (matches Postgres enum where applicable) |
 | locale | text | `en` \| `ru` |
 | label | text | Display label |
