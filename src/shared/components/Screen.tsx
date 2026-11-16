@@ -1,17 +1,25 @@
 import { type ReactNode } from 'react';
-import { SafeAreaView, View, type ViewStyle } from 'react-native';
+import { View, type StyleProp, type ViewStyle } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { styles } from './Screen.styles';
 
 type ScreenProps = {
   children: ReactNode;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
+  edges?: ('top' | 'right' | 'bottom' | 'left')[];
+  padded?: boolean;
 };
 
-export function Screen({ children, style }: ScreenProps) {
+export function Screen({
+  children,
+  style,
+  edges = ['top', 'right', 'bottom', 'left'],
+  padded = true,
+}: ScreenProps) {
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={[styles.content, style]}>{children}</View>
+    <SafeAreaView style={styles.safe} edges={edges}>
+      <View style={[padded ? styles.content : styles.contentFlush, style]}>{children}</View>
     </SafeAreaView>
   );
 }

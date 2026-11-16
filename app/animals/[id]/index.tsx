@@ -5,7 +5,7 @@ import { AnimalDetailView } from '@/features/animals';
 import { InlineMessage } from '@/shared/components/InlineMessage';
 import { Screen } from '@/shared/components/Screen';
 
-import { styles } from './_id.styles';
+import { styles } from './_index.styles';
 
 export default function AnimalDetailScreen() {
   const { t } = useTranslation();
@@ -14,7 +14,7 @@ export default function AnimalDetailScreen() {
 
   if (!animalId) {
     return (
-      <Screen style={styles.centered}>
+      <Screen style={styles.centered} edges={['left', 'right', 'bottom']}>
         <InlineMessage message={t('animals.detail.notFound')} style={styles.error} />
       </Screen>
     );
@@ -23,7 +23,7 @@ export default function AnimalDetailScreen() {
   return (
     <>
       <Stack.Screen options={{ title: t('animals.detail.title') }} />
-      <Screen style={styles.screen}>
+      <Screen padded={false} style={styles.screen} edges={['left', 'right', 'bottom']}>
         <AnimalDetailView animalId={animalId} />
       </Screen>
     </>

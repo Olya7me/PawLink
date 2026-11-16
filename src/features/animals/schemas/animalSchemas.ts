@@ -20,6 +20,14 @@ export const createAnimalSchema = z.object({
 
 export type CreateAnimalInput = z.infer<typeof createAnimalSchema>;
 
+export const updateAnimalSchema = createAnimalSchema
+  .omit({ helpTypes: true })
+  .extend({
+    status: z.enum(['active', 'resolved', 'archived']),
+  });
+
+export type UpdateAnimalInput = z.infer<typeof updateAnimalSchema>;
+
 export type AnimalFeedFilters = {
   city: string;
   species: string | null;

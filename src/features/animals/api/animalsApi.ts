@@ -3,6 +3,7 @@ import { isSupabaseConfigured, supabase } from '@/services/supabase';
 import type {
   Animal,
   AnimalSpecies,
+  AnimalStatus,
   HelpRequest,
   HelpType,
   PublicProfile,
@@ -212,6 +213,98 @@ export async function getAnimalById(id: string): Promise<AnimalDetail | null> {
     help_requests: data.help_requests ?? [],
     author,
   } as AnimalDetail;
+}
+
+export type UpdateAnimalPayload = {
+  animalId: string;
+  authorId: string;
+  name: string | null;
+  species: AnimalSpecies;
+  description: string;
+  conditionNotes: string | null;
+  city: string;
+  locationLabel: string | null;
+  urgency: UrgencyLevel;
+  status: AnimalStatus;
+};
+
+export async function listAnimalsByAuthor(authorId: string): Promise<AnimalListItem[]> {
+  assertConfigured();
+
+  const { data, error } = await supabase
+    .from('animals')
+    .select(
+      `
+      id,
+      author_id,
+      name,
+      species,
+      description,
+      condition_notes,
+      urgency,
+      status,
+      city,
+      location_label,
+      photo_paths,
+      created_at,
+      updated_at,
+      help_requests (
+        id,
+        help_type,
+        title,
+        status,
+        description
+      ),
+      author:profiles!animals_author_id_fkey (
+        id,
+        display_name,
+        city,
+        avatar_url,
+        skills,
+        is_anonymized,
+        created_at,
+        updated_at
+      )
+    `,
+    )
+    .eq('author_id', authorId)
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+
+  return (data ?? []).map((row) => {
+    const authorRaw = row.author;
+    const author = Array.isArray(authorRaw) ? (authorRaw[0] ?? null) : (authorRaw ?? null);
+    return {
+      ...row,
+      help_requests: row.help_requests ?? [],
+      author,
+    } as AnimalListItem;
+  });
+}
+
+export async function updateAnimalListing(payload: UpdateAnimalPayload): Promise<Animal> {
+  assertConfigured();
+
+  const { data, error } = await supabase
+    .from('animals')
+    .update({
+      name: payload.name,
+      species: payload.species,
+      description: payload.description,
+      condition_notes: payload.conditionNotes,
+      city: payload.city,
+      location_label: payload.locationLabel,
+      urgency: payload.urgency,
+      status: payload.status,
+    })
+    .eq('id', payload.animalId)
+    .eq('author_id', payload.authorId)
+    .select('*')
+    .single();
+
+  if (error) throw error;
+  return data;
 }
 
 export async function createAnimalListing(payload: CreateAnimalPayload): Promise<Animal> {

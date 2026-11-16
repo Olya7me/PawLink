@@ -5,12 +5,13 @@ export { ContactMeetupPanel } from './components/ContactMeetupPanel';
 export {
   acceptHelpOffer,
   getHelpRequestDetail,
+  listOffersByOfferer,
   listOffersForRequest,
   rejectHelpOffer,
   submitHelpOffer,
   withdrawHelpOffer,
   setHelpRequestStatus,
 } from './api/helpApi';
-export type { HelpRequestDetail, SafeHelpOffer } from './api/helpApi';
+export type { HelpRequestDetail, MyOfferItem, SafeHelpOffer } from './api/helpApi';
 export { submitOfferSchema, acceptOfferSchema } from './schemas/offerSchemas';
 export type { SubmitOfferInput, AcceptOfferInput } from './schemas/offerSchemas';

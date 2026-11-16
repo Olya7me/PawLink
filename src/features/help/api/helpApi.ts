@@ -244,6 +244,95 @@ export async function getPeerContact(profileId: string): Promise<PeerContact | n
   };
 }
 
+export type MyOfferItem = {
+  id: string;
+  status: HelpOfferStatus;
+  message: string | null;
+  created_at: string;
+  help_request_id: string;
+  help_request: {
+    id: string;
+    title: string;
+    help_type: HelpRequest['help_type'];
+    status: HelpRequestStatus;
+    animal_id: string;
+  };
+  animal: {
+    id: string;
+    name: string | null;
+    city: string;
+    species: string;
+  } | null;
+};
+
+export async function listOffersByOfferer(offererId: string): Promise<MyOfferItem[]> {
+  assertConfigured();
+
+  const { data: offers, error } = await supabase
+    .from('help_offers_safe')
+    .select('id, status, message, created_at, help_request_id')
+    .eq('offerer_id', offererId)
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+  if (!offers?.length) return [];
+
+  const requestIds = [...new Set(offers.map((row) => row.help_request_id))];
+  const { data: requests, error: requestError } = await supabase
+    .from('help_requests')
+    .select('id, title, help_type, status, animal_id')
+    .in('id', requestIds);
+
+  if (requestError) throw requestError;
+
+  const requestById = new Map((requests ?? []).map((request) => [request.id, request]));
+  const animalIds = [
+    ...new Set(
+      (requests ?? [])
+        .map((request) => request.animal_id)
+        .filter((id): id is string => Boolean(id)),
+    ),
+  ];
+
+  const animalById = new Map<
+    string,
+    { id: string; name: string | null; city: string; species: string }
+  >();
+
+  if (animalIds.length > 0) {
+    const { data: animals, error: animalError } = await supabase
+      .from('animals')
+      .select('id, name, city, species')
+      .in('id', animalIds);
+
+    if (animalError) throw animalError;
+    for (const animal of animals ?? []) {
+      animalById.set(animal.id, animal);
+    }
+  }
+
+  return offers.map((row) => {
+    const request = requestById.get(row.help_request_id);
+    const animal = request ? (animalById.get(request.animal_id) ?? null) : null;
+
+    return {
+      id: row.id,
+      status: row.status as HelpOfferStatus,
+      message: row.message,
+      created_at: row.created_at,
+      help_request_id: row.help_request_id,
+      help_request: {
+        id: request?.id ?? row.help_request_id,
+        title: request?.title ?? '',
+        help_type: request?.help_type ?? 'other',
+        status: request?.status ?? 'open',
+        animal_id: request?.animal_id ?? '',
+      },
+      animal,
+    };
+  });
+}
+
 export async function getAnimalCityForRequest(requestId: string): Promise<{
   animalId: string;
   city: string;

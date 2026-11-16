@@ -6,21 +6,27 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
+    paddingTop: spacing.md,
   },
   list: {
     flex: 1,
   },
   listContent: {
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
+    paddingTop: spacing.md,
     paddingBottom: spacing.xxl,
   },
   topBar: {
-    marginBottom: spacing.lg,
+    marginBottom: spacing.md,
+  },
+  brandRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
     gap: spacing.md,
   },
   brandBlock: {
+    flex: 1,
     gap: spacing.xs,
   },
   brand: {
@@ -33,13 +39,9 @@ export const styles = StyleSheet.create({
     color: colors.textSecondary,
     lineHeight: typography.size.md * typography.lineHeight.normal,
   },
-  actions: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-  },
-  actionButton: {
-    minWidth: 120,
+  signInButton: {
+    minWidth: 96,
+    alignSelf: 'flex-start',
   },
   warning: {
     color: colors.warning,

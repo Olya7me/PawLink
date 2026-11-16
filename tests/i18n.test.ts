@@ -38,4 +38,13 @@ describe('i18n locales', () => {
     expect(ru.help.offers.accept).toBeTruthy();
     expect(en.help.contact.title).toBeTruthy();
   });
+
+  it('includes tab and activity strings', () => {
+    expect(en.tabs.feed).toBeTruthy();
+    expect(ru.tabs.activity).toBeTruthy();
+    expect(en.activity.createCta).toBeTruthy();
+    expect(en.animals.feed.subtitleSignedIn).toBeTruthy();
+    expect(ru.animals.feed.subtitleGuest).toBeTruthy();
+  });
 });
+
