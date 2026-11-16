@@ -66,6 +66,13 @@ describe('i18n locales', () => {
     expect(ru.notifications.markAllRead).toBeTruthy();
     expect(en.notifications.bellUnread).toContain('{{count}}');
   });
+
+  it('includes feedback and report chrome strings', () => {
+    expect(en.reports.feedback.submit).toBeTruthy();
+    expect(ru.reports.menu.reportListing).toBe('Пожаловаться');
+    expect(en.reports.listing.title).toBeTruthy();
+    expect(ru.reports.gated).toBeTruthy();
+  });
 });
 
 

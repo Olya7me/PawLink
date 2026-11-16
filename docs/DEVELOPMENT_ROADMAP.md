@@ -11,8 +11,10 @@
 | 5 | Guest feed + create animal listing | Done (PR #5) |
 | 6 | Help offers + accept/reject + status transitions | Done (PR #6) |
 | 7 | Styles / shared UI extraction | Done (PR #7) |
-| 8 | Tabs + My activity + feed header UX | In progress (`feat/tab-navigation-my-activity`) |
-| 9+ | Notifications, reports | Next |
+| 8 | Tabs + My activity + feed header UX | Done |
+| 9 | In-app notifications | Done (PR #14) |
+| 10 | Feedback + listing reports | This PR |
+| 11+ | Polish, EAS preview, push (optional) | Next |
 
 ## Locked product decisions (2026-11-14)
 
@@ -39,7 +41,7 @@ See also [PRODUCT_SPEC.md](./PRODUCT_SPEC.md), [ARCHITECTURE.md](./ARCHITECTURE.
 4. Offers (author accept/reject; post-accept contact reveal) — done  
 5. Personal area (tabs: feed + my activity / listings / offers) — done  
 6. In-app notifications — done (no push yet)  
-7. Reports (store only)  
+7. Reports / feedback (store in Table Editor; no admin UI) — this PR  
 8. Polish, EAS preview builds  
 9. Push notifications (optional stretch)  
 
@@ -65,15 +67,17 @@ See also [PRODUCT_SPEC.md](./PRODUCT_SPEC.md), [ARCHITECTURE.md](./ARCHITECTURE.
 4. Configure Auth redirect URLs for password reset  
 5. (Optional) EAS project + `eas.json`  
 
-## Out of scope in notifications PR
+## Out of scope in feedback/reports PR
 
+- Admin moderation console (use Table Editor)  
+- In-app user-profile report UI (`user_report` ready in schema)  
 - Push notifications (Expo Notifications)  
-- Reports UI  
 - Photo replace on edit  
 - Fake seed data  
 - Production EAS submit  
 
-## Manual setup after notifications slice
+## Manual setup after feedback/reports slice
 
-1. Apply migration `00008_in_app_notifications.sql` in SQL Editor if not already (see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)).  
-2. Smoke-test: new offer → author inbox; accept/reject → offerer; status change → peer; bell badge + mark read + deep-link.
+1. Apply migration `00009_feedback_and_reports.sql` in SQL Editor if not already (see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)).  
+2. Smoke-test: Help → feedback form (signed in) → row in **Table Editor → `reports`** with `kind=feedback`.  
+3. Smoke-test: Animal detail → ⋯ → Report → reason + comment → row with `kind=listing_report` and `animal_id`.

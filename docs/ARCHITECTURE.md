@@ -77,18 +77,20 @@ Hardcode on the client only **true local UI chrome**: navigation labels, button 
 | Content | Table | Client chrome that stays in i18n |
 |---------|-------|----------------------------------|
 | Help FAQ Q&A | `faq_items` | `faq.title`, empty/error |
-| Species / urgency / help type / feed sort / status labels | `lookup_options` | Filter field titles (`animals.filters.*`) |
-| Maps “soon” + feed/activity empty marketing | `app_copy` | Tab titles, loading/retry |
+| Species / urgency / help type / feed sort / status / report reason labels | `lookup_options` | Filter/form field titles (`animals.filters.*`, `reports.fields.*`) |
+| Maps “soon” + feed/activity empty marketing + report hints | `app_copy` | Tab titles, loading/retry, report button labels |
 | Notification titles/bodies + empty inbox | `app_copy` (+ `notifications` rows) | Inbox chrome (`notifications.*` i18n) |
 | Max photos, max bytes, allowed MIME | `app_config` | Validation message templates with `{{count}}` / `{{mb}}` |
+| Feedback + listing reports | `reports` | Form chrome (`reports.*` i18n); reasons from `lookup_options` |
 
-Offline/error UX uses seeded fallbacks in `src/features/content/fallbacks.ts` that match migration `00006` seeds. Prefer fetching via TanStack Query (`features/content`) over growing locale blobs of editorial text.
+Offline/error UX uses seeded fallbacks in `src/features/content/fallbacks.ts` that match migrations `00006` / `00009` seeds. Prefer fetching via TanStack Query (`features/content`) over growing locale blobs of editorial text.
 
 Edits for MVP: Table Editor / SQL (service role); no client write policies for content tables unless an admin product is built.
 
 ## State boundaries
 
-- **Server state** (animals, requests, offers, notifications, FAQ, lookup catalogs, app copy/config, profile from DB) → TanStack Query  
+- **Server state** (animals, requests, offers, notifications, FAQ, lookup catalogs, app copy/config, reports submit, profile from DB) → TanStack Query / direct mutations  
+
 - **Auth session** → Supabase Auth + thin hook (future `features/auth`)  
 - **Client prefs** (language override) → Zustand  
 - **Form draft state** → React Hook Form  

@@ -55,6 +55,7 @@ export function useLookupOptions() {
     helpTypeOptions: optionsForCategory(rows, 'help_type'),
     feedSortOptions: optionsForCategory(rows, 'feed_sort'),
     animalStatusOptions: optionsForCategory(rows, 'animal_status'),
+    reportReasonOptions: optionsForCategory(rows, 'report_reason'),
     isLoading: query.isLoading && isSupabaseConfigured,
     isError: query.isError,
     refetch: query.refetch,

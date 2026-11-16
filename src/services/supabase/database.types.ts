@@ -19,7 +19,7 @@ export type HelpType =
 export type HelpRequestStatus = 'open' | 'accepted' | 'in_progress' | 'completed' | 'cancelled';
 export type HelpOfferStatus = 'pending' | 'accepted' | 'rejected' | 'withdrawn';
 export type AnimalUpdateEventType = 'comment' | 'status_change' | 'photo' | 'system';
-export type ReportTargetType = 'animal' | 'profile';
+export type ReportKind = 'feedback' | 'listing_report' | 'user_report';
 export type ReportStatus = 'open' | 'reviewed' | 'dismissed';
 export type FaqLocale = 'en' | 'ru';
 export type ContentLocale = FaqLocale;
@@ -335,34 +335,59 @@ export type Database = {
         Row: {
           id: string;
           reporter_id: string | null;
-          target_type: ReportTargetType;
-          target_id: string;
+          kind: ReportKind;
+          animal_id: string | null;
+          reported_user_id: string | null;
           reason: string;
-          details: string | null;
+          body: string | null;
           status: ReportStatus;
           created_at: string;
         };
         Insert: {
           id?: string;
           reporter_id?: string | null;
-          target_type: ReportTargetType;
-          target_id: string;
+          kind: ReportKind;
+          animal_id?: string | null;
+          reported_user_id?: string | null;
           reason: string;
-          details?: string | null;
+          body?: string | null;
           status?: ReportStatus;
           created_at?: string;
         };
         Update: {
           id?: string;
           reporter_id?: string | null;
-          target_type?: ReportTargetType;
-          target_id?: string;
+          kind?: ReportKind;
+          animal_id?: string | null;
+          reported_user_id?: string | null;
           reason?: string;
-          details?: string | null;
+          body?: string | null;
           status?: ReportStatus;
           created_at?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'reports_animal_id_fkey';
+            columns: ['animal_id'];
+            isOneToOne: false;
+            referencedRelation: 'animals';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'reports_reported_user_id_fkey';
+            columns: ['reported_user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'reports_reporter_id_fkey';
+            columns: ['reporter_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       faq_items: {
         Row: FaqItemRow;
@@ -546,7 +571,7 @@ export type Database = {
       help_request_status: HelpRequestStatus;
       help_offer_status: HelpOfferStatus;
       animal_update_event_type: AnimalUpdateEventType;
-      report_target_type: ReportTargetType;
+      report_kind: ReportKind;
       report_status: ReportStatus;
     };
     CompositeTypes: Record<string, never>;
@@ -568,3 +593,5 @@ export type AppCopy = Database['public']['Tables']['app_copy']['Row'];
 export type AppConfig = Database['public']['Tables']['app_config']['Row'];
 export type Favorite = Database['public']['Tables']['favorites']['Row'];
 export type FavoriteInsert = Database['public']['Tables']['favorites']['Insert'];
+export type Report = Database['public']['Tables']['reports']['Row'];
+export type ReportInsert = Database['public']['Tables']['reports']['Insert'];

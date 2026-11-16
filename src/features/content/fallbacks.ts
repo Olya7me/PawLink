@@ -6,7 +6,15 @@ export type LookupCategory =
   | 'urgency'
   | 'help_type'
   | 'feed_sort'
-  | 'animal_status';
+  | 'animal_status'
+  | 'report_reason';
+
+export type ReportReasonKey =
+  | 'spam'
+  | 'inappropriate'
+  | 'misleading'
+  | 'animal_welfare'
+  | 'other';
 
 export type FeedSort = 'newest' | 'oldest' | 'urgency';
 
@@ -36,6 +44,13 @@ export const FALLBACK_HELP_TYPES: HelpType[] = [
 ];
 export const FALLBACK_FEED_SORT: FeedSort[] = ['newest', 'oldest', 'urgency'];
 export const FALLBACK_ANIMAL_STATUS: AnimalStatus[] = ['active', 'resolved', 'archived'];
+export const FALLBACK_REPORT_REASONS: ReportReasonKey[] = [
+  'spam',
+  'inappropriate',
+  'misleading',
+  'animal_welfare',
+  'other',
+];
 
 export const FALLBACK_APP_CONFIG: AppConfigValues = {
   maxAnimalPhotos: 5,
@@ -73,6 +88,13 @@ const LABELS: Record<LookupCategory, Record<string, Record<AppLanguage, string>>
     active: { en: 'Active', ru: 'Активно' },
     resolved: { en: 'Resolved', ru: 'Решено' },
     archived: { en: 'Archived', ru: 'В архиве' },
+  },
+  report_reason: {
+    spam: { en: 'Spam or advertising', ru: 'Спам или реклама' },
+    inappropriate: { en: 'Inappropriate content', ru: 'Неприемлемый контент' },
+    misleading: { en: 'Misleading or false', ru: 'Вводит в заблуждение' },
+    animal_welfare: { en: 'Animal welfare concern', ru: 'Беспокойство о животном' },
+    other: { en: 'Other', ru: 'Другое' },
   },
 };
 
@@ -147,6 +169,14 @@ const COPY: Record<string, Record<AppLanguage, string>> = {
     en: '“{{animal_label}}” is now {{status}}.',
     ru: 'Объявление «{{animal_label}}» теперь: {{status}}.',
   },
+  'reports.feedback.hint': {
+    en: 'Tell us what went wrong or how we can improve. We read every message in the dashboard.',
+    ru: 'Напишите, что пошло не так или как нам стать лучше. Мы читаем каждое сообщение в панели.',
+  },
+  'reports.listing.hint': {
+    en: 'Choose a reason and add details if needed. Reports help us keep listings safe.',
+    ru: 'Выберите причину и при необходимости добавьте детали. Жалобы помогают держать ленту безопасной.',
+  },
 };
 
 const KEYS_BY_CATEGORY: Record<LookupCategory, readonly string[]> = {
@@ -155,6 +185,7 @@ const KEYS_BY_CATEGORY: Record<LookupCategory, readonly string[]> = {
   help_type: FALLBACK_HELP_TYPES,
   feed_sort: FALLBACK_FEED_SORT,
   animal_status: FALLBACK_ANIMAL_STATUS,
+  report_reason: FALLBACK_REPORT_REASONS,
 };
 
 export function fallbackLookupOptions(

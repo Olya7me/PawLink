@@ -4,6 +4,7 @@ export {
   FALLBACK_APP_CONFIG,
   FALLBACK_FEED_SORT,
   FALLBACK_HELP_TYPES,
+  FALLBACK_REPORT_REASONS,
   FALLBACK_SPECIES,
   FALLBACK_URGENCY,
   fallbackAppCopy,
@@ -15,6 +16,7 @@ export type {
   FeedSort,
   LookupCategory,
   LookupOption,
+  ReportReasonKey,
 } from './fallbacks';
 export { useAppConfig } from './hooks/useAppConfig';
 export { useAppCopy } from './hooks/useAppCopy';
