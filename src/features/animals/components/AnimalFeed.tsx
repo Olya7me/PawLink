@@ -5,6 +5,7 @@ import { FlatList, RefreshControl, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '@/features/auth';
+import { useAppCopy } from '@/features/content';
 import { Button } from '@/shared/components/Button';
 import { EmptyState } from '@/shared/components/EmptyState';
 import { ErrorRetry } from '@/shared/components/ErrorRetry';
@@ -21,6 +22,7 @@ import { AnimalFeedFilters } from './AnimalFeedFilters';
 
 export function AnimalFeed() {
   const { t } = useTranslation();
+  const copy = useAppCopy();
   const { isAuthenticated } = useAuth();
   const [filters, setFilters] = useState<Filters>(defaultFeedFilters);
   const queryKey = useMemo(() => ['animals', 'feed', filters] as const, [filters]);
@@ -110,7 +112,10 @@ export function AnimalFeed() {
         />
       }
       ListEmptyComponent={
-        <EmptyState title={t('animals.feed.emptyTitle')} body={t('animals.feed.emptyBody')} />
+        <EmptyState
+          title={copy.get('animals.feed.emptyTitle')}
+          body={copy.get('animals.feed.emptyBody')}
+        />
       }
       renderItem={({ item }) => (
         <AnimalFeedCard animal={item} onPress={() => router.push(`/animals/${item.id}`)} />

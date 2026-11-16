@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { listAnimalsByAuthor, type AnimalListItem } from '@/features/animals';
 import { useAuth } from '@/features/auth';
+import { useAppCopy, useLookupOptions } from '@/features/content';
 import { listOffersByOfferer, type MyOfferItem } from '@/features/help';
 import { Button } from '@/shared/components/Button';
 import { EmptyState } from '@/shared/components/EmptyState';
@@ -19,7 +20,8 @@ import { styles } from './MyActivity.styles';
 
 function ListingRow({ animal }: { animal: AnimalListItem }) {
   const { t } = useTranslation();
-  const title = animal.name?.trim() || t(`animals.species.${animal.species}`);
+  const { labelFor } = useLookupOptions();
+  const title = animal.name?.trim() || labelFor('species', animal.species);
 
   return (
     <SurfaceCard style={styles.rowCard}>
@@ -28,8 +30,8 @@ function ListingRow({ animal }: { animal: AnimalListItem }) {
           {title}
         </Text>
         <Text style={styles.rowMeta}>
-          {animal.city} · {t(`animals.status.${animal.status}`)} ·{' '}
-          {t(`animals.urgency.${animal.urgency}`)}
+          {animal.city} · {labelFor('animal_status', animal.status)} ·{' '}
+          {labelFor('urgency', animal.urgency)}
         </Text>
       </View>
       <View style={styles.rowActions}>
@@ -51,9 +53,10 @@ function ListingRow({ animal }: { animal: AnimalListItem }) {
 
 function OfferRow({ offer }: { offer: MyOfferItem }) {
   const { t } = useTranslation();
+  const { labelFor } = useLookupOptions();
   const animalTitle =
     offer.animal?.name?.trim() ||
-    (offer.animal ? t(`animals.species.${offer.animal.species}`) : t('activity.unknownAnimal'));
+    (offer.animal ? labelFor('species', offer.animal.species) : t('activity.unknownAnimal'));
 
   return (
     <SurfaceCard style={styles.rowCard}>
@@ -62,7 +65,7 @@ function OfferRow({ offer }: { offer: MyOfferItem }) {
           {animalTitle}
         </Text>
         <Text style={styles.rowMeta}>
-          {t(`animals.helpType.${offer.help_request.help_type}`)} ·{' '}
+          {labelFor('help_type', offer.help_request.help_type)} ·{' '}
           {t(`help.offerStatus.${offer.status}`)}
           {offer.animal?.city ? ` · ${offer.animal.city}` : ''}
         </Text>
@@ -84,6 +87,7 @@ function OfferRow({ offer }: { offer: MyOfferItem }) {
 
 export function MyActivity() {
   const { t } = useTranslation();
+  const copy = useAppCopy();
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
 
   const listingsQuery = useQuery({
@@ -167,8 +171,8 @@ export function MyActivity() {
         <Section title={t('activity.myListings')}>
           {(listingsQuery.data ?? []).length === 0 ? (
             <EmptyState
-              title={t('activity.listingsEmptyTitle')}
-              body={t('activity.listingsEmptyBody')}
+              title={copy.get('activity.listingsEmptyTitle')}
+              body={copy.get('activity.listingsEmptyBody')}
             />
           ) : (
             <View style={styles.stack}>
@@ -191,7 +195,10 @@ export function MyActivity() {
       {!loading && !offersError ? (
         <Section title={t('activity.myOffers')}>
           {(offersQuery.data ?? []).length === 0 ? (
-            <EmptyState title={t('activity.offersEmptyTitle')} body={t('activity.offersEmptyBody')} />
+            <EmptyState
+              title={copy.get('activity.offersEmptyTitle')}
+              body={copy.get('activity.offersEmptyBody')}
+            />
           ) : (
             <View style={styles.stack}>
               {(offersQuery.data ?? []).map((offer) => (

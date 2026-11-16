@@ -2,10 +2,10 @@ import { Image } from 'expo-image';
 import { Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
+import { useAppConfig } from '@/features/content';
 import { Button } from '@/shared/components/Button';
 import { InlineMessage } from '@/shared/components/InlineMessage';
 
-import { MAX_ANIMAL_PHOTOS } from '../constants';
 import type { LocalPhoto } from '../utils/photos';
 import { styles } from './PhotoPickerField.styles';
 
@@ -18,13 +18,17 @@ type PhotoPickerFieldProps = {
 
 export function PhotoPickerField({ photos, error, onAdd, onRemove }: PhotoPickerFieldProps) {
   const { t } = useTranslation();
+  const { maxAnimalPhotos, maxPhotoBytes } = useAppConfig();
+  const maxMb = Math.round(maxPhotoBytes / (1024 * 1024));
 
   return (
     <View style={styles.wrap}>
       <Text style={styles.label}>
-        {t('animals.fields.photos')} ({photos.length}/{MAX_ANIMAL_PHOTOS})
+        {t('animals.fields.photos')} ({photos.length}/{maxAnimalPhotos})
       </Text>
-      <Text style={styles.hint}>{t('animals.fields.photosHint')}</Text>
+      <Text style={styles.hint}>
+        {t('animals.fields.photosHint', { count: maxAnimalPhotos, mb: maxMb })}
+      </Text>
       <View style={styles.row}>
         {photos.map((photo) => (
           <View key={photo.id} style={styles.thumbWrap}>
@@ -40,7 +44,7 @@ export function PhotoPickerField({ photos, error, onAdd, onRemove }: PhotoPicker
           </View>
         ))}
       </View>
-      {photos.length < MAX_ANIMAL_PHOTOS ? (
+      {photos.length < maxAnimalPhotos ? (
         <Button
           label={t('animals.fields.addPhotos')}
           variant="secondary"

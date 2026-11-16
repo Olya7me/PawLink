@@ -162,7 +162,7 @@ export const ru: TranslationResources = {
     },
     fields: {
       photos: 'Фото',
-      photosHint: 'До 5 изображений, до 5 МБ каждое (JPEG, PNG, WebP).',
+      photosHint: 'До {{count}} изображений, до {{mb}} МБ каждое (JPEG, PNG, WebP).',
       addPhotos: 'Добавить фото',
       removePhoto: 'Удалить фото',
       species: 'Вид',
@@ -190,8 +190,8 @@ export const ru: TranslationResources = {
       helpTypesRequired: 'Выберите хотя бы один тип помощи.',
     },
     photos: {
-      tooMany: 'Можно добавить не больше 5 фото.',
-      tooLarge: 'Каждое фото должно быть не больше 5 МБ.',
+      tooMany: 'Можно добавить не больше {{count}} фото.',
+      tooLarge: 'Каждое фото должно быть не больше {{mb}} МБ.',
       badType: 'Только JPEG, PNG или WebP.',
       permission: 'Нужен доступ к галерее.',
       generic: 'Не удалось обработать фото. Попробуйте снова.',

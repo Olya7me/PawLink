@@ -1,26 +1,24 @@
-import type { AnimalSpecies, HelpType, UrgencyLevel } from '@/shared/types/domain';
+import {
+  FALLBACK_APP_CONFIG,
+  FALLBACK_FEED_SORT,
+  FALLBACK_HELP_TYPES,
+  FALLBACK_SPECIES,
+  FALLBACK_URGENCY,
+  type FeedSort,
+} from '@/features/content';
+import type { UrgencyLevel } from '@/shared/types/domain';
 
-export const ANIMAL_SPECIES: AnimalSpecies[] = ['dog', 'cat', 'other'];
+/** Offline / Zod fallbacks — prefer `useLookupOptions` / `useAppConfig` in UI. */
+export const ANIMAL_SPECIES = FALLBACK_SPECIES;
+export const URGENCY_LEVELS = FALLBACK_URGENCY;
+export const HELP_TYPES = FALLBACK_HELP_TYPES;
+export const FEED_SORT_OPTIONS = FALLBACK_FEED_SORT;
 
-export const URGENCY_LEVELS: UrgencyLevel[] = ['low', 'medium', 'high', 'critical'];
-
-export const HELP_TYPES: HelpType[] = [
-  'catch',
-  'transport',
-  'vet',
-  'foster',
-  'permanent_home',
-  'food',
-  'other',
-];
-
-export const MAX_ANIMAL_PHOTOS = 5;
-export const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+export const MAX_ANIMAL_PHOTOS = FALLBACK_APP_CONFIG.maxAnimalPhotos;
+export const MAX_PHOTO_BYTES = FALLBACK_APP_CONFIG.maxPhotoBytes;
 export const ANIMAL_PHOTOS_BUCKET = 'animal-photos';
 
-export type FeedSort = 'newest' | 'oldest' | 'urgency';
-
-export const FEED_SORT_OPTIONS: FeedSort[] = ['newest', 'oldest', 'urgency'];
+export type { FeedSort };
 
 export const URGENCY_RANK: Record<UrgencyLevel, number> = {
   critical: 4,

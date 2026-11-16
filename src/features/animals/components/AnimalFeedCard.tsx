@@ -2,6 +2,8 @@ import { Image } from 'expo-image';
 import { Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
+import { useLookupOptions } from '@/features/content';
+
 import type { AnimalListItem } from '../api/animalsApi';
 import { getAnimalPhotoPublicUrls } from '../utils/photoUrls';
 import { styles } from './AnimalFeedCard.styles';
@@ -14,10 +16,11 @@ type AnimalFeedCardProps = {
 
 export function AnimalFeedCard({ animal, onPress }: AnimalFeedCardProps) {
   const { t } = useTranslation();
+  const { labelFor } = useLookupOptions();
   const photos = getAnimalPhotoPublicUrls(animal.photo_paths);
-  const title = animal.name?.trim() || t(`animals.species.${animal.species}`);
+  const title = animal.name?.trim() || labelFor('species', animal.species);
   const helpLabels = animal.help_requests
-    .map((request) => t(`animals.helpType.${request.help_type}`))
+    .map((request) => labelFor('help_type', request.help_type))
     .slice(0, 3);
 
   return (
@@ -34,10 +37,10 @@ export function AnimalFeedCard({ animal, onPress }: AnimalFeedCardProps) {
           <Text style={styles.title} numberOfLines={1}>
             {title}
           </Text>
-          <UrgencyBadge level={animal.urgency} label={t(`animals.urgency.${animal.urgency}`)} />
+          <UrgencyBadge level={animal.urgency} label={labelFor('urgency', animal.urgency)} />
         </View>
         <Text style={styles.meta}>
-          {t(`animals.species.${animal.species}`)} · {animal.city}
+          {labelFor('species', animal.species)} · {animal.city}
         </Text>
         {animal.description ? (
           <Text style={styles.description} numberOfLines={2}>

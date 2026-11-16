@@ -22,6 +22,7 @@ export type AnimalUpdateEventType = 'comment' | 'status_change' | 'photo' | 'sys
 export type ReportTargetType = 'animal' | 'profile';
 export type ReportStatus = 'open' | 'reviewed' | 'dismissed';
 export type FaqLocale = 'en' | 'ru';
+export type ContentLocale = FaqLocale;
 
 export type FaqItemRow = {
   id: string;
@@ -32,6 +33,34 @@ export type FaqItemRow = {
   sort_order: number;
   published: boolean;
   created_at: string;
+  updated_at: string;
+};
+
+export type LookupOptionRow = {
+  id: string;
+  category: string;
+  option_key: string;
+  locale: ContentLocale;
+  label: string;
+  sort_order: number;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AppCopyRow = {
+  id: string;
+  key: string;
+  locale: ContentLocale;
+  value: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AppConfigRow = {
+  key: string;
+  value: Json;
+  description: string | null;
   updated_at: string;
 };
 
@@ -361,6 +390,68 @@ export type Database = {
         };
         Relationships: [];
       };
+      lookup_options: {
+        Row: LookupOptionRow;
+        Insert: {
+          id?: string;
+          category: string;
+          option_key: string;
+          locale: ContentLocale;
+          label: string;
+          sort_order?: number;
+          active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          category?: string;
+          option_key?: string;
+          locale?: ContentLocale;
+          label?: string;
+          sort_order?: number;
+          active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      app_copy: {
+        Row: AppCopyRow;
+        Insert: {
+          id?: string;
+          key: string;
+          locale: ContentLocale;
+          value: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          key?: string;
+          locale?: ContentLocale;
+          value?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      app_config: {
+        Row: AppConfigRow;
+        Insert: {
+          key: string;
+          value: Json;
+          description?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          key?: string;
+          value?: Json;
+          description?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       profiles_public: {
@@ -440,3 +531,5 @@ export type HelpOfferInsert = Database['public']['Tables']['help_offers']['Inser
 export type PublicProfile = Database['public']['Views']['profiles_public']['Row'];
 export type SafeHelpOfferRow = Database['public']['Views']['help_offers_safe']['Row'];
 export type FaqItem = Database['public']['Tables']['faq_items']['Row'];
+export type AppCopy = Database['public']['Tables']['app_copy']['Row'];
+export type AppConfig = Database['public']['Tables']['app_config']['Row'];

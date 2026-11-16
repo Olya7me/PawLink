@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
+import { useLookupOptions } from '@/features/content';
 import { ErrorRetry } from '@/shared/components/ErrorRetry';
 import { InlineMessage } from '@/shared/components/InlineMessage';
 import { LoadingBlock } from '@/shared/components/LoadingBlock';
@@ -21,6 +22,7 @@ type AnimalDetailViewProps = {
 
 export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
   const { t } = useTranslation();
+  const { labelFor } = useLookupOptions();
   const detailQuery = useQuery({
     queryKey: ['animals', 'detail', animalId],
     queryFn: () => getAnimalById(animalId),
@@ -52,7 +54,7 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
   }
 
   const photos = getAnimalPhotoPublicUrls(animal.photo_paths);
-  const title = animal.name?.trim() || t(`animals.species.${animal.species}`);
+  const title = animal.name?.trim() || labelFor('species', animal.species);
   const authorName =
     animal.author?.display_name?.trim() ||
     (animal.author?.is_anonymized ? t('animals.detail.anonymousAuthor') : t('animals.detail.unknownAuthor'));
@@ -74,15 +76,15 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
       <View style={styles.body}>
         <View style={styles.titleRow}>
           <Text style={styles.title}>{title}</Text>
-          <UrgencyBadge level={animal.urgency} label={t(`animals.urgency.${animal.urgency}`)} />
+          <UrgencyBadge level={animal.urgency} label={labelFor('urgency', animal.urgency)} />
         </View>
 
         <Text style={styles.meta}>
-          {t(`animals.species.${animal.species}`)} · {animal.city}
+          {labelFor('species', animal.species)} · {animal.city}
           {animal.location_label ? ` · ${animal.location_label}` : ''}
         </Text>
         <Text style={styles.status}>
-          {t('animals.detail.status')}: {t(`animals.status.${animal.status}`)}
+          {t('animals.detail.status')}: {labelFor('animal_status', animal.status)}
         </Text>
         <Text style={styles.author}>
           {t('animals.detail.author')}: {authorName}
@@ -112,7 +114,9 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
                 onPress={() => router.push(`/requests/${request.id}`)}
               >
                 <SurfaceCard>
-                  <Text style={styles.requestTitle}>{t(`animals.helpType.${request.help_type}`)}</Text>
+                  <Text style={styles.requestTitle}>
+                    {labelFor('help_type', request.help_type)}
+                  </Text>
                   <Text style={styles.requestStatus}>
                     {t(`animals.helpRequestStatus.${request.status}`)}
                   </Text>

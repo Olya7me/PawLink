@@ -6,6 +6,7 @@ import { Pressable, Text, View } from 'react-native';
 
 import { useAuth } from '@/features/auth';
 import { mapAuthError } from '@/features/auth/utils/mapAuthError';
+import { useLookupOptions } from '@/features/content';
 import { Button } from '@/shared/components/Button';
 import { ErrorRetry } from '@/shared/components/ErrorRetry';
 import { InlineMessage } from '@/shared/components/InlineMessage';
@@ -29,6 +30,7 @@ type HelpRequestDetailViewProps = {
 
 export function HelpRequestDetailView({ requestId }: HelpRequestDetailViewProps) {
   const { t } = useTranslation();
+  const { labelFor } = useLookupOptions();
   const { user, isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const [actionError, setActionError] = useState<string | null>(null);
@@ -124,7 +126,7 @@ export function HelpRequestDetailView({ requestId }: HelpRequestDetailViewProps)
         </Pressable>
       ) : null}
 
-      <Text style={styles.title}>{t(`animals.helpType.${detail.help_type}`)}</Text>
+      <Text style={styles.title}>{labelFor('help_type', detail.help_type)}</Text>
       <Text style={styles.status}>
         {t('help.detail.status')}: {t(`animals.helpRequestStatus.${detail.status}`)}
       </Text>

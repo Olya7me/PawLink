@@ -39,6 +39,7 @@ export const en = {
   maps: {
     title: 'Maps',
     subtitle: 'Browse by city text for now. Interactive maps come later.',
+    // soonTitle/soonBody: prefer app_copy; kept as last-resort i18n mirrors
     soonTitle: 'Maps coming soon',
     soonBody: 'Listings use city as text in this MVP. A map view will land in a later release.',
   },
@@ -53,6 +54,7 @@ export const en = {
     open: 'Open',
     edit: 'Edit',
     openRequest: 'Open request',
+    // empty marketing copy: prefer app_copy
     listingsEmptyTitle: 'No publications yet',
     listingsEmptyBody: 'Create a publication to ask for help with an animal.',
     offersEmptyTitle: 'No offers yet',
@@ -118,6 +120,7 @@ export const en = {
     feed: {
       subtitleGuest: 'Browse as a guest. Sign in to publish or offer help.',
       subtitleSignedIn: 'Browse open cases. Create and manage yours in My activity.',
+      // emptyTitle/emptyBody prefer app_copy
       emptyTitle: 'No listings yet',
       emptyBody: 'Try clearing filters, or create the first listing from My activity.',
       error: 'Could not load the feed. Check your connection and try again.',
@@ -160,7 +163,7 @@ export const en = {
     },
     fields: {
       photos: 'Photos',
-      photosHint: 'Up to 5 images, max 5 MB each (JPEG, PNG, WebP).',
+      photosHint: 'Up to {{count}} images, max {{mb}} MB each (JPEG, PNG, WebP).',
       addPhotos: 'Add photos',
       removePhoto: 'Remove photo',
       species: 'Species',
@@ -188,12 +191,13 @@ export const en = {
       helpTypesRequired: 'Select at least one help type.',
     },
     photos: {
-      tooMany: 'You can add up to 5 photos.',
-      tooLarge: 'Each photo must be 5 MB or smaller.',
+      tooMany: 'You can add up to {{count}} photos.',
+      tooLarge: 'Each photo must be {{mb}} MB or smaller.',
       badType: 'Use JPEG, PNG, or WebP images only.',
       permission: 'Photo library permission is required.',
       generic: 'Could not process photos. Try again.',
     },
+    // Catalog labels prefer lookup_options; i18n maps remain offline mirrors
     species: {
       dog: 'Dog',
       cat: 'Cat',
