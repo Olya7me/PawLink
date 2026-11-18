@@ -5,7 +5,7 @@ import { AnimalDetailView } from '@/features/animals';
 import { InlineMessage } from '@/shared/components/InlineMessage';
 import { Screen } from '@/shared/components/Screen';
 
-import { styles } from './_index.styles';
+import { styles } from '@/app-styles/animals/[id]/_index.styles';
 
 export default function AnimalDetailScreen() {
   const { t } = useTranslation();

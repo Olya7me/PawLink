@@ -1,8 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { lazyStyles, spacing, typography } from '@/theme';
 
-import { colors, spacing, typography } from '@/theme';
-
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   screen: {
     paddingVertical: 0,
   },
@@ -19,4 +17,4 @@ export const styles = StyleSheet.create({
     lineHeight: typography.size.md * typography.lineHeight.normal,
     marginBottom: spacing.lg,
   },
-});
+}));

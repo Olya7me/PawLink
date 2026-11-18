@@ -8,7 +8,7 @@ import { InlineMessage } from '@/shared/components/InlineMessage';
 import { LoadingBlock } from '@/shared/components/LoadingBlock';
 import { Screen } from '@/shared/components/Screen';
 
-import { styles } from './_offer.styles';
+import { styles } from '@/app-styles/requests/[requestId]/_offer.styles';
 
 export default function SubmitOfferScreen() {
   const { t } = useTranslation();

@@ -9,6 +9,8 @@ export type LocalPhoto = {
   mimeType: 'image/jpeg' | 'image/png' | 'image/webp';
   fileName: string;
   byteSize: number;
+  /** Storage path already saved on the listing. Absent for newly picked files. */
+  remotePath?: string;
 };
 
 export type PhotoLimits = Pick<

@@ -8,7 +8,7 @@ import { InlineMessage } from '@/shared/components/InlineMessage';
 import { LoadingBlock } from '@/shared/components/LoadingBlock';
 import { Screen } from '@/shared/components/Screen';
 
-import { styles } from './_report.styles';
+import { styles } from '@/app-styles/animals/[id]/_report.styles';
 
 export default function ReportListingScreen() {
   const { t } = useTranslation();

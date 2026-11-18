@@ -1,23 +1,15 @@
+import { getColors } from './active';
+import type { ColorPalette } from './palettes';
+
 /**
- * PawLink design tokens — warm neutrals + soft coral accent.
- * Light theme only for MVP (see docs/ARCHITECTURE.md).
+ * Live palette. Style modules must read it through `lazyStyles` so sheets
+ * rebuild when the scheme changes. Direct reads update on the next render.
  */
-export const colors = {
-  background: '#F7F3EE',
-  surface: '#FFFFFF',
-  surfaceMuted: '#EFE9E2',
-  text: '#2C2420',
-  textSecondary: '#6B5E56',
-  textMuted: '#9A8C82',
-  border: '#E4DBD2',
-  accent: '#E07A5F',
-  accentPressed: '#C9654B',
-  accentSoft: '#F6D5CB',
-  success: '#5B8C6A',
-  warning: '#C9A227',
-  danger: '#C45C5C',
-  overlay: 'rgba(44, 36, 32, 0.4)',
-} as const;
+export const colors: ColorPalette = new Proxy({} as ColorPalette, {
+  get(_target, prop: string) {
+    return getColors()[prop as keyof ColorPalette];
+  },
+});
 
 export const spacing = {
   xs: 4,
@@ -57,10 +49,17 @@ export const typography = {
 } as const;
 
 export const theme = {
-  colors,
+  get colors() {
+    return colors;
+  },
   spacing,
   radii,
   typography,
-} as const;
+};
 
-export type Theme = typeof theme;
+export type Theme = {
+  colors: ColorPalette;
+  spacing: typeof spacing;
+  radii: typeof radii;
+  typography: typeof typography;
+};

@@ -249,6 +249,8 @@ export type UpdateAnimalPayload = {
   longitude: number;
   urgency: UrgencyLevel;
   status: AnimalStatus;
+  photos?: LocalPhoto[];
+  previousPhotoPaths?: string[];
 };
 
 export async function listAnimalsByAuthor(authorId: string): Promise<AnimalListItem[]> {
@@ -313,6 +315,28 @@ export async function listAnimalsByAuthor(authorId: string): Promise<AnimalListI
 export async function updateAnimalListing(payload: UpdateAnimalPayload): Promise<Animal> {
   assertConfigured();
 
+  const uploaded: string[] = [];
+  let nextPaths: string[] | undefined;
+  if (payload.photos) {
+    try {
+      nextPaths = [];
+      for (const photo of payload.photos) {
+        if (photo.remotePath) {
+          nextPaths.push(photo.remotePath);
+          continue;
+        }
+        const path = await uploadPhoto(payload.authorId, photo);
+        uploaded.push(path);
+        nextPaths.push(path);
+      }
+    } catch (error) {
+      if (uploaded.length > 0) {
+        await supabase.storage.from(ANIMAL_PHOTOS_BUCKET).remove(uploaded);
+      }
+      throw error;
+    }
+  }
+
   const { data, error } = await supabase
     .from('animals')
     .update({
@@ -328,13 +352,27 @@ export async function updateAnimalListing(payload: UpdateAnimalPayload): Promise
       longitude: payload.longitude,
       urgency: payload.urgency,
       status: payload.status,
+      ...(nextPaths ? { photo_paths: nextPaths } : {}),
     })
     .eq('id', payload.animalId)
     .eq('author_id', payload.authorId)
     .select('*')
     .single();
 
-  if (error) throw error;
+  if (error) {
+    if (uploaded.length > 0) {
+      await supabase.storage.from(ANIMAL_PHOTOS_BUCKET).remove(uploaded);
+    }
+    throw error;
+  }
+
+  const removed = nextPaths
+    ? (payload.previousPhotoPaths ?? []).filter((path) => !nextPaths.includes(path))
+    : [];
+  if (removed.length > 0) {
+    await supabase.storage.from(ANIMAL_PHOTOS_BUCKET).remove(removed);
+  }
+
   return data;
 }
 

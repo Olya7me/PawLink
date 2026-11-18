@@ -7,7 +7,7 @@ import { FormScreen } from '@/shared/components/FormScreen';
 import { LoadingBlock } from '@/shared/components/LoadingBlock';
 import { Screen } from '@/shared/components/Screen';
 
-import { styles } from './_create.styles';
+import { styles } from '@/app-styles/_create.styles';
 
 export default function CreateScreen() {
   const { t } = useTranslation();

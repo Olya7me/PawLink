@@ -1,9 +1,9 @@
 import { Camera, Map, Marker, type CameraRef } from '@maplibre/maplibre-react-native';
 import { useEffect, useMemo, useRef } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import type { AnimalListItem } from '@/features/animals/api/animalsApi';
-import { colors } from '@/theme';
+import { lazyStyles } from '@/theme';
 
 import { MAP_STYLE_URL } from '../constants';
 import { styles } from './AnimalMap.styles';
@@ -65,7 +65,7 @@ export function MapCanvas({ animals, selectedId, onSelect }: MapCanvasProps) {
   );
 }
 
-const pinStyles = StyleSheet.create({
+const pinStyles = lazyStyles((colors) => ({
   dot: {
     width: 14,
     height: 14,
@@ -80,4 +80,4 @@ const pinStyles = StyleSheet.create({
     borderRadius: 9,
     backgroundColor: colors.accentPressed,
   },
-});
+}));

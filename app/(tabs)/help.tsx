@@ -1,7 +1,7 @@
 import { HelpHub } from '@/features/faq';
 import { Screen } from '@/shared/components/Screen';
 
-import { styles } from './_help.styles';
+import { styles } from '@/app-styles/(tabs)/_help.styles';
 
 export default function HelpScreen() {
   return (

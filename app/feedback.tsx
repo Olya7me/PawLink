@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ReportForm } from '@/features/reports';
 import { Screen } from '@/shared/components/Screen';
 
-import { styles } from './_feedback.styles';
+import { styles } from '@/app-styles/_feedback.styles';
 
 export default function FeedbackScreen() {
   const { t } = useTranslation();

@@ -1,8 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { lazyStyles, spacing, typography } from '@/theme';
 
-import { colors, spacing, typography } from '@/theme';
-
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   hint: {
     fontSize: typography.size.xs,
     color: colors.textMuted,
@@ -15,4 +13,4 @@ export const styles = StyleSheet.create({
   submit: {
     marginTop: spacing.lg,
   },
-});
+}));

@@ -3,6 +3,12 @@ export const en = {
     name: 'PawLink',
     tagline: 'Coordinate help for animals in need',
   },
+  appearance: {
+    title: 'Appearance',
+    system: 'System',
+    light: 'Light',
+    dark: 'Dark',
+  },
   common: {
     loading: 'Loading…',
     error: 'Something went wrong',
@@ -192,7 +198,7 @@ export const en = {
       subtitle: 'Update public details. Meetup and contact stay private until an offer is accepted.',
       gated: 'Sign in to edit your listing.',
       forbidden: 'You can only edit your own listings.',
-      photoHint: 'Photos stay as published for now — update text details and status below.',
+      photoHint: 'Add or remove photos. New pictures upload when you save.',
       submit: 'Save changes',
     },
     detail: {

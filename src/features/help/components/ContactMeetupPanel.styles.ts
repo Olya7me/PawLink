@@ -1,8 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { lazyStyles, radii, spacing, typography } from '@/theme';
 
-import { colors, radii, spacing, typography } from '@/theme';
-
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   box: {
     backgroundColor: colors.accentSoft,
     borderRadius: radii.md,
@@ -38,4 +36,4 @@ export const styles = StyleSheet.create({
   loader: {
     paddingVertical: spacing.sm,
   },
-});
+}));

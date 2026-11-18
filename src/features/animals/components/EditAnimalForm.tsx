@@ -8,7 +8,7 @@ import { Text, View } from 'react-native';
 
 import { useAuth } from '@/features/auth';
 import { mapAuthError } from '@/features/auth/utils/mapAuthError';
-import { useLookupOptions } from '@/features/content';
+import { useAppConfig, useLookupOptions } from '@/features/content';
 import { Button } from '@/shared/components/Button';
 import { ChipGroup } from '@/shared/components/ChipGroup';
 import { ErrorRetry } from '@/shared/components/ErrorRetry';
@@ -21,7 +21,10 @@ import type { AnimalSpecies, AnimalStatus, UrgencyLevel } from '@/shared/types/d
 import { getAnimalById, updateAnimalListing } from '../api/animalsApi';
 import { updateAnimalSchema, type UpdateAnimalInput } from '../schemas/animalSchemas';
 import { placeFromStored, storedPublicLocation } from '../utils/publicLocation';
+import { getAnimalPhotoPublicUrl } from '../utils/photoUrls';
+import { PhotoValidationError, pickAnimalPhotos, type LocalPhoto } from '../utils/photos';
 import { ListingLocationFields } from './ListingLocationFields';
+import { PhotoPickerField } from './PhotoPickerField';
 import { styles } from './EditAnimalForm.styles';
 
 type EditAnimalFormProps = {
@@ -33,7 +36,10 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { speciesOptions, urgencyOptions, animalStatusOptions } = useLookupOptions();
+  const photoLimits = useAppConfig();
   const [formError, setFormError] = useState<string | null>(null);
+  const [photoError, setPhotoError] = useState<string | null>(null);
+  const [photoDraft, setPhotoDraft] = useState<LocalPhoto[] | null>(null);
 
   const detailQuery = useQuery({
     queryKey: ['animals', 'detail', animalId],
@@ -97,6 +103,17 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
   }
 
   const animal = detailQuery.data;
+  const photos =
+    photoDraft ??
+    (animal?.photo_paths ?? []).map((path) => ({
+      id: path,
+      uri: getAnimalPhotoPublicUrl(path),
+      mimeType: 'image/jpeg' as const,
+      fileName: path.split('/').pop() ?? 'photo.jpg',
+      byteSize: 0,
+      remotePath: path,
+    }));
+
   if (!animal) {
     return <InlineMessage message={t('animals.detail.notFound')} />;
   }
@@ -124,6 +141,8 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
         }),
         urgency: values.urgency,
         status: values.status,
+        photos,
+        previousPhotoPaths: animal.photo_paths ?? [],
       });
       await queryClient.invalidateQueries({ queryKey: ['animals'] });
       router.replace(`/animals/${animalId}`);
@@ -132,10 +151,41 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
     }
   });
 
+  const mapPhotoError = (error: unknown): string => {
+    if (error instanceof PhotoValidationError) {
+      const maxMb = Math.round(photoLimits.maxPhotoBytes / (1024 * 1024));
+      return t(`animals.photos.${error.code}`, {
+        count: photoLimits.maxAnimalPhotos,
+        mb: maxMb,
+      });
+    }
+    return t('animals.photos.generic');
+  };
+
+  const onAddPhotos = async () => {
+    setPhotoError(null);
+    try {
+      const next = await pickAnimalPhotos(photos.length, photoLimits);
+      if (next.length) {
+        setPhotoDraft((current) => [...(current ?? photos), ...next]);
+      }
+    } catch (error) {
+      setPhotoError(mapPhotoError(error));
+    }
+  };
+
   return (
     <FormProvider {...form}>
     <View>
       <Text style={styles.hint}>{t('animals.edit.photoHint')}</Text>
+      <PhotoPickerField
+        photos={photos}
+        error={photoError ?? undefined}
+        onAdd={() => void onAddPhotos()}
+        onRemove={(id) =>
+          setPhotoDraft((current) => (current ?? photos).filter((photo) => photo.id !== id))
+        }
+      />
 
       <FieldLabel>{t('animals.fields.species')}</FieldLabel>
       <Controller

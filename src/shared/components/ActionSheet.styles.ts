@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native';
 
-import { colors, radii, spacing, typography } from '@/theme';
+import { lazyStyles, radii, spacing, typography } from '@/theme';
 
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   backdrop: {
     flex: 1,
     backgroundColor: colors.overlay,
@@ -56,4 +56,4 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     color: colors.accentPressed,
   },
-});
+}));

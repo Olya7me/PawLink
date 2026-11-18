@@ -1,8 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { lazyStyles, radii } from '@/theme';
 
-import { colors, radii } from '@/theme';
-
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   base: {
     width: 44,
     height: 44,
@@ -19,4 +17,4 @@ export const styles = StyleSheet.create({
   disabled: {
     opacity: 0.5,
   },
-});
+}));

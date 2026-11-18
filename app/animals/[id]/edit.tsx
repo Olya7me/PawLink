@@ -8,7 +8,7 @@ import { InlineMessage } from '@/shared/components/InlineMessage';
 import { LoadingBlock } from '@/shared/components/LoadingBlock';
 import { Screen } from '@/shared/components/Screen';
 
-import { styles } from './_edit.styles';
+import { styles } from '@/app-styles/animals/[id]/_edit.styles';
 
 export default function EditAnimalScreen() {
   const { t } = useTranslation();

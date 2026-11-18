@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { HelpFaq } from '@/features/faq';
 import { Screen } from '@/shared/components/Screen';
 
-import { styles } from './_faq.styles';
+import { styles } from '@/app-styles/_faq.styles';
 
 export default function FaqScreen() {
   const { t } = useTranslation();

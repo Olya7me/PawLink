@@ -1,12 +1,10 @@
-import { StyleSheet } from 'react-native';
+import { lazyStyles, spacing, typography } from '@/theme';
 
-import { colors, spacing, typography } from '@/theme';
-
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   title: {
     fontSize: typography.size.xl,
     fontWeight: '700',
     color: colors.text,
     marginBottom: spacing.lg,
   },
-});
+}));

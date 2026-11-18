@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native';
 
-import { colors, radii, typography } from '@/theme';
+import { lazyStyles, radii, typography } from '@/theme';
 
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   button: {
     marginRight: -4,
   },
@@ -61,4 +61,4 @@ export const styles = StyleSheet.create({
     lineHeight: 18,
     color: colors.text,
   },
-});
+}));

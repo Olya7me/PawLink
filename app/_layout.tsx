@@ -3,14 +3,16 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 import { AppProviders } from '@/shared/components/AppProviders';
-import { colors } from '@/theme';
+import { useTheme } from '@/theme';
 
 export { ErrorBoundary } from 'expo-router';
 
-export default function RootLayout() {
+function RootNavigator() {
+  const { scheme, colors } = useTheme();
+
   return (
-    <AppProviders>
-      <StatusBar style="dark" />
+    <>
+      <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
       <Stack
         screenOptions={{
           headerStyle: { backgroundColor: colors.background },
@@ -33,6 +35,14 @@ export default function RootLayout() {
         <Stack.Screen name="create" options={{ title: 'Create' }} />
         <Stack.Screen name="+not-found" />
       </Stack>
+    </>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <AppProviders>
+      <RootNavigator />
     </AppProviders>
   );
 }

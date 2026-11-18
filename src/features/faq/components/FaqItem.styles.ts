@@ -1,8 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { lazyStyles, radii, spacing, typography } from '@/theme';
 
-import { colors, radii, spacing, typography } from '@/theme';
-
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   card: {
     borderRadius: radii.md,
     backgroundColor: colors.surface,
@@ -37,4 +35,4 @@ export const styles = StyleSheet.create({
     color: colors.textSecondary,
     lineHeight: typography.size.sm * typography.lineHeight.relaxed,
   },
-});
+}));

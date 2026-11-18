@@ -1,7 +1,7 @@
 import { AnimalMap } from '@/features/maps';
 import { Screen } from '@/shared/components/Screen';
 
-import { styles } from './_maps.styles';
+import { styles } from '@/app-styles/(tabs)/_maps.styles';
 
 export default function MapsScreen() {
   return (

@@ -1,8 +1,8 @@
-import { Platform, StyleSheet } from 'react-native';
+import { Platform } from 'react-native';
 
-import { colors } from '@/theme';
+import { lazyStyles } from '@/theme';
 
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   wrap: {
     position: 'relative',
   },
@@ -31,4 +31,4 @@ export const styles = StyleSheet.create({
       default: {},
     }),
   },
-});
+}));

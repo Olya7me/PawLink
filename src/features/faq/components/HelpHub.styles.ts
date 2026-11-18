@@ -1,8 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { lazyStyles, radii, spacing, typography } from '@/theme';
 
-import { colors, radii, spacing, typography } from '@/theme';
-
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   list: {
     flex: 1,
   },
@@ -61,4 +59,4 @@ export const styles = StyleSheet.create({
     color: colors.textSecondary,
     lineHeight: typography.size.sm * typography.lineHeight.normal,
   },
-});
+}));

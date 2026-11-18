@@ -1,7 +1,7 @@
 import { AnimalFeed } from '@/features/animals';
 import { Screen } from '@/shared/components/Screen';
 
-import { styles } from './_index.styles';
+import { styles } from '@/app-styles/(tabs)/_index.styles';
 
 export default function FeedScreen() {
   return (

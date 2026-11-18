@@ -1,8 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { lazyStyles, spacing, typography } from '@/theme';
 
-import { colors, spacing, typography } from '@/theme';
-
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   spaced: {
     marginTop: spacing.md,
   },
@@ -12,4 +10,4 @@ export const styles = StyleSheet.create({
     fontSize: typography.size.sm,
     lineHeight: typography.size.sm * typography.lineHeight.normal,
   },
-});
+}));

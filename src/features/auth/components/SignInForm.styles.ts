@@ -1,12 +1,10 @@
-import { StyleSheet } from 'react-native';
+import { lazyStyles, spacing, typography } from '@/theme';
 
-import { colors, spacing, typography } from '@/theme';
-
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   link: {
     marginTop: spacing.md,
     color: colors.accent,
     fontSize: typography.size.sm,
     textAlign: 'center',
   },
-});
+}));

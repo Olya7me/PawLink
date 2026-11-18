@@ -1,8 +1,8 @@
-import { Dimensions, StyleSheet } from 'react-native';
+import { Dimensions } from 'react-native';
 
-import { colors, spacing, typography } from '@/theme';
+import { lazyStyles, spacing, typography } from '@/theme';
 
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   content: {
     paddingBottom: spacing.xxl,
   },
@@ -82,4 +82,4 @@ export const styles = StyleSheet.create({
   inlineError: {
     marginBottom: 0,
   },
-});
+}));

@@ -1,8 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { lazyStyles, spacing } from '@/theme';
 
-import { colors, spacing } from '@/theme';
-
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   safe: {
     flex: 1,
     backgroundColor: colors.background,
@@ -15,4 +13,4 @@ export const styles = StyleSheet.create({
   contentFlush: {
     flex: 1,
   },
-});
+}));

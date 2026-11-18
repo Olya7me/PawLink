@@ -6,7 +6,7 @@ import { HelpRequestDetailView } from '@/features/help';
 import { InlineMessage } from '@/shared/components/InlineMessage';
 import { Screen } from '@/shared/components/Screen';
 
-import { styles } from './_index.styles';
+import { styles } from '@/app-styles/requests/[requestId]/_index.styles';
 
 export default function HelpRequestScreen() {
   const { t } = useTranslation();

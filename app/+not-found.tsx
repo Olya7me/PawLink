@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Screen } from '@/shared/components/Screen';
 
-import { styles } from './_not-found.styles';
+import { styles } from '@/app-styles/_not-found.styles';
 
 export default function NotFoundScreen() {
   const { t } = useTranslation();

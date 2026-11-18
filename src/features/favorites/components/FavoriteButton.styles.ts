@@ -1,8 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { lazyStyles, radii } from '@/theme';
 
-import { colors, radii } from '@/theme';
-
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   button: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
@@ -15,4 +13,4 @@ export const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.92)',
     borderRadius: radii.full,
   },
-});
+}));

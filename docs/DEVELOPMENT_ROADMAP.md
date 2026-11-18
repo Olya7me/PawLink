@@ -15,7 +15,7 @@
 | 9 | In-app notifications | Done (PR #14) |
 | 10 | Feedback + listing reports | Done (PR #15) |
 | 11 | Public map (city, district, optional street, pins) | Done |
-| 12 | Dark theme | Next |
+| 12 | Dark theme + photo replace on edit | Done |
 | 13 | Device push (Expo) | Done (project id in `app.json`; apply migration `00011` on Supabase) |
 
 ## Locked product decisions (2026-11-14)
@@ -29,7 +29,7 @@
 | 5 | Maps | **Done**: city + district required, street optional; pin uses coordinates of the chosen public place |
 | 6 | Chat | **Out of scope** (pet project) |
 | 7 | Moderation | **Listing report + Help feedback** only; rows in Table Editor. No admin console, no user-profile reports |
-| 8 | Theme | **Light now**; dark theme next |
+| 8 | Theme | Light and dark; preference is system / light / dark |
 | 9 | Guest feed | Guests may browse feed + animal detail; auth required to create listings/offers |
 | 10 | Photos | Max **5** per animal; max **5 MB** each; JPEG / PNG / WebP; compress before upload when possible |
 
@@ -46,7 +46,7 @@ See also [PRODUCT_SPEC.md](./PRODUCT_SPEC.md), [ARCHITECTURE.md](./ARCHITECTURE.
 6b. Device push via Expo — done after migration `00011` (`extra.eas.projectId` is in `app.json`)  
 7. Reports / feedback (listing report + Help feedback in Table Editor) — done  
 8. Public map pins — done  
-9. Dark theme — next  
+9. Dark theme — done (Profile; stored preference)  
 10. Polish  
 
 ## Out of scope
@@ -72,8 +72,6 @@ See also [PRODUCT_SPEC.md](./PRODUCT_SPEC.md), [ARCHITECTURE.md](./ARCHITECTURE.
 
 ## Still open after the map
 
-- Dark theme  
-- Photo replace on edit  
 - Fake seed data (optional)  
 
 ## Manual setup after feedback/reports slice

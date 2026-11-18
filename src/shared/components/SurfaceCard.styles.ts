@@ -1,8 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { lazyStyles, radii, spacing } from '@/theme';
 
-import { colors, radii, spacing } from '@/theme';
-
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   card: {
     backgroundColor: colors.surface,
     borderWidth: 1,
@@ -11,4 +9,4 @@ export const styles = StyleSheet.create({
     padding: spacing.md,
     gap: spacing.xs,
   },
-});
+}));

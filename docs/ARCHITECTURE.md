@@ -22,7 +22,7 @@
 |------|--------|
 | Maps SDK | MVP uses city text only (approved 2026-11-14) |
 | In-app chat | Not in MVP; contact after offer accept |
-| Dark mode | Light theme shipped; dark theme planned next |
+| Dark mode | System, light, or dark (Profile) |
 | Push notifications (Expo Notifications) | Add after in-app notifications work |
 | Admin panel | Reports are stored; moderation UI later |
 | Nativewind / heavy UI kit | Custom theme tokens keep design control |

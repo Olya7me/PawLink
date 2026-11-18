@@ -1,8 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { lazyStyles, spacing, typography } from '@/theme';
 
-import { colors, spacing, typography } from '@/theme';
-
-export const styles = StyleSheet.create({
+export const styles = lazyStyles((colors) => ({
   wrap: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -18,4 +16,4 @@ export const styles = StyleSheet.create({
     fontSize: typography.size.sm,
     textAlign: 'center',
   },
-});
+}));

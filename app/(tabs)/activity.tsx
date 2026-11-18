@@ -1,7 +1,7 @@
 import { MyActivity } from '@/features/activity';
 import { Screen } from '@/shared/components/Screen';
 
-import { styles } from './_activity.styles';
+import { styles } from '@/app-styles/(tabs)/_activity.styles';
 
 export default function ActivityScreen() {
   return (

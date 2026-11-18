@@ -6,6 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider } from '@/features/auth';
 import { PushRegistration } from '@/features/notifications/components/PushRegistration';
 import { i18n } from '@/i18n';
+import { ThemeProvider } from '@/theme';
 
 type AppProvidersProps = {
   children: ReactNode;
@@ -26,14 +27,16 @@ export function AppProviders({ children }: AppProvidersProps) {
 
   return (
     <SafeAreaProvider>
-      <I18nextProvider i18n={i18n}>
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <PushRegistration />
-            {children}
-          </AuthProvider>
-        </QueryClientProvider>
-      </I18nextProvider>
+      <ThemeProvider>
+        <I18nextProvider i18n={i18n}>
+          <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+              <PushRegistration />
+              {children}
+            </AuthProvider>
+          </QueryClientProvider>
+        </I18nextProvider>
+      </ThemeProvider>
     </SafeAreaProvider>
   );
 }
