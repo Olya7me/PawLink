@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FlatList, RefreshControl, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
@@ -27,12 +27,21 @@ export function AnimalFeed() {
   const copy = useAppCopy();
   const { isAuthenticated } = useAuth();
   const [filters, setFilters] = useState<Filters>(defaultFeedFilters);
-  const queryKey = useMemo(() => ['animals', 'feed', filters] as const, [filters]);
+  const [cityQuery, setCityQuery] = useState(filters.city);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setCityQuery(filters.city), 400);
+    return () => clearTimeout(timer);
+  }, [filters.city]);
+
+  const queryFilters = useMemo(() => ({ ...filters, city: cityQuery }), [filters, cityQuery]);
+  const queryKey = useMemo(() => ['animals', 'feed', queryFilters] as const, [queryFilters]);
 
   const feedQuery = useQuery({
     queryKey,
-    queryFn: () => listAnimals(filters),
+    queryFn: () => listAnimals(queryFilters),
     enabled: isSupabaseConfigured,
+    placeholderData: keepPreviousData,
   });
 
   const subtitle = isAuthenticated
@@ -77,7 +86,7 @@ export function AnimalFeed() {
     return <View style={styles.container}>{header}</View>;
   }
 
-  if (feedQuery.isLoading) {
+  if (feedQuery.isLoading && !feedQuery.data) {
     return (
       <View style={styles.container}>
         {header}

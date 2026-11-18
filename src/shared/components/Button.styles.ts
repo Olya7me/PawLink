@@ -8,6 +8,11 @@ export const styles = lazyStyles((colors) => ({
     justifyContent: 'center',
     paddingHorizontal: spacing.lg,
   },
+  compact: {
+    minHeight: 34,
+    paddingHorizontal: spacing.md,
+    borderRadius: radii.sm,
+  },
   primary: {
     backgroundColor: colors.accent,
   },
@@ -31,6 +36,9 @@ export const styles = lazyStyles((colors) => ({
   label: {
     fontSize: typography.size.md,
     fontWeight: '600',
+  },
+  compactLabel: {
+    fontSize: typography.size.sm,
   },
   primaryLabel: {
     color: '#FFFFFF',

@@ -1,4 +1,4 @@
-import { lazyStyles, spacing, typography } from '@/theme';
+import { lazyStyles, radii, spacing, typography } from '@/theme';
 
 export const styles = lazyStyles((colors) => ({
   container: {
@@ -50,7 +50,40 @@ export const styles = lazyStyles((colors) => ({
     fontSize: typography.size.sm,
   },
   stack: {
+    gap: spacing.sm,
+  },
+  pressed: {
+    opacity: 0.9,
+  },
+  card: {
+    paddingVertical: spacing.md,
+  },
+  hubRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: spacing.md,
+  },
+  iconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: radii.full,
+    backgroundColor: colors.accentSoft,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  copy: {
+    flex: 1,
+    gap: spacing.xs,
+  },
+  linkTitle: {
+    fontSize: typography.size.lg,
+    fontWeight: '600',
+    color: colors.text,
+  },
+  linkSubtitle: {
+    fontSize: typography.size.sm,
+    color: colors.textSecondary,
+    lineHeight: typography.size.sm * typography.lineHeight.normal,
   },
   rowCard: {
     gap: spacing.md,
@@ -78,6 +111,7 @@ export const styles = lazyStyles((colors) => ({
     gap: spacing.sm,
   },
   rowButton: {
-    minWidth: 100,
+    minWidth: 0,
+    alignSelf: 'flex-start',
   },
 }));

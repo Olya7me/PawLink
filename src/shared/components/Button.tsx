@@ -17,6 +17,7 @@ type ButtonProps = PressableProps & {
   label: string;
   loading?: boolean;
   variant?: ButtonVariant;
+  size?: 'default' | 'compact';
   style?: StyleProp<ViewStyle>;
 };
 
@@ -24,6 +25,7 @@ export function Button({
   label,
   loading = false,
   variant = 'primary',
+  size = 'default',
   disabled,
   style,
   ...props
@@ -36,6 +38,7 @@ export function Button({
       disabled={isDisabled}
       style={({ pressed }) => [
         styles.base,
+        size === 'compact' ? styles.compact : null,
         styles[variant],
         pressed && !isDisabled ? styles.pressed : null,
         isDisabled ? styles.disabled : null,
@@ -46,7 +49,15 @@ export function Button({
       {loading ? (
         <ActivityIndicator color={variant === 'primary' || variant === 'danger' ? '#fff' : colors.accent} />
       ) : (
-        <Text style={[styles.label, styles[`${variant}Label` as const]]}>{label}</Text>
+        <Text
+          style={[
+            styles.label,
+            size === 'compact' ? styles.compactLabel : null,
+            styles[`${variant}Label` as const],
+          ]}
+        >
+          {label}
+        </Text>
       )}
     </Pressable>
   );
