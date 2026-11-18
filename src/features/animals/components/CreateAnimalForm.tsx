@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 
@@ -18,8 +18,10 @@ import type { AnimalSpecies, HelpType, UrgencyLevel } from '@/shared/types/domai
 
 import { createAnimalListing } from '../api/animalsApi';
 import { createAnimalSchema, type CreateAnimalInput } from '../schemas/animalSchemas';
+import { storedPublicLocation } from '../utils/publicLocation';
 import { PhotoValidationError, pickAnimalPhotos, type LocalPhoto } from '../utils/photos';
 import { styles } from './CreateAnimalForm.styles';
+import { ListingLocationFields } from './ListingLocationFields';
 import { PhotoPickerField } from './PhotoPickerField';
 
 export function CreateAnimalForm() {
@@ -32,23 +34,25 @@ export function CreateAnimalForm() {
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<CreateAnimalInput>({
+  const form = useForm<CreateAnimalInput>({
     resolver: zodResolver(createAnimalSchema),
     defaultValues: {
       name: '',
       species: 'dog',
       description: '',
       conditionNotes: '',
-      city: '',
-      locationLabel: '',
+      city: null,
+      district: null,
+      address: null,
       urgency: 'medium',
       helpTypes: [],
     },
   });
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = form;
 
   const mapPhotoError = (error: unknown): string => {
     if (error instanceof PhotoValidationError) {
@@ -85,8 +89,11 @@ export function CreateAnimalForm() {
         species: values.species,
         description: values.description.trim(),
         conditionNotes: values.conditionNotes?.trim() ? values.conditionNotes.trim() : null,
-        city: values.city.trim(),
-        locationLabel: values.locationLabel?.trim() ? values.locationLabel.trim() : null,
+        ...storedPublicLocation({
+          city: values.city!,
+          district: values.district!,
+          address: values.address,
+        }),
         urgency: values.urgency,
         helpTypes: values.helpTypes,
         photos,
@@ -103,6 +110,7 @@ export function CreateAnimalForm() {
   });
 
   return (
+    <FormProvider {...form}>
     <View>
       <PhotoPickerField
         photos={photos}
@@ -172,34 +180,7 @@ export function CreateAnimalForm() {
         )}
       />
 
-      <Controller
-        control={control}
-        name="city"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextField
-            label={t('animals.fields.city')}
-            placeholder={t('animals.fields.cityPlaceholder')}
-            value={value}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            error={errors.city ? t('animals.errors.cityRequired') : undefined}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="locationLabel"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextField
-            label={t('animals.fields.location')}
-            placeholder={t('animals.fields.locationPlaceholder')}
-            value={value ?? ''}
-            onBlur={onBlur}
-            onChangeText={onChange}
-          />
-        )}
-      />
+      <ListingLocationFields />
 
       <FieldLabel>{t('animals.fields.urgency')}</FieldLabel>
       <Controller
@@ -242,5 +223,6 @@ export function CreateAnimalForm() {
         style={styles.submit}
       />
     </View>
+    </FormProvider>
   );
 }

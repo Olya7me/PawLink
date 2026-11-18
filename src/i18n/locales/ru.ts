@@ -29,7 +29,7 @@ export const ru: TranslationResources = {
     feed: 'Лента',
     activity: 'Моё',
     help: 'Помощь',
-    maps: 'Карты',
+    maps: 'Карта',
   },
   faq: {
     title: 'Помощь',
@@ -83,10 +83,11 @@ export const ru: TranslationResources = {
     },
   },
   maps: {
-    title: 'Карты',
-    subtitle: 'Пока ищем по тексту города. Интерактивные карты появятся позже.',
-    soonTitle: 'Карты скоро',
-    soonBody: 'В этом MVP объявления используют город текстом. Карта появится в следующих версиях.',
+    title: 'Карта',
+    subtitle: 'Активные объявления на тайлах OpenStreetMap, без ключа Google. Улица необязательна.',
+    empty: 'Нет объявлений с координатами для этого фильтра.',
+    error: 'Не удалось загрузить карту.',
+    webUnsupported: 'Интерактивная карта доступна в приложении для iOS и Android.',
   },
 
   activity: {
@@ -236,9 +237,14 @@ export const ru: TranslationResources = {
       condition: 'Состояние',
       conditionPlaceholder: 'Травмы, характер, потребности…',
       city: 'Город',
-      cityPlaceholder: 'Название города',
-      location: 'Примерный район',
-      locationPlaceholder: 'Район или ориентир — не частный адрес',
+      cityPlaceholder: 'Найдите и выберите город',
+      district: 'Район',
+      districtPlaceholder: 'Найдите и выберите район',
+      address: 'Улица или ориентир (необязательно)',
+      addressPlaceholder: 'Улица, перекрёсток или ориентир',
+      addressHint: 'Можно не указывать — на карте останутся город и район.',
+      locationPrivacy: 'Выберите место из подсказок. На карте сохранится только эта публичная точка.',
+      placeSearchError: 'Не удалось загрузить подсказки. Попробуйте ещё раз.',
       urgency: 'Срочность',
       status: 'Статус',
       helpTypes: 'Нужна помощь',
@@ -249,7 +255,8 @@ export const ru: TranslationResources = {
     },
     errors: {
       descriptionRequired: 'Описание обязательно.',
-      cityRequired: 'Укажите город.',
+      cityRequired: 'Выберите город из подсказок.',
+      districtRequired: 'Выберите район из подсказок.',
       helpTypesRequired: 'Выберите хотя бы один тип помощи.',
     },
     photos: {

@@ -31,7 +31,11 @@ export type CreateAnimalPayload = {
   description: string;
   conditionNotes: string | null;
   city: string;
+  district: string;
+  addressLabel: string | null;
   locationLabel: string | null;
+  latitude: number;
+  longitude: number;
   urgency: UrgencyLevel;
   helpTypes: HelpType[];
   photos: LocalPhoto[];
@@ -102,6 +106,10 @@ export async function listAnimals(filters: AnimalFeedFilters): Promise<AnimalLis
       status,
       city,
       location_label,
+      district,
+      address_label,
+      latitude,
+      longitude,
       photo_paths,
       created_at,
       updated_at,
@@ -155,6 +163,13 @@ export async function listAnimals(filters: AnimalFeedFilters): Promise<AnimalLis
   return sortAnimals(rows, filters.sort);
 }
 
+export async function listMappedAnimals(filters: AnimalFeedFilters): Promise<AnimalListItem[]> {
+  const rows = await listAnimals(filters);
+  return rows.filter(
+    (row) => row.status === 'active' && row.latitude != null && row.longitude != null,
+  );
+}
+
 export async function getAnimalById(id: string): Promise<AnimalDetail | null> {
   assertConfigured();
 
@@ -172,6 +187,10 @@ export async function getAnimalById(id: string): Promise<AnimalDetail | null> {
       status,
       city,
       location_label,
+      district,
+      address_label,
+      latitude,
+      longitude,
       photo_paths,
       created_at,
       updated_at,
@@ -223,7 +242,11 @@ export type UpdateAnimalPayload = {
   description: string;
   conditionNotes: string | null;
   city: string;
+  district: string;
+  addressLabel: string | null;
   locationLabel: string | null;
+  latitude: number;
+  longitude: number;
   urgency: UrgencyLevel;
   status: AnimalStatus;
 };
@@ -245,6 +268,10 @@ export async function listAnimalsByAuthor(authorId: string): Promise<AnimalListI
       status,
       city,
       location_label,
+      district,
+      address_label,
+      latitude,
+      longitude,
       photo_paths,
       created_at,
       updated_at,
@@ -294,7 +321,11 @@ export async function updateAnimalListing(payload: UpdateAnimalPayload): Promise
       description: payload.description,
       condition_notes: payload.conditionNotes,
       city: payload.city,
+      district: payload.district,
+      address_label: payload.addressLabel,
       location_label: payload.locationLabel,
+      latitude: payload.latitude,
+      longitude: payload.longitude,
       urgency: payload.urgency,
       status: payload.status,
     })
@@ -324,7 +355,11 @@ export async function createAnimalListing(payload: CreateAnimalPayload): Promise
       description: payload.description,
       condition_notes: payload.conditionNotes,
       city: payload.city,
+      district: payload.district,
+      address_label: payload.addressLabel,
       location_label: payload.locationLabel,
+      latitude: payload.latitude,
+      longitude: payload.longitude,
       urgency: payload.urgency,
       status: 'active',
       photo_paths: photoPaths,

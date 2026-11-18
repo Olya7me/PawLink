@@ -51,12 +51,15 @@ lookup_options / app_copy / app_config (public read catalogs + copy + limits)
 | condition_notes | text | |
 | urgency | enum | low / medium / high / critical |
 | status | enum | active / resolved / archived |
-| city | text | Public city (MVP location; no maps) |
-| location_label | text | Approximate public area label |
+| city | text | Public city chosen from suggestions |
+| district | text | Public district chosen from suggestions |
+| address_label | text | Optional street, crossing, or landmark |
+| location_label | text | District, plus address when the author added one |
+| latitude / longitude | double precision | Coordinates of the most specific public place selected. Null on older text-only rows |
 | photo_paths | text[] | ≤ **5** objects; JPEG/PNG/WebP; ≤ **5 MB** each |
 | created_at / updated_at | timestamptz | |
 
-**Privacy:** no precise foster/home addresses in public columns. No map coordinates in MVP.
+**Privacy:** coordinates are the public place the author picked (district, or street when they add one). Contact and meetup details stay on accepted offers.
 
 ### `help_requests`
 

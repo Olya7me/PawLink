@@ -87,7 +87,8 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
 
         <Text style={styles.meta}>
           {labelFor('species', animal.species)} · {animal.city}
-          {animal.location_label ? ` · ${animal.location_label}` : ''}
+          {animal.district ? ` · ${animal.district}` : ''}
+          {animal.address_label ? ` · ${animal.address_label}` : animal.location_label && !animal.district ? ` · ${animal.location_label}` : ''}
         </Text>
         <Text style={styles.status}>
           {t('animals.detail.status')}: {labelFor('animal_status', animal.status)}

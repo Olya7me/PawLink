@@ -61,8 +61,8 @@ describe('i18n locales', () => {
     expect(ru.faq.error).toBeTruthy();
     expect(en.reports.feedback.intro).toBeTruthy();
     expect(ru.reports.fields.reasonPlaceholder).toBeTruthy();
-    expect(en.maps.soonTitle).toBeTruthy();
-    expect(ru.maps.soonBody).toBeTruthy();
+    expect(en.maps.empty).toBeTruthy();
+    expect(ru.maps.error).toBeTruthy();
   });
 
 

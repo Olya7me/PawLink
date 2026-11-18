@@ -1,1 +1,1 @@
-export { MapsPlaceholder } from './components/MapsPlaceholder';
+export { AnimalMap } from './components/AnimalMap';

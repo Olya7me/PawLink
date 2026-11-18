@@ -33,6 +33,7 @@ Use the **anon** key only. Do not put the service role key in the app or in git.
 | 7 | [`supabase/migrations/00007_favorites.sql`](../supabase/migrations/00007_favorites.sql) — `favorites` table + owner-only RLS; seeds Favorites empty `app_copy` |
 | 8 | [`supabase/migrations/00008_in_app_notifications.sql`](../supabase/migrations/00008_in_app_notifications.sql) — notification templates, server-side inserts (triggers + RPC hooks), harden RLS, realtime |
 | 9 | [`supabase/migrations/00009_feedback_and_reports.sql`](../supabase/migrations/00009_feedback_and_reports.sql) — evolve `reports` for feedback/listing/user kinds; seed `report_reason` + report hints |
+| 10 | [`supabase/migrations/00010_animal_public_location.sql`](../supabase/migrations/00010_animal_public_location.sql) — public `district`, optional `address_label`, and pin coordinates on `animals` |
 
 3. Confirm under **Table Editor** that `profiles`, `animals`, `help_requests`, `help_offers`, `animal_updates`, `notifications`, `reports`, `faq_items`, `lookup_options`, `app_copy`, `app_config`, and `favorites` exist.
 4. Confirm under **Storage** that buckets `animal-photos` and `avatars` exist.

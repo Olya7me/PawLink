@@ -27,7 +27,7 @@ export const en = {
     feed: 'Feed',
     activity: 'My activity',
     help: 'Help',
-    maps: 'Maps',
+    maps: 'Map',
   },
   faq: {
     title: 'Help',
@@ -81,11 +81,11 @@ export const en = {
     },
   },
   maps: {
-    title: 'Maps',
-    subtitle: 'Browse by city text for now. Interactive maps come later.',
-    // soonTitle/soonBody: prefer app_copy; kept as last-resort i18n mirrors
-    soonTitle: 'Maps coming soon',
-    soonBody: 'Listings use city as text in this MVP. A map view will land in a later release.',
+    title: 'Map',
+    subtitle: 'Active listings on OpenStreetMap tiles (no Google key). Street is optional.',
+    empty: 'No listings with a map location match this filter.',
+    error: 'Could not load the map.',
+    webUnsupported: 'The interactive map is available in the iOS and Android app.',
   },
 
   activity: {
@@ -236,9 +236,14 @@ export const en = {
       condition: 'Condition',
       conditionPlaceholder: 'Injuries, temperament, needs…',
       city: 'City',
-      cityPlaceholder: 'City name',
-      location: 'Approximate area',
-      locationPlaceholder: 'District or landmark — not a private address',
+      cityPlaceholder: 'Search and choose a city',
+      district: 'District',
+      districtPlaceholder: 'Search and choose a district',
+      address: 'Street or landmark (optional)',
+      addressPlaceholder: 'Search a street, crossing, or landmark',
+      addressHint: 'Leave this empty to publish only the city and district.',
+      locationPrivacy: 'Pick a place from the suggestions. Only that public spot is saved and shown on the map.',
+      placeSearchError: 'Could not load suggestions. Try again.',
       urgency: 'Urgency',
       status: 'Status',
       helpTypes: 'Help needed',
@@ -249,7 +254,8 @@ export const en = {
     },
     errors: {
       descriptionRequired: 'Description is required.',
-      cityRequired: 'City is required.',
+      cityRequired: 'Choose a city from the suggestions.',
+      districtRequired: 'Choose a district from the suggestions.',
       helpTypesRequired: 'Select at least one help type.',
     },
     photos: {

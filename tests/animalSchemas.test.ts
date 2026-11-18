@@ -7,12 +7,21 @@ describe('createAnimalSchema', () => {
       species: 'dog',
       description: 'Found near the park',
       conditionNotes: '',
-      city: 'Kyiv',
-      locationLabel: 'Pechersk',
+      city: {
+        label: 'Kyiv',
+        latitude: 50.45,
+        longitude: 30.52,
+      },
+      district: {
+        label: 'Pechersk',
+        latitude: 50.42,
+        longitude: 30.54,
+      },
+      address: null,
       urgency: 'high',
       helpTypes: ['transport', 'vet'],
     });
-    expect(parsed.city).toBe('Kyiv');
+    expect(parsed.city?.label).toBe('Kyiv');
     expect(parsed.helpTypes).toEqual(['transport', 'vet']);
   });
 
@@ -23,8 +32,9 @@ describe('createAnimalSchema', () => {
         species: 'cat',
         description: '',
         conditionNotes: '',
-        city: '',
-        locationLabel: '',
+        city: null,
+        district: null,
+        address: null,
         urgency: 'medium',
         helpTypes: [],
       }),

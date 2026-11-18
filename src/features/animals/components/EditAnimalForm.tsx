@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 
@@ -20,6 +20,8 @@ import type { AnimalSpecies, AnimalStatus, UrgencyLevel } from '@/shared/types/d
 
 import { getAnimalById, updateAnimalListing } from '../api/animalsApi';
 import { updateAnimalSchema, type UpdateAnimalInput } from '../schemas/animalSchemas';
+import { placeFromStored, storedPublicLocation } from '../utils/publicLocation';
+import { ListingLocationFields } from './ListingLocationFields';
 import { styles } from './EditAnimalForm.styles';
 
 type EditAnimalFormProps = {
@@ -38,35 +40,43 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
     queryFn: () => getAnimalById(animalId),
   });
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<UpdateAnimalInput>({
+  const form = useForm<UpdateAnimalInput>({
     resolver: zodResolver(updateAnimalSchema),
     defaultValues: {
       name: '',
       species: 'dog',
       description: '',
       conditionNotes: '',
-      city: '',
-      locationLabel: '',
+      city: null,
+      district: null,
+      address: null,
       urgency: 'medium',
       status: 'active',
     },
   });
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = form;
 
   useEffect(() => {
     const animal = detailQuery.data;
     if (!animal) return;
+    const pin = { latitude: animal.latitude, longitude: animal.longitude };
     reset({
       name: animal.name ?? '',
       species: animal.species,
       description: animal.description ?? '',
       conditionNotes: animal.condition_notes ?? '',
-      city: animal.city,
-      locationLabel: animal.location_label ?? '',
+      city: placeFromStored(animal.city, pin.latitude, pin.longitude),
+      district: placeFromStored(
+        animal.district ?? animal.location_label,
+        pin.latitude,
+        pin.longitude,
+      ),
+      address: placeFromStored(animal.address_label, pin.latitude, pin.longitude),
       urgency: animal.urgency,
       status: animal.status,
     });
@@ -107,8 +117,11 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
         species: values.species,
         description: values.description.trim(),
         conditionNotes: values.conditionNotes?.trim() ? values.conditionNotes.trim() : null,
-        city: values.city.trim(),
-        locationLabel: values.locationLabel?.trim() ? values.locationLabel.trim() : null,
+        ...storedPublicLocation({
+          city: values.city!,
+          district: values.district!,
+          address: values.address,
+        }),
         urgency: values.urgency,
         status: values.status,
       });
@@ -120,6 +133,7 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
   });
 
   return (
+    <FormProvider {...form}>
     <View>
       <Text style={styles.hint}>{t('animals.edit.photoHint')}</Text>
 
@@ -184,34 +198,7 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
         )}
       />
 
-      <Controller
-        control={control}
-        name="city"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextField
-            label={t('animals.fields.city')}
-            placeholder={t('animals.fields.cityPlaceholder')}
-            value={value}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            error={errors.city ? t('animals.errors.cityRequired') : undefined}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="locationLabel"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextField
-            label={t('animals.fields.location')}
-            placeholder={t('animals.fields.locationPlaceholder')}
-            value={value ?? ''}
-            onBlur={onBlur}
-            onChangeText={onChange}
-          />
-        )}
-      />
+      <ListingLocationFields />
 
       <FieldLabel>{t('animals.fields.urgency')}</FieldLabel>
       <Controller
@@ -250,5 +237,6 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
         style={styles.submit}
       />
     </View>
+    </FormProvider>
   );
 }

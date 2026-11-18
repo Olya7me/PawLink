@@ -120,6 +120,10 @@ export type Database = {
           status: AnimalStatus;
           city: string;
           location_label: string | null;
+          district: string | null;
+          address_label: string | null;
+          latitude: number | null;
+          longitude: number | null;
           photo_paths: string[];
           created_at: string;
           updated_at: string;
@@ -135,6 +139,10 @@ export type Database = {
           status?: AnimalStatus;
           city: string;
           location_label?: string | null;
+          district?: string | null;
+          address_label?: string | null;
+          latitude?: number | null;
+          longitude?: number | null;
           photo_paths?: string[];
           created_at?: string;
           updated_at?: string;
@@ -150,6 +158,10 @@ export type Database = {
           status?: AnimalStatus;
           city?: string;
           location_label?: string | null;
+          district?: string | null;
+          address_label?: string | null;
+          latitude?: number | null;
+          longitude?: number | null;
           photo_paths?: string[];
           created_at?: string;
           updated_at?: string;

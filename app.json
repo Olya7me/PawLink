@@ -43,7 +43,8 @@
         {
           "photosPermission": "Allow PawLink to access your photos for animal listings."
         }
-      ]
+      ],
+      "@maplibre/maplibre-react-native"
     ],
     "experiments": {
       "typedRoutes": true
