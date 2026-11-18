@@ -13,8 +13,10 @@
 | 7 | Styles / shared UI extraction | Done (PR #7) |
 | 8 | Tabs + My activity + feed header UX | Done |
 | 9 | In-app notifications | Done (PR #14) |
-| 10 | Feedback + listing reports | This PR |
-| 11+ | Polish, EAS preview, push (optional) | Next |
+| 10 | Feedback + listing reports | Done (PR #15) |
+| 11 | Public map (city, district, optional street, pins) | Done |
+| 12 | Dark theme | Next |
+| 13 | Device push (Expo) | Done (needs EAS project id + migration 00011) |
 
 ## Locked product decisions (2026-11-14)
 
@@ -24,10 +26,10 @@
 | 2 | Accept/reject | **Only the help request author** accepts or rejects offers |
 | 3 | Private meetup | Contact / meetup details visible **only after accept**; public: city + approximate location |
 | 4 | Account deletion | **Anonymize** PII; keep rescue history without personal data (no cascade-delete of shared history) |
-| 5 | Maps | **City as text** in MVP; maps later |
-| 6 | Chat | **Not in MVP** |
-| 7 | Moderation | **Basic**: report listing/user + store reports; no admin panel yet |
-| 8 | Theme | **Light only**; dark mode later |
+| 5 | Maps | **Done**: city + district required, street optional; pin uses coordinates of the chosen public place |
+| 6 | Chat | **Out of scope** (pet project) |
+| 7 | Moderation | **Listing report + Help feedback** only; rows in Table Editor. No admin console, no user-profile reports |
+| 8 | Theme | **Light now**; dark theme next |
 | 9 | Guest feed | Guests may browse feed + animal detail; auth required to create listings/offers |
 | 10 | Photos | Max **5** per animal; max **5 MB** each; JPEG / PNG / WebP; compress before upload when possible |
 
@@ -40,18 +42,19 @@ See also [PRODUCT_SPEC.md](./PRODUCT_SPEC.md), [ARCHITECTURE.md](./ARCHITECTURE.
 3. Guest-readable feed + filters + animal detail (public fields) — done  
 4. Offers (author accept/reject; post-accept contact reveal) — done  
 5. Personal area (tabs: feed + my activity / listings / offers) — done  
-6. In-app notifications — done (no push yet)  
-7. Reports / feedback (store in Table Editor; no admin UI) — this PR  
-8. Polish, EAS preview builds  
-9. Push notifications (optional stretch)  
+6. In-app notifications — done  
+6b. Device push via Expo — done after migration `00011` (`extra.eas.projectId` is in `app.json`)  
+7. Reports / feedback (listing report + Help feedback in Table Editor) — done  
+8. Public map pins — done  
+9. Dark theme — next  
+10. Polish  
 
-## Explicitly deferred past MVP
+## Out of scope
 
-- Maps SDK / map pins  
 - In-app chat  
-- Dark mode  
-- Full admin / moderation console  
-- Precise public coordinates  
+- Admin / moderation console  
+- User-profile reports (`user_report` remains in the database enum only; no screen)  
+- Store submission (App Store / Google Play)  
 
 ## Risks to track
 
@@ -67,14 +70,11 @@ See also [PRODUCT_SPEC.md](./PRODUCT_SPEC.md), [ARCHITECTURE.md](./ARCHITECTURE.
 4. Configure Auth redirect URLs for password reset  
 5. (Optional) EAS project + `eas.json`  
 
-## Out of scope in feedback/reports PR
+## Still open after the map
 
-- Admin moderation console (use Table Editor)  
-- In-app user-profile report UI (`user_report` ready in schema)  
-- Push notifications (Expo Notifications)  
+- Dark theme  
 - Photo replace on edit  
-- Fake seed data  
-- Production EAS submit  
+- Fake seed data (optional)  
 
 ## Manual setup after feedback/reports slice
 

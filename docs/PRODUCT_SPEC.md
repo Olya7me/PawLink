@@ -43,7 +43,7 @@ After accept, contact / meetup details become visible to the author and the acce
 3. Meetup/contact after accept only; public city + approximate location  
 4. Account deletion anonymizes PII; rescue history kept without personal data  
 5. No maps in MVP (city text)  
-6. No chat in MVP  
+6. No in-app chat  
 7. Basic reports only (no admin panel)  
 8. Light theme only  
 9. Guest browse of feed + animal cards; auth to create/respond  
@@ -65,8 +65,9 @@ After accept, contact / meetup details become visible to the author and the acce
 
 - Maps / map pins  
 - In-app chat  
-- Dark mode  
-- Full admin / moderation console  
+- Admin / moderation console
+- User-profile reports
+- Store submission
 - Payments / crowdfunding  
 - Exact private addresses in public UI  
 

@@ -343,6 +343,38 @@ export type Database = {
           },
         ];
       };
+      push_tokens: {
+        Row: {
+          token: string;
+          user_id: string;
+          platform: 'ios' | 'android';
+          locale: 'en' | 'ru';
+          updated_at: string;
+        };
+        Insert: {
+          token: string;
+          user_id: string;
+          platform: 'ios' | 'android';
+          locale?: 'en' | 'ru';
+          updated_at?: string;
+        };
+        Update: {
+          token?: string;
+          user_id?: string;
+          platform?: 'ios' | 'android';
+          locale?: 'en' | 'ru';
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'push_tokens_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       reports: {
         Row: {
           id: string;

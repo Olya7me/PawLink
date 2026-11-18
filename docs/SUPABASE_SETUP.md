@@ -34,6 +34,7 @@ Use the **anon** key only. Do not put the service role key in the app or in git.
 | 8 | [`supabase/migrations/00008_in_app_notifications.sql`](../supabase/migrations/00008_in_app_notifications.sql) — notification templates, server-side inserts (triggers + RPC hooks), harden RLS, realtime |
 | 9 | [`supabase/migrations/00009_feedback_and_reports.sql`](../supabase/migrations/00009_feedback_and_reports.sql) — evolve `reports` for feedback/listing/user kinds; seed `report_reason` + report hints |
 | 10 | [`supabase/migrations/00010_animal_public_location.sql`](../supabase/migrations/00010_animal_public_location.sql) — public `district`, optional `address_label`, and pin coordinates on `animals` |
+| 11 | [`supabase/migrations/00011_push_tokens.sql`](../supabase/migrations/00011_push_tokens.sql) — device tokens and Expo push delivery (`pg_net`) |
 
 3. Confirm under **Table Editor** that `profiles`, `animals`, `help_requests`, `help_offers`, `animal_updates`, `notifications`, `reports`, `faq_items`, `lookup_options`, `app_copy`, `app_config`, and `favorites` exist.
 4. Confirm under **Storage** that buckets `animal-photos` and `avatars` exist.
@@ -113,7 +114,7 @@ There is **no email and no admin UI**. Submissions land in Supabase:
 1. Open [Supabase Dashboard](https://supabase.com/dashboard) → your PawLink project → **Table Editor** → **`reports`**.
 2. Filter or sort by `created_at` (newest first) or `status` (`open` = pending).
 3. Columns to read:
-   - `kind` — `feedback` (Help tab), `listing_report` (animal ⋯ menu), or `user_report` (schema-ready; UI later)
+   - `kind` — `feedback` (Help tab) or `listing_report` (animal ⋯ menu). `user_report` exists on the enum only; the app does not write it.
    - `reason` — stable key from `lookup_options` category `report_reason` (labels editable there)
    - `body` — free-text message / comment
    - `animal_id` — set for listing reports (open that UUID in `animals` if needed)
@@ -128,3 +129,11 @@ If migrations `00001`–`00008` are already applied, open **SQL Editor** and run
 1. **Table Editor → `reports`**: columns include `kind`, `animal_id`, `reported_user_id`, `body` (no `target_type` / `target_id` / `details`).
 2. **Table Editor → `lookup_options`**: rows with `category = report_reason` for `en` and `ru`.
 3. In the app (signed in): Help → send feedback; Animal detail → ⋯ → Report — confirm new rows appear under **`reports`**.
+
+### Device push
+
+1. Run [`00011_push_tokens.sql`](../supabase/migrations/00011_push_tokens.sql) (enables `pg_net`, table `push_tokens`, trigger on `notifications`).
+2. Expo project `@oly7mes-team/pawlink` is linked in `app.json` (`extra.eas.projectId`). Do not run `eas init` again.
+3. Rebuild the native app (`npx expo run:android` or `run:ios`). Expo Go does not receive these pushes.
+4. Sign in on a physical device and allow notifications. A row appears in **`push_tokens`**. The next in-app notification is also sent to `https://exp.host/--/api/v2/push/send`.
+5. Android delivery needs FCM credentials on the Expo project (EAS credentials). iOS delivery needs a paid Apple Developer account.

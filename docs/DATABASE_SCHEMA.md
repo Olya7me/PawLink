@@ -127,7 +127,7 @@ Inserts are **server-side only** (security definer `create_notification` via off
 
 ### `reports`
 
-Unified store for Help-tab **feedback**, **listing reports**, and (schema-ready) **user reports**. No admin panel in MVP — Olga reviews rows in **Table Editor**. Migration: `00009_feedback_and_reports.sql` (evolves the original `00001` shape).
+Unified store for Help-tab **feedback** and **listing reports**. The `user_report` enum value is unused by the app. Review rows in **Table Editor**. Migration: `00009_feedback_and_reports.sql` (evolves the original `00001` shape).
 
 | Column | Type | Notes |
 |--------|------|-------|

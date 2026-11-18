@@ -44,10 +44,28 @@
           "photosPermission": "Allow PawLink to access your photos for animal listings."
         }
       ],
-      "@maplibre/maplibre-react-native"
+      "@maplibre/maplibre-react-native",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png",
+          "color": "#C46B4A",
+          "defaultChannel": "default"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "716417cc-f034-44f7-9464-eefdc3f6a4d1"
+      }
     }
   }
 }

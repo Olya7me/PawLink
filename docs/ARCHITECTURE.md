@@ -22,7 +22,7 @@
 |------|--------|
 | Maps SDK | MVP uses city text only (approved 2026-11-14) |
 | In-app chat | Not in MVP; contact after offer accept |
-| Dark mode | Light theme only for MVP |
+| Dark mode | Light theme shipped; dark theme planned next |
 | Push notifications (Expo Notifications) | Add after in-app notifications work |
 | Admin panel | Reports are stored; moderation UI later |
 | Nativewind / heavy UI kit | Custom theme tokens keep design control |
@@ -146,7 +146,7 @@ See [SCREENS.md](./SCREENS.md). High level:
 - Help: FAQ from Supabase `faq_items` by locale; Maps: placeholder copy from `app_copy` (city text in MVP)
 - Feed/create filters and photo limits load from `lookup_options` / `app_config`
 - Stack screens: Animal Detail, Edit listing, Create, Profile, Help request / offer, Auth
-- Product locks unchanged: light theme, city text (no maps SDK), no chat, one accepted offer (author accepts), meetup/contact after accept only
+- Product locks: no chat, no admin console, one accepted offer (author accepts), meetup/contact after accept only. Map pins use the chosen public place. Dark theme is planned next.
 
 ## Risks
 

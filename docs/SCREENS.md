@@ -86,9 +86,8 @@ Root Stack
 - Map SDK / map picker (Maps tab is a placeholder; city text stays the location model)  
 - Chat threads  
 - Admin moderation console (Olga reviews `reports` in Table Editor)  
-- Dark mode settings  
+- Dark theme (planned next)  
 - Push notifications (Expo Notifications) — after in-app inbox  
-- In-app user-profile report UI (`user_report` kind is schema-ready; UI later)  
 
 ### Backend content (editable without an app release)
 

@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 
 import { signOut } from '@/features/auth';
+import { unregisterCurrentPushToken } from '@/features/notifications/api/pushApi';
 import { useAuth } from '@/features/auth/hooks/AuthProvider';
 import { mapAuthError } from '@/features/auth/utils/mapAuthError';
 import { Button } from '@/shared/components/Button';
@@ -89,6 +90,7 @@ export function ProfileForm() {
     setSigningOut(true);
     setFormError(null);
     try {
+      await unregisterCurrentPushToken();
       await signOut();
       router.replace('/');
     } catch (error) {
