@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 
 import { useAuth } from '@/features/auth';
 import { mapAuthError } from '@/features/auth/utils/mapAuthError';
@@ -16,9 +16,15 @@ import { FieldLabel } from '@/shared/components/FieldLabel';
 import { InlineMessage } from '@/shared/components/InlineMessage';
 import { LoadingBlock } from '@/shared/components/LoadingBlock';
 import { TextField } from '@/shared/components/TextField';
-import type { AnimalSpecies, AnimalStatus, UrgencyLevel } from '@/shared/types/domain';
+import type { AnimalSpecies, AnimalStatus, HelpType, UrgencyLevel } from '@/shared/types/domain';
 
-import { getAnimalById, updateAnimalListing } from '../api/animalsApi';
+import {
+  deleteAnimalListing,
+  getAnimalById,
+  HelpTypesSyncError,
+  syncAnimalHelpTypes,
+  updateAnimalListing,
+} from '../api/animalsApi';
 import { updateAnimalSchema, type UpdateAnimalInput } from '../schemas/animalSchemas';
 import { placeFromStored, storedPublicLocation } from '../utils/publicLocation';
 import { getAnimalPhotoPublicUrl } from '../utils/photoUrls';
@@ -35,11 +41,12 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const { speciesOptions, urgencyOptions, animalStatusOptions } = useLookupOptions();
+  const { speciesOptions, urgencyOptions, animalStatusOptions, helpTypeOptions } = useLookupOptions();
   const photoLimits = useAppConfig();
   const [formError, setFormError] = useState<string | null>(null);
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [photoDraft, setPhotoDraft] = useState<LocalPhoto[] | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const detailQuery = useQuery({
     queryKey: ['animals', 'detail', animalId],
@@ -58,6 +65,7 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
       address: null,
       urgency: 'medium',
       status: 'active',
+      helpTypes: [],
     },
   });
   const {
@@ -71,6 +79,13 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
     const animal = detailQuery.data;
     if (!animal) return;
     const pin = { latitude: animal.latitude, longitude: animal.longitude };
+    const helpTypes = [
+      ...new Set(
+        animal.help_requests
+          .filter((request) => request.status !== 'cancelled')
+          .map((request) => request.help_type),
+      ),
+    ] as HelpType[];
     reset({
       name: animal.name ?? '',
       species: animal.species,
@@ -85,6 +100,7 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
       address: placeFromStored(animal.address_label, pin.latitude, pin.longitude),
       urgency: animal.urgency,
       status: animal.status,
+      helpTypes,
     });
   }, [detailQuery.data, reset]);
 
@@ -144,12 +160,43 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
         photos,
         previousPhotoPaths: animal.photo_paths ?? [],
       });
+      await syncAnimalHelpTypes(user.id, animalId, values.helpTypes, animal.help_requests);
       await queryClient.invalidateQueries({ queryKey: ['animals'] });
       router.replace(`/animals/${animalId}`);
     } catch (error) {
+      if (error instanceof HelpTypesSyncError) {
+        setFormError(t(`animals.errors.${error.code === 'active_coordination' ? 'helpTypesActive' : 'helpTypesRequired'}`));
+        return;
+      }
       setFormError(t(mapAuthError(error)));
     }
   });
+
+  const confirmDelete = () => {
+    Alert.alert(t('animals.edit.deleteConfirmTitle'), t('animals.edit.deleteConfirmBody'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('animals.edit.deleteListing'),
+        style: 'destructive',
+        onPress: () => void onDelete(),
+      },
+    ]);
+  };
+
+  const onDelete = async () => {
+    if (!user?.id) return;
+    setIsDeleting(true);
+    setFormError(null);
+    try {
+      await deleteAnimalListing(animalId, user.id);
+      await queryClient.invalidateQueries({ queryKey: ['animals'] });
+      router.replace('/(tabs)/activity');
+    } catch (error) {
+      setFormError(t(mapAuthError(error)));
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const mapPhotoError = (error: unknown): string => {
     if (error instanceof PhotoValidationError) {
@@ -264,7 +311,26 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
         )}
       />
 
+      <FieldLabel>{t('animals.fields.helpTypeNeeded')}</FieldLabel>
+      <Text style={styles.hint}>{t('animals.edit.helpTypesHint')}</Text>
+      <Controller
+        control={control}
+        name="helpTypes"
+        render={({ field: { value, onChange } }) => (
+          <ChipGroup
+            multiple
+            options={helpTypeOptions}
+            value={value}
+            onChange={(next) => onChange((next as HelpType[]) ?? [])}
+          />
+        )}
+      />
+      {errors.helpTypes ? (
+        <InlineMessage message={t('animals.errors.helpTypesRequired')} />
+      ) : null}
+
       <FieldLabel>{t('animals.fields.status')}</FieldLabel>
+      <Text style={styles.hint}>{t('animals.edit.statusHint')}</Text>
       <Controller
         control={control}
         name="status"
@@ -286,6 +352,16 @@ export function EditAnimalForm({ animalId }: EditAnimalFormProps) {
         onPress={() => void onSubmit()}
         style={styles.submit}
       />
+
+      <Button
+        label={t('animals.edit.deleteListing')}
+        variant="danger"
+        loading={isDeleting}
+        disabled={isSubmitting}
+        onPress={confirmDelete}
+        style={styles.danger}
+      />
+      <Text style={styles.hint}>{t('animals.edit.deleteHint')}</Text>
     </View>
     </FormProvider>
   );

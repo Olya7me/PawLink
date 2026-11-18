@@ -44,10 +44,6 @@ export function AnimalFeed() {
     placeholderData: keepPreviousData,
   });
 
-  const subtitle = isAuthenticated
-    ? t('animals.feed.subtitleSignedIn')
-    : t('animals.feed.subtitleGuest');
-
   const header = (
     <View>
       <View style={styles.topBar}>
@@ -73,7 +69,6 @@ export function AnimalFeed() {
             )}
           </View>
         </View>
-        <Text style={styles.subtitle}>{subtitle}</Text>
       </View>
 
       {!isSupabaseConfigured ? <Text style={styles.warning}>{t('shell.notConfigured')}</Text> : null}

@@ -45,6 +45,10 @@ export type CreateAnimalInput = z.infer<typeof createAnimalSchema>;
 export const updateAnimalSchema = requirePublicPlace(
   animalCoreSchema.extend({
     status: z.enum(['active', 'resolved', 'archived']),
+    helpTypes: z
+      .array(z.enum(['catch', 'transport', 'vet', 'foster', 'permanent_home', 'food', 'other']))
+      .min(1)
+      .max(7),
   }),
 );
 

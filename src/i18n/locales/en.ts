@@ -202,6 +202,14 @@ export const en = {
       gated: 'Sign in to edit your listing.',
       forbidden: 'You can only edit your own listings.',
       photoHint: 'Add or remove photos. New pictures upload when you save.',
+      helpTypesHint:
+        'Change which help is needed. You cannot remove a type while coordination is in progress on it.',
+      statusHint:
+        'Archived hides the listing from the feed but keeps history. Use delete below for permanent removal.',
+      deleteListing: 'Delete listing',
+      deleteHint: 'This cannot be undone. The listing and related help requests are removed from the app.',
+      deleteConfirmTitle: 'Delete this listing?',
+      deleteConfirmBody: 'This cannot be undone. Listing photos will be removed too.',
       submit: 'Save changes',
     },
     detail: {
@@ -212,6 +220,8 @@ export const en = {
       unknownAuthor: 'Unknown',
       helpRequests: 'Help needed',
       helpRequestsEmpty: 'No help requests yet.',
+      offerCta: 'Offer help',
+      viewRequest: 'Request details',
       openRequest: 'Open request',
       error: 'Could not load this listing.',
       notFound: 'Listing not found.',
@@ -256,6 +266,7 @@ export const en = {
       urgency: 'Urgency',
       status: 'Status',
       helpTypes: 'Help needed',
+      helpTypeNeeded: 'Help type needed',
       helpTypesHint: 'Select one or more help types for this animal.',
     },
     create: {
@@ -266,6 +277,7 @@ export const en = {
       cityRequired: 'Choose a city from the suggestions.',
       districtRequired: 'Choose a district from the suggestions.',
       helpTypesRequired: 'Select at least one help type.',
+      helpTypesActive: 'You cannot remove a help type while coordination is in progress on it.',
     },
     photos: {
       tooMany: 'You can add up to {{count}} photos.',

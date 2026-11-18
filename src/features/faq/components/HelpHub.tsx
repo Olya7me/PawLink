@@ -41,7 +41,6 @@ export function HelpHub() {
     >
       <View style={styles.header}>
         <Text style={styles.title}>{t('faq.title')}</Text>
-        <Text style={styles.subtitle}>{t('faq.subtitle')}</Text>
       </View>
 
       <View style={styles.stack}>

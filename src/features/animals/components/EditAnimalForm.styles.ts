@@ -14,4 +14,7 @@ export const styles = lazyStyles((colors) => ({
   submit: {
     marginTop: spacing.lg,
   },
+  danger: {
+    marginTop: spacing.lg,
+  },
 }));

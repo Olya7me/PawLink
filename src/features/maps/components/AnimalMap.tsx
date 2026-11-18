@@ -49,7 +49,6 @@ export function AnimalMap() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{t('maps.title')}</Text>
-      <Text style={styles.subtitle}>{t('maps.subtitle')}</Text>
       <AnimalFeedFilters value={filters} onChange={onFiltersChange} />
 
       {query.isLoading ? <LoadingBlock message={t('common.loading')} /> : null}

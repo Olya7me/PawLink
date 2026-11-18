@@ -1,17 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
+import { useAuth } from '@/features/auth';
 import { useLookupOptions } from '@/features/content';
+import { Button } from '@/shared/components/Button';
 import { FavoriteButton } from '@/features/favorites';
 import { ReportMenuButton } from '@/features/reports';
 import { ErrorRetry } from '@/shared/components/ErrorRetry';
 import { InlineMessage } from '@/shared/components/InlineMessage';
 import { LoadingBlock } from '@/shared/components/LoadingBlock';
 import { Section } from '@/shared/components/Section';
-import { SurfaceCard } from '@/shared/components/SurfaceCard';
 
 import { getAnimalById } from '../api/animalsApi';
 import { getAnimalPhotoPublicUrls } from '../utils/photoUrls';
@@ -24,6 +25,7 @@ type AnimalDetailViewProps = {
 
 export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
   const { t } = useTranslation();
+  const { user, isAuthenticated } = useAuth();
   const { labelFor } = useLookupOptions();
   const detailQuery = useQuery({
     queryKey: ['animals', 'detail', animalId],
@@ -60,6 +62,15 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
   const authorName =
     animal.author?.display_name?.trim() ||
     (animal.author?.is_anonymized ? t('animals.detail.anonymousAuthor') : t('animals.detail.unknownAuthor'));
+  const isAuthor = Boolean(user?.id && animal.author_id === user.id);
+  const activeHelpRequests = animal.help_requests.filter((request) => request.status !== 'cancelled');
+  const openHelpRequests = activeHelpRequests.filter((request) => request.status === 'open');
+  const neededHelpTypes = [
+    ...new Set(activeHelpRequests.map((request) => labelFor('help_type', request.help_type))),
+  ];
+  const neededHelpLabel = neededHelpTypes.join(' · ');
+  const primaryOpenRequest = openHelpRequests[0] ?? null;
+  const canOffer = !isAuthor && primaryOpenRequest !== null;
 
   return (
     <ScrollView contentContainerStyle={styles.content}>
@@ -109,33 +120,25 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
           </Section>
         ) : null}
 
-        <Section title={t('animals.detail.helpRequests')}>
-          {animal.help_requests.length === 0 ? (
+        {activeHelpRequests.length > 0 ? (
+          <Section title={t('animals.fields.helpTypeNeeded')}>
+            <Text style={styles.helpTypeValue}>{neededHelpLabel}</Text>
+            {canOffer && !isAuthenticated ? (
+              <Button label={t('shell.signInCta')} onPress={() => router.push('/sign-in')} />
+            ) : null}
+            {canOffer && isAuthenticated ? (
+              <Button
+                label={t('animals.detail.offerCta')}
+                onPress={() => router.push(`/requests/${primaryOpenRequest.id}/offer`)}
+                style={styles.offerButton}
+              />
+            ) : null}
+          </Section>
+        ) : (
+          <Section title={t('animals.fields.helpTypeNeeded')}>
             <Text style={styles.muted}>{t('animals.detail.helpRequestsEmpty')}</Text>
-          ) : (
-            animal.help_requests.map((request) => (
-              <Pressable
-                key={request.id}
-                accessibilityRole="button"
-                style={({ pressed }) => [pressed ? styles.requestPressed : null]}
-                onPress={() => router.push(`/requests/${request.id}`)}
-              >
-                <SurfaceCard>
-                  <Text style={styles.requestTitle}>
-                    {labelFor('help_type', request.help_type)}
-                  </Text>
-                  <Text style={styles.requestStatus}>
-                    {t(`animals.helpRequestStatus.${request.status}`)}
-                  </Text>
-                  {request.description ? (
-                    <Text style={styles.sectionBody}>{request.description}</Text>
-                  ) : null}
-                  <Text style={styles.requestCta}>{t('animals.detail.openRequest')}</Text>
-                </SurfaceCard>
-              </Pressable>
-            ))
-          )}
-        </Section>
+          </Section>
+        )}
       </View>
     </ScrollView>
   );

@@ -57,23 +57,14 @@ export const styles = lazyStyles((colors) => ({
     color: colors.text,
     lineHeight: typography.size.md * typography.lineHeight.normal,
   },
-  requestPressed: {
-    opacity: 0.88,
-  },
-  requestTitle: {
-    fontSize: typography.size.md,
+  helpTypeValue: {
+    fontSize: typography.size.lg,
     fontWeight: '600',
     color: colors.text,
+    marginBottom: spacing.md,
   },
-  requestStatus: {
-    fontSize: typography.size.sm,
-    color: colors.accentPressed,
-  },
-  requestCta: {
+  offerButton: {
     marginTop: spacing.xs,
-    fontSize: typography.size.sm,
-    fontWeight: '600',
-    color: colors.accent,
   },
   muted: {
     color: colors.textMuted,

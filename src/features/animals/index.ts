@@ -4,9 +4,11 @@ export { CreateAnimalForm } from './components/CreateAnimalForm';
 export { EditAnimalForm } from './components/EditAnimalForm';
 export {
   createAnimalListing,
+  deleteAnimalListing,
   getAnimalById,
   listAnimals,
   listAnimalsByAuthor,
+  syncAnimalHelpTypes,
   updateAnimalListing,
 } from './api/animalsApi';
 export type {

@@ -60,7 +60,6 @@ export function MyActivity() {
         <View style={styles.titleRow}>
           <View style={styles.titleBlock}>
             <Text style={styles.title}>{t('activity.title')}</Text>
-            <Text style={styles.subtitle}>{t('activity.guestBody')}</Text>
           </View>
           <View style={styles.headerActions}>
             <ChatInboxButton />
@@ -90,7 +89,6 @@ export function MyActivity() {
       <View style={styles.titleRow}>
         <View style={styles.titleBlock}>
           <Text style={styles.title}>{t('activity.title')}</Text>
-          <Text style={styles.subtitle}>{t('activity.subtitle')}</Text>
         </View>
         <View style={styles.headerActions}>
           <ChatInboxButton />

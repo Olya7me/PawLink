@@ -5,6 +5,7 @@ import type {
   AnimalSpecies,
   AnimalStatus,
   HelpRequest,
+  HelpRequestStatus,
   HelpType,
   PublicProfile,
   UrgencyLevel,
@@ -426,4 +427,103 @@ export async function createAnimalListing(payload: CreateAnimalPayload): Promise
   if (helpError) throw helpError;
 
   return animal;
+}
+
+const HELP_TYPE_LOCK_STATUSES: HelpRequestStatus[] = ['accepted', 'in_progress', 'completed'];
+
+export class HelpTypesSyncError extends Error {
+  constructor(readonly code: 'active_coordination' | 'help_types_required') {
+    super(code);
+    this.name = 'HelpTypesSyncError';
+  }
+}
+
+type HelpRequestSyncRow = Pick<HelpRequest, 'id' | 'help_type' | 'status'>;
+
+export async function syncAnimalHelpTypes(
+  authorId: string,
+  animalId: string,
+  nextTypes: HelpType[],
+  existing: HelpRequestSyncRow[],
+): Promise<void> {
+  assertConfigured();
+
+  if (nextTypes.length === 0) {
+    throw new HelpTypesSyncError('help_types_required');
+  }
+
+  const nextSet = new Set(nextTypes);
+  const rowsByType = new Map<HelpType, HelpRequestSyncRow[]>();
+  for (const row of existing) {
+    const bucket = rowsByType.get(row.help_type) ?? [];
+    bucket.push(row);
+    rowsByType.set(row.help_type, bucket);
+  }
+
+  for (const [type, rows] of rowsByType) {
+    if (nextSet.has(type)) continue;
+  for (const row of rows) {
+      if (HELP_TYPE_LOCK_STATUSES.includes(row.status)) {
+        throw new HelpTypesSyncError('active_coordination');
+      }
+    }
+  }
+
+  for (const [type, rows] of rowsByType) {
+    if (nextSet.has(type)) continue;
+    for (const row of rows) {
+      if (row.status !== 'open') continue;
+      const { error } = await supabase
+        .from('help_requests')
+        .update({ status: 'cancelled' })
+        .eq('id', row.id)
+        .eq('created_by', authorId);
+      if (error) throw error;
+    }
+  }
+
+  for (const type of nextTypes) {
+    const rows = rowsByType.get(type) ?? [];
+    if (rows.some((row) => row.status === 'open')) continue;
+
+    const cancelled = rows.find((row) => row.status === 'cancelled');
+    if (cancelled) {
+      const { error } = await supabase
+        .from('help_requests')
+        .update({ status: 'open' })
+        .eq('id', cancelled.id)
+        .eq('created_by', authorId);
+      if (error) throw error;
+      continue;
+    }
+
+    if (rows.some((row) => HELP_TYPE_LOCK_STATUSES.includes(row.status))) continue;
+
+    const { error } = await supabase.from('help_requests').insert({
+      animal_id: animalId,
+      created_by: authorId,
+      help_type: type,
+      title: type,
+      description: null,
+      status: 'open',
+    });
+    if (error) throw error;
+  }
+}
+
+export async function deleteAnimalListing(animalId: string, authorId: string): Promise<void> {
+  assertConfigured();
+
+  const animal = await getAnimalById(animalId);
+  if (!animal || animal.author_id !== authorId) {
+    throw new Error('forbidden');
+  }
+
+  const { error } = await supabase.from('animals').delete().eq('id', animalId).eq('author_id', authorId);
+  if (error) throw error;
+
+  const paths = animal.photo_paths ?? [];
+  if (paths.length > 0) {
+    await supabase.storage.from(ANIMAL_PHOTOS_BUCKET).remove(paths);
+  }
 }

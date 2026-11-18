@@ -196,7 +196,7 @@ export function CreateAnimalForm() {
         )}
       />
 
-      <FieldLabel>{t('animals.fields.helpTypes')}</FieldLabel>
+      <FieldLabel>{t('animals.fields.helpTypeNeeded')}</FieldLabel>
       <Text style={styles.hint}>{t('animals.fields.helpTypesHint')}</Text>
       <Controller
         control={control}

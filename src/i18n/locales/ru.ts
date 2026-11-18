@@ -203,6 +203,14 @@ export const ru: TranslationResources = {
       gated: 'Войдите, чтобы редактировать объявление.',
       forbidden: 'Можно редактировать только свои объявления.',
       photoHint: 'Можно добавить или убрать фото. Новые снимки загрузятся при сохранении.',
+      helpTypesHint:
+        'Измените, какая помощь нужна. Нельзя убрать тип, если по нему уже идёт координация.',
+      statusHint:
+        '«В архиве» скрывает объявление из ленты, но сохраняет историю. Полное удаление — ниже.',
+      deleteListing: 'Удалить объявление',
+      deleteHint: 'Удаление необратимо: объявление и связанные запросы исчезнут из приложения.',
+      deleteConfirmTitle: 'Удалить объявление?',
+      deleteConfirmBody: 'Действие нельзя отменить. Фото объявления тоже будут удалены.',
       submit: 'Сохранить',
     },
     detail: {
@@ -213,6 +221,8 @@ export const ru: TranslationResources = {
       unknownAuthor: 'Неизвестно',
       helpRequests: 'Нужна помощь',
       helpRequestsEmpty: 'Запросов помощи пока нет.',
+      offerCta: 'Откликнуться',
+      viewRequest: 'Подробнее о запросе',
       openRequest: 'Открыть запрос',
       error: 'Не удалось загрузить объявление.',
       notFound: 'Объявление не найдено.',
@@ -257,6 +267,7 @@ export const ru: TranslationResources = {
       urgency: 'Срочность',
       status: 'Статус',
       helpTypes: 'Нужна помощь',
+      helpTypeNeeded: 'Нужный тип помощи',
       helpTypesHint: 'Выберите один или несколько типов помощи.',
     },
     create: {
@@ -267,6 +278,7 @@ export const ru: TranslationResources = {
       cityRequired: 'Выберите город из подсказок.',
       districtRequired: 'Выберите район из подсказок.',
       helpTypesRequired: 'Выберите хотя бы один тип помощи.',
+      helpTypesActive: 'Нельзя убрать тип помощи, пока по нему идёт координация.',
     },
     photos: {
       tooMany: 'Можно добавить не больше {{count}} фото.',
