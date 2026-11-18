@@ -16,7 +16,7 @@
 | 10 | Feedback + listing reports | Done (PR #15) |
 | 11 | Public map (city, district, optional street, pins) | Done |
 | 12 | Dark theme | Next |
-| 13 | Device push (Expo) | Done (needs EAS project id + migration 00011) |
+| 13 | Device push (Expo) | Done (project id in `app.json`; apply migration `00011` on Supabase) |
 
 ## Locked product decisions (2026-11-14)
 
