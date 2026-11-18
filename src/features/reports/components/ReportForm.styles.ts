@@ -11,12 +11,6 @@ export const styles = StyleSheet.create({
     color: colors.textSecondary,
     lineHeight: typography.size.md * typography.lineHeight.normal,
   },
-  fieldBlock: {
-    gap: spacing.sm,
-  },
-  reasonError: {
-    marginBottom: 0,
-  },
   multiline: {
     minHeight: 120,
     textAlignVertical: 'top',

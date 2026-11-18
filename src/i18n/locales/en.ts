@@ -31,7 +31,9 @@ export const en = {
   },
   faq: {
     title: 'Help',
-    subtitle: 'Answers to common questions about using PawLink.',
+    subtitle: 'Popular questions and a way to reach us.',
+    popularTitle: 'Popular questions',
+    popularSubtitle: 'Short FAQ about using PawLink.',
     emptyTitle: 'No FAQ yet',
     emptyBody: 'Help articles will appear here when they are published.',
     error: 'Could not load the FAQ. Check your connection and try again.',
@@ -48,6 +50,7 @@ export const en = {
     },
     fields: {
       reason: 'Reason',
+      reasonPlaceholder: 'Choose a reason',
       message: 'Message',
       messagePlaceholder: 'Describe the issue or your idea…',
       comment: 'Comment (optional)',
@@ -55,11 +58,14 @@ export const en = {
     },
     feedback: {
       title: 'Feedback',
-      subtitle: 'Send a complaint or suggestion. We read submissions in the Supabase Table Editor.',
-      hint: 'Tell us what went wrong or how we can improve. We read every message in the dashboard.',
+      menuSubtitle: 'Tell us if something went wrong.',
+      intro: 'Tell us what went wrong — it will help us get better.',
+      subtitle: 'Send a complaint or suggestion.',
+      hint: 'Tell us what went wrong — it will help us get better.',
       submit: 'Send feedback',
       success: 'Thanks — your feedback was sent.',
     },
+
     listing: {
       title: 'Report listing',
       subtitle: 'Tell us why this listing should be reviewed.',

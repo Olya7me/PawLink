@@ -170,9 +170,10 @@ const COPY: Record<string, Record<AppLanguage, string>> = {
     ru: 'Объявление «{{animal_label}}» теперь: {{status}}.',
   },
   'reports.feedback.hint': {
-    en: 'Tell us what went wrong or how we can improve. We read every message in the dashboard.',
-    ru: 'Напишите, что пошло не так или как нам стать лучше. Мы читаем каждое сообщение в панели.',
+    en: 'Tell us what went wrong — it will help us get better.',
+    ru: 'Напишите, что пошло не так — это поможет нам стать лучше.',
   },
+
   'reports.listing.hint': {
     en: 'Choose a reason and add details if needed. Reports help us keep listings safe.',
     ru: 'Выберите причину и при необходимости добавьте детали. Жалобы помогают держать ленту безопасной.',

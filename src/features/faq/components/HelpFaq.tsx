@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 import { ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { FeedbackSection } from '@/features/reports';
 import type { AppLanguage } from '@/i18n';
 import { EmptyState } from '@/shared/components/EmptyState';
 import { ErrorRetry } from '@/shared/components/ErrorRetry';
@@ -27,37 +26,18 @@ export function HelpFaq() {
     enabled: isSupabaseConfigured,
   });
 
-  const header = (
-    <View style={styles.header}>
-      <Text style={styles.title}>{t('faq.title')}</Text>
-      <Text style={styles.subtitle}>{t('faq.subtitle')}</Text>
-      {!isSupabaseConfigured ? (
-        <Text style={styles.warning}>{t('shell.notConfigured')}</Text>
-      ) : null}
-    </View>
-  );
-
   if (!isSupabaseConfigured) {
     return (
-      <ScrollView
-        style={styles.list}
-        contentContainerStyle={styles.content}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
-        {header}
-        <FeedbackSection />
-      </ScrollView>
+      <View style={styles.content}>
+        <Text style={styles.warning}>{t('shell.notConfigured')}</Text>
+      </View>
     );
   }
 
   if (faqQuery.isLoading) {
     return (
-      <View style={styles.list}>
-        <View style={styles.content}>
-          {header}
-          <LoadingBlock message={t('common.loading')} />
-        </View>
+      <View style={styles.content}>
+        <LoadingBlock message={t('common.loading')} />
       </View>
     );
   }
@@ -70,13 +50,11 @@ export function HelpFaq() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        {header}
         <ErrorRetry
           message={t('faq.error')}
           retryLabel={t('common.retry')}
           onRetry={() => void faqQuery.refetch()}
         />
-        <FeedbackSection />
       </ScrollView>
     );
   }
@@ -90,7 +68,6 @@ export function HelpFaq() {
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
     >
-      {header}
       {items.length === 0 ? (
         <EmptyState title={t('faq.emptyTitle')} body={t('faq.emptyBody')} />
       ) : (
@@ -105,7 +82,6 @@ export function HelpFaq() {
           ))}
         </View>
       )}
-      <FeedbackSection />
     </ScrollView>
   );
 }

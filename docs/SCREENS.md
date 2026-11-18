@@ -17,7 +17,7 @@ Root Stack
 │   │   ├── Favorites (Избранное) → Animal Detail
 │   │   ├── My publications (open / edit)
 │   │   └── Offers I made → Help Request Detail
-│   ├── Help — FAQ from Supabase + feedback form (auth to submit; chrome via i18n)
+│   ├── Help — hub → Popular questions (`/faq`) + Feedback (`/feedback`)
 │   └── Maps — placeholder (“soon” copy from `app_copy`; city text in MVP, no map SDK)
 ├── Animal Detail `/animals/[id]`
 │   ├── Favorite heart toggle (auth; guests → sign-in)
@@ -44,7 +44,9 @@ Root Stack
 |--------|---------|------|
 | Feed (tab) | Browse listings; heart on cards; filters from `lookup_options` | Guest (favorite needs auth) |
 | My activity (tab) | Favorites + my listings + my offers + create CTA; empty copy from `app_copy` | Guest sees sign-in gate |
-| Help (tab) | FAQ from `faq_items` + feedback form → `reports` (`kind=feedback`) | Guest browse; submit needs auth |
+| Help (tab) | Hub: popular FAQ + feedback entry points | Guest |
+| FAQ `/faq` | Accordion from `faq_items` | Guest |
+| Feedback `/feedback` | Short intro + reason dropdown + message → `reports` (`kind=feedback`) | Guest browse; submit needs auth |
 | Maps (tab) | Placeholder until maps (`app_copy` soon text); city text remains MVP location | Guest |
 | Sign In | Email/password (Supabase Auth) | Guest |
 | Sign Up | Create account | Guest |

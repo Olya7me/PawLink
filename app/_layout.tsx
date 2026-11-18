@@ -28,6 +28,8 @@ export default function RootLayout() {
         <Stack.Screen name="reset-password" options={{ title: 'Reset password' }} />
         <Stack.Screen name="profile" options={{ title: 'Profile' }} />
         <Stack.Screen name="notifications" options={{ title: 'Notifications' }} />
+        <Stack.Screen name="faq" options={{ title: 'FAQ' }} />
+        <Stack.Screen name="feedback" options={{ title: 'Feedback' }} />
         <Stack.Screen name="create" options={{ title: 'Create' }} />
         <Stack.Screen name="+not-found" />
       </Stack>

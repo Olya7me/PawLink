@@ -55,11 +55,16 @@ describe('i18n locales', () => {
     expect(en.tabs.help).toBeTruthy();
     expect(ru.tabs.maps).toBeTruthy();
     expect(en.faq.title).toBeTruthy();
+    expect(en.faq.popularTitle).toBeTruthy();
+    expect(ru.faq.popularSubtitle).toBeTruthy();
     expect(en.faq.emptyTitle).toBeTruthy();
     expect(ru.faq.error).toBeTruthy();
+    expect(en.reports.feedback.intro).toBeTruthy();
+    expect(ru.reports.fields.reasonPlaceholder).toBeTruthy();
     expect(en.maps.soonTitle).toBeTruthy();
     expect(ru.maps.soonBody).toBeTruthy();
   });
+
 
   it('includes notifications chrome strings', () => {
     expect(en.notifications.title).toBeTruthy();

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useLookupOptions } from '@/features/content';
 import { FavoriteButton } from '@/features/favorites';
+import { ReportMenuButton } from '@/features/reports';
 
 import type { AnimalListItem } from '../api/animalsApi';
 import { getAnimalPhotoPublicUrls } from '../utils/photoUrls';
@@ -34,6 +35,7 @@ export function AnimalFeedCard({ animal, onPress }: AnimalFeedCardProps) {
             <Text style={styles.placeholderText}>{t('animals.noPhoto')}</Text>
           </View>
         )}
+        <ReportMenuButton animalId={animal.id} overlay />
         <FavoriteButton animalId={animal.id} overlay />
       </View>
       <View style={styles.body}>

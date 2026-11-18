@@ -20,7 +20,7 @@ describe('content fallbacks', () => {
     expect(fallbackAppCopy('maps.soonTitle', 'ru')).toBe('Карты скоро');
     expect(fallbackAppCopy('notifications.emptyTitle', 'en')).toBe('No notifications yet');
     expect(fallbackAppCopy('notifications.offer_accepted.title', 'ru')).toBe('Ваш отклик приняли');
-    expect(fallbackAppCopy('reports.feedback.hint', 'en')).toContain('improve');
+    expect(fallbackAppCopy('reports.feedback.hint', 'en')).toContain('went wrong');
   });
 
   it('parses app_config rows with fallbacks', () => {

@@ -9,9 +9,8 @@ import { useAuth } from '@/features/auth';
 import { mapAuthError } from '@/features/auth/utils/mapAuthError';
 import { useAppCopy, useLookupOptions } from '@/features/content';
 import { Button } from '@/shared/components/Button';
-import { ChipGroup } from '@/shared/components/ChipGroup';
-import { FieldLabel } from '@/shared/components/FieldLabel';
 import { InlineMessage } from '@/shared/components/InlineMessage';
+import { SelectField } from '@/shared/components/SelectField';
 import { TextField } from '@/shared/components/TextField';
 import type { ReportKind } from '@/services/supabase';
 
@@ -86,8 +85,6 @@ export function ReportForm({ kind, animalId, onSuccess }: ReportFormProps) {
     );
   }
 
-  const hintKey = isFeedback ? 'reports.feedback.hint' : 'reports.listing.hint';
-
   const onSubmit = handleSubmit(async (values) => {
     if (kind === 'listing_report' && !animalId) {
       setFormError(t('reports.errors.missingAnimal'));
@@ -110,31 +107,33 @@ export function ReportForm({ kind, animalId, onSuccess }: ReportFormProps) {
     }
   });
 
+  const reasonOptions = reportReasonOptions.map((option) => ({
+    value: option.value,
+    label: option.label,
+  }));
+
   return (
     <View style={styles.root}>
-      <Text style={styles.hint}>{get(hintKey)}</Text>
+      {isFeedback ? (
+        <Text style={styles.hint}>{t('reports.feedback.intro')}</Text>
+      ) : (
+        <Text style={styles.hint}>{get('reports.listing.hint')}</Text>
+      )}
 
-      <View style={styles.fieldBlock}>
-        <FieldLabel>{t('reports.fields.reason')}</FieldLabel>
-        <Controller
-          control={control}
-          name="reason"
-          render={({ field: { onChange, value } }) => (
-            <ChipGroup
-              options={reportReasonOptions.map((option) => ({
-                value: option.value,
-                label: option.label,
-              }))}
-              value={value || null}
-              allowClear={false}
-              onChange={(next) => onChange(typeof next === 'string' ? next : '')}
-            />
-          )}
-        />
-        {errors.reason ? (
-          <InlineMessage message={t('reports.errors.reasonRequired')} style={styles.reasonError} />
-        ) : null}
-      </View>
+      <Controller
+        control={control}
+        name="reason"
+        render={({ field: { onChange, value } }) => (
+          <SelectField
+            label={t('reports.fields.reason')}
+            placeholder={t('reports.fields.reasonPlaceholder')}
+            options={reasonOptions}
+            value={value || null}
+            onChange={onChange}
+            error={errors.reason ? t('reports.errors.reasonRequired') : undefined}
+          />
+        )}
+      />
 
       <Controller
         control={control}

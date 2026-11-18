@@ -33,7 +33,9 @@ export const ru: TranslationResources = {
   },
   faq: {
     title: 'Помощь',
-    subtitle: 'Ответы на частые вопросы о работе с PawLink.',
+    subtitle: 'Популярные вопросы и способ связаться с нами.',
+    popularTitle: 'Популярные вопросы',
+    popularSubtitle: 'Короткий FAQ по работе с PawLink.',
     emptyTitle: 'Пока нет FAQ',
     emptyBody: 'Статьи помощи появятся здесь, когда их опубликуют.',
     error: 'Не удалось загрузить FAQ. Проверьте соединение и попробуйте снова.',
@@ -50,6 +52,7 @@ export const ru: TranslationResources = {
     },
     fields: {
       reason: 'Причина',
+      reasonPlaceholder: 'Выберите причину',
       message: 'Сообщение',
       messagePlaceholder: 'Опишите проблему или идею…',
       comment: 'Комментарий (необязательно)',
@@ -57,11 +60,14 @@ export const ru: TranslationResources = {
     },
     feedback: {
       title: 'Обратная связь',
-      subtitle: 'Жалоба или предложение. Мы читаем сообщения в Table Editor Supabase.',
-      hint: 'Напишите, что пошло не так или как нам стать лучше. Мы читаем каждое сообщение в панели.',
+      menuSubtitle: 'Напишите, если что-то пошло не так.',
+      intro: 'Напишите, что пошло не так — это поможет нам стать лучше.',
+      subtitle: 'Жалоба или предложение.',
+      hint: 'Напишите, что пошло не так — это поможет нам стать лучше.',
       submit: 'Отправить',
       success: 'Спасибо — сообщение отправлено.',
     },
+
     listing: {
       title: 'Пожаловаться',
       subtitle: 'Расскажите, почему объявление стоит проверить.',
