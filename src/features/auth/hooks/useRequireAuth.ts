@@ -1,4 +1,4 @@
-import { router, useFocusEffect } from 'expo-router';
+import { router, useFocusEffect, type Href } from 'expo-router';
 import { useCallback } from 'react';
 
 import { useAuth } from './AuthProvider';
@@ -6,7 +6,7 @@ import { useAuth } from './AuthProvider';
 /**
  * Redirects guests to sign-in. Use on create / offer / personal routes.
  */
-export function useRequireAuth(redirectTo = '/sign-in') {
+export function useRequireAuth(redirectTo: Href = '/sign-in') {
   const { isAuthenticated, isLoading, isConfigured } = useAuth();
 
   useFocusEffect(

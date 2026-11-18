@@ -22,6 +22,12 @@ export const styles = lazyStyles((colors) => ({
     justifyContent: 'space-between',
     gap: spacing.md,
   },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexShrink: 0,
+    gap: spacing.sm,
+  },
   titleBlock: {
     flex: 1,
     gap: spacing.xs,

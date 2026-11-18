@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { listAnimalsByAuthor, type AnimalListItem } from '@/features/animals';
 import { useAuth } from '@/features/auth';
 import { useAppCopy, useLookupOptions } from '@/features/content';
+import { ChatInboxButton } from '@/features/chat/components/ChatInboxButton';
 import { favoritesListQueryKey, listFavoriteAnimals } from '@/features/favorites';
 import { listOffersByOfferer, type MyOfferItem } from '@/features/help';
 import { NotificationBellButton } from '@/features/notifications';
@@ -161,7 +162,10 @@ export function MyActivity() {
             <Text style={styles.title}>{t('activity.title')}</Text>
             <Text style={styles.subtitle}>{t('activity.guestBody')}</Text>
           </View>
-          <NotificationBellButton />
+          <View style={styles.headerActions}>
+            <ChatInboxButton />
+            <NotificationBellButton />
+          </View>
         </View>
         <Button label={t('shell.signInCta')} onPress={() => router.push('/sign-in')} />
       </View>
@@ -195,7 +199,10 @@ export function MyActivity() {
           <Text style={styles.title}>{t('activity.title')}</Text>
           <Text style={styles.subtitle}>{t('activity.subtitle')}</Text>
         </View>
-        <NotificationBellButton />
+        <View style={styles.headerActions}>
+          <ChatInboxButton />
+          <NotificationBellButton />
+        </View>
       </View>
 
       <Button

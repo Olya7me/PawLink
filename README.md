@@ -93,7 +93,7 @@ tests/               # Jest tests
 
 ## Locked product decisions (2026-11-14)
 
-See [DEVELOPMENT_ROADMAP.md](docs/DEVELOPMENT_ROADMAP.md) for the full table (single accepted offer, author-only accept/reject, anonymize on delete, guest feed, photo limits, listing reports and Help feedback, no chat and no admin console). **Public map location** is in the app: city + district required, street optional, coordinates of the chosen public place. Dark theme is in Profile. No store release planned.
+See [DEVELOPMENT_ROADMAP.md](docs/DEVELOPMENT_ROADMAP.md) for the full table (single accepted offer, author-only accept/reject, anonymize on delete, guest feed, photo limits, listing reports and Help feedback, text chat after accept, no admin console). **Public map location** is in the app: city + district required, street optional, coordinates of the chosen public place. Dark theme is next. No store release planned.
 
 ## CI
 

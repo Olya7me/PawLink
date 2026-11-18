@@ -1,3 +1,5 @@
+import type { Href } from 'expo-router';
+
 import type { AppLanguage } from '@/i18n';
 
 import type { NotificationPayload } from '../api/notificationsApi';
@@ -36,8 +38,11 @@ export function resolveNotificationText(input: {
   return stored?.trim() || '';
 }
 
-export function notificationDeepLink(payload: NotificationPayload): string | null {
+export function notificationDeepLink(payload: NotificationPayload): Href | null {
   if (typeof payload.help_request_id === 'string' && payload.help_request_id) {
+    if (payload.chat) {
+      return `/requests/${payload.help_request_id}/chat`;
+    }
     return `/requests/${payload.help_request_id}`;
   }
   if (typeof payload.animal_id === 'string' && payload.animal_id) {

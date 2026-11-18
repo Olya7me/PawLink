@@ -28,10 +28,12 @@ Root Stack
 ├── Create `/create` (auth)
 ├── Profile `/profile` (auth) — opened from feed header icon; link to Notifications
 ├── Notifications `/notifications` (auth) — inbox; tap → request/animal; mark read
+├── Messages `/chats` (auth) — chat threads; tap → chat; unread badge on header icon
 ├── Help Request Detail `/requests/[requestId]`
 │   ├── Submit Offer (auth)
 │   ├── Offer List (author)
-│   └── Contact / meetup (after accept; parties only)
+│   ├── Contact / meetup (after accept; parties only)
+│   └── Chat `/requests/[requestId]/chat` (author + assignee)
 └── Auth stack
     ├── Sign In
     ├── Sign Up
@@ -54,7 +56,8 @@ Root Stack
 | Animal Detail | Photos, info, tasks, author (public); favorite heart; ⋯ report menu | Guest (favorite/report need auth) |
 | Report listing | Reason (`report_reason`) + comment; stores `listing_report` | Auth |
 | Edit listing | Author updates public fields + status | Auth (author) |
-| Help Request Detail | Status, description, offer CTA | Guest read; actions auth |
+| Help Request Detail | Status, description, offer CTA, chat after accept | Guest read; actions auth |
+| Chat | Text thread for author + accepted helper | Auth (parties) |
 | Submit Offer | Message + submit | Auth |
 | Offer List | Author reviews pending offers; accept one | Auth (author) |
 | Contact / meetup | Post-accept private details | Auth (author + assignee) |
@@ -84,7 +87,7 @@ Root Stack
 ## Out of scope screens (MVP)
 
 - Map SDK / map picker (Maps tab is a placeholder; city text stays the location model)  
-- Chat threads  
+- Chat attachments / typing indicators  
 - Admin moderation console (Olga reviews `reports` in Table Editor)  
 - Dark theme (planned next)  
 - Push notifications (Expo Notifications) — after in-app inbox  

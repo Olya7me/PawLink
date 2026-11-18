@@ -1,4 +1,4 @@
-import { requireOptionalNativeModule } from 'expo-modules-core';
+import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -32,29 +32,15 @@ export function PushRegistration() {
   }, [user, i18n.language]);
 
   useEffect(() => {
-    let remove: (() => void) | undefined;
-    let cancelled = false;
+    void Notifications.getLastNotificationResponseAsync().then((response) => {
+      if (!response) return;
+      openFromData(response.notification.request.content.data);
+    });
 
-    if (!requireOptionalNativeModule('ExpoPushTokenManager')) return;
-
-    void import('expo-notifications')
-      .then(async (Notifications) => {
-        if (cancelled) return;
-        const response = await Notifications.getLastNotificationResponseAsync();
-        if (response) {
-          openFromData(response.notification.request.content.data);
-        }
-        const subscription = Notifications.addNotificationResponseReceivedListener((event) => {
-          openFromData(event.notification.request.content.data);
-        });
-        remove = () => subscription.remove();
-      })
-      .catch(() => undefined);
-
-    return () => {
-      cancelled = true;
-      remove?.();
-    };
+    const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
+      openFromData(response.notification.request.content.data);
+    });
+    return () => subscription.remove();
   }, []);
 
   return null;

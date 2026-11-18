@@ -15,7 +15,6 @@ import { ErrorRetry } from '@/shared/components/ErrorRetry';
 import { InlineMessage } from '@/shared/components/InlineMessage';
 import { LoadingBlock } from '@/shared/components/LoadingBlock';
 import { TextField } from '@/shared/components/TextField';
-import { ThemePreferenceField } from '@/shared/components/ThemePreferenceField';
 
 import { anonymizeOwnAccount, fetchOwnProfile, updateOwnProfile } from '../api/profileApi';
 import {
@@ -131,7 +130,6 @@ export function ProfileForm() {
 
   return (
     <View>
-      <ThemePreferenceField />
       <Controller
         control={control}
         name="displayName"

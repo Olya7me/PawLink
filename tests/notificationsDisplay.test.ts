@@ -39,6 +39,9 @@ describe('notifications display helpers', () => {
     expect(
       notificationDeepLink({ help_request_id: 'req-1', animal_id: 'animal-1' }),
     ).toBe('/requests/req-1');
+    expect(notificationDeepLink({ help_request_id: 'req-1', chat: true })).toBe(
+      '/requests/req-1/chat',
+    );
     expect(notificationDeepLink({ animal_id: 'animal-1' })).toBe('/animals/animal-1');
     expect(notificationDeepLink({})).toBeNull();
   });

@@ -5,6 +5,7 @@ import type { Json } from '@/services/supabase';
 export type NotificationPayload = {
   animal_id?: string;
   help_request_id?: string;
+  chat?: boolean;
   offer_id?: string;
   status?: string;
   title_key?: string;
@@ -59,8 +60,14 @@ export function notificationsListQueryKey(userId: string | undefined) {
   return ['notifications', 'list', userId] as const;
 }
 
+export const CHAT_NOTIFICATION_TYPE = 'chat_message';
+
 export function notificationsUnreadQueryKey(userId: string | undefined) {
   return ['notifications', 'unread-count', userId] as const;
+}
+
+export function chatUnreadQueryKey(userId: string | undefined) {
+  return ['notifications', 'chat-unread-count', userId] as const;
 }
 
 export async function listNotifications(userId: string): Promise<AppNotification[]> {
@@ -70,6 +77,7 @@ export async function listNotifications(userId: string): Promise<AppNotification
     .from('notifications')
     .select('id, user_id, type, title, body, payload, read_at, created_at')
     .eq('user_id', userId)
+    .neq('type', CHAT_NOTIFICATION_TYPE)
     .order('created_at', { ascending: false })
     .limit(100);
 
@@ -84,6 +92,21 @@ export async function countUnreadNotifications(userId: string): Promise<number> 
     .from('notifications')
     .select('id', { count: 'exact', head: true })
     .eq('user_id', userId)
+    .neq('type', CHAT_NOTIFICATION_TYPE)
+    .is('read_at', null);
+
+  if (error) throw error;
+  return count ?? 0;
+}
+
+export async function countUnreadChatNotifications(userId: string): Promise<number> {
+  assertConfigured();
+
+  const { count, error } = await supabase
+    .from('notifications')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .eq('type', CHAT_NOTIFICATION_TYPE)
     .is('read_at', null);
 
   if (error) throw error;
@@ -109,7 +132,21 @@ export async function markAllNotificationsRead(userId: string): Promise<void> {
     .from('notifications')
     .update({ read_at: new Date().toISOString() })
     .eq('user_id', userId)
+    .neq('type', CHAT_NOTIFICATION_TYPE)
     .is('read_at', null);
+
+  if (error) throw error;
+}
+
+export async function markChatNotificationsRead(helpRequestId: string): Promise<void> {
+  assertConfigured();
+
+  const { error } = await supabase
+    .from('notifications')
+    .update({ read_at: new Date().toISOString() })
+    .eq('type', CHAT_NOTIFICATION_TYPE)
+    .is('read_at', null)
+    .filter('payload->>help_request_id', 'eq', helpRequestId);
 
   if (error) throw error;
 }

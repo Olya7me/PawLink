@@ -190,6 +190,13 @@ export function HelpRequestDetailView({ requestId }: HelpRequestDetailViewProps)
             peerProfileId={peerProfileId}
             canViewPrivate={canViewPrivate}
           />
+          {canViewPrivate ? (
+            <Button
+              label={t('chat.open')}
+              variant="secondary"
+              onPress={() => router.push(`/requests/${requestId}/chat`)}
+            />
+          ) : null}
         </Section>
       ) : null}
 

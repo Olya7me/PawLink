@@ -35,6 +35,7 @@ Use the **anon** key only. Do not put the service role key in the app or in git.
 | 9 | [`supabase/migrations/00009_feedback_and_reports.sql`](../supabase/migrations/00009_feedback_and_reports.sql) — evolve `reports` for feedback/listing/user kinds; seed `report_reason` + report hints |
 | 10 | [`supabase/migrations/00010_animal_public_location.sql`](../supabase/migrations/00010_animal_public_location.sql) — public `district`, optional `address_label`, and pin coordinates on `animals` |
 | 11 | [`supabase/migrations/00011_push_tokens.sql`](../supabase/migrations/00011_push_tokens.sql) — device tokens and Expo push delivery (`pg_net`) |
+| 12 | [`supabase/migrations/00012_chat_messages.sql`](../supabase/migrations/00012_chat_messages.sql) — text chat after accept + notify/push |
 
 3. Confirm under **Table Editor** that `profiles`, `animals`, `help_requests`, `help_offers`, `animal_updates`, `notifications`, `reports`, `faq_items`, `lookup_options`, `app_copy`, `app_config`, and `favorites` exist.
 4. Confirm under **Storage** that buckets `animal-photos` and `avatars` exist.

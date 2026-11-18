@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { useCallback, useRef, useState, type StyleProp, type ViewStyle } from 'react';
+import { useCallback, useRef, useState, type ComponentRef } from 'react';
 import {
   Modal,
   Platform,
@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   View,
   useWindowDimensions,
-  type View as RNView,
+  type StyleProp,
+  type ViewStyle,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -33,9 +34,11 @@ type MenuAnchor = {
   height: number;
 };
 
-function measureAnchor(view: RNView): Promise<MenuAnchor> {
+type AnchorView = ComponentRef<typeof View>;
+
+function measureAnchor(view: AnchorView): Promise<MenuAnchor> {
   return new Promise((resolve) => {
-    view.measureInWindow((x, y, width, height) => {
+    view.measureInWindow((x: number, y: number, width: number, height: number) => {
       const yOffset = Platform.OS === 'android' ? (StatusBar.currentHeight ?? 0) : 0;
       resolve({ x, y: y + yOffset, width, height });
     });
@@ -46,7 +49,7 @@ export function ReportMenuButton({ animalId, overlay = false, style }: ReportMen
   const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
-  const anchorRef = useRef<RNView>(null);
+  const anchorRef = useRef<AnchorView>(null);
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState<MenuAnchor | null>(null);
   const [menuSize, setMenuSize] = useState({ width: 0, height: 0 });

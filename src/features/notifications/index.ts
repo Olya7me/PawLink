@@ -9,5 +9,9 @@ export {
 export type { AppNotification, NotificationPayload } from './api/notificationsApi';
 export { NotificationBellButton } from './components/NotificationBellButton';
 export { NotificationsInbox } from './components/NotificationsInbox';
-export { useNotificationsInbox, useUnreadNotificationCount } from './hooks/useNotifications';
+export {
+  useNotificationsInbox,
+  useUnreadChatCount,
+  useUnreadNotificationCount,
+} from './hooks/useNotifications';
 export { notificationDeepLink, resolveNotificationText } from './utils/display';

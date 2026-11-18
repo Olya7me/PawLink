@@ -364,6 +364,27 @@ export const en = {
       messageRequired: 'Write a short message for your offer.',
     },
   },
+  chat: {
+    title: 'Chat',
+    inboxTitle: 'Messages',
+    inboxSubtitle: 'Chats with people after an offer is accepted.',
+    inboxGuest: 'Sign in to see your chats.',
+    inboxError: 'Could not load your chats.',
+    inboxEmptyTitle: 'No chats yet',
+    inboxEmptyBody: 'A chat opens after an offer is accepted.',
+    inboxNoPreview: 'No messages yet',
+    iconAccessibility: 'Messages',
+    iconUnread: 'Messages, {{count}} unread',
+    open: 'Open chat',
+    gated: 'Sign in to message the other person.',
+    unavailable: 'Chat is available after an offer is accepted — only for you and the helper.',
+    error: 'Could not load this chat.',
+    emptyTitle: 'No messages yet',
+    emptyBody: 'Write the first message about the meetup or the animal.',
+    placeholder: 'Message…',
+    send: 'Send',
+    closed: 'This request is finished. You can still read the messages.',
+  },
 };
 
 export type TranslationResources = typeof en;

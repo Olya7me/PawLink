@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '@/features/auth';
 import { useAppCopy } from '@/features/content';
+import { ChatInboxButton } from '@/features/chat/components/ChatInboxButton';
 import { NotificationBellButton } from '@/features/notifications';
 import { Button } from '@/shared/components/Button';
 import { EmptyState } from '@/shared/components/EmptyState';
@@ -44,6 +45,7 @@ export function AnimalFeed() {
         <View style={styles.brandRow}>
           <Text style={styles.brand}>{t('app.name')}</Text>
           <View style={styles.headerActions}>
+            {isAuthenticated ? <ChatInboxButton /> : null}
             <NotificationBellButton />
             {isAuthenticated ? (
               <IconButton

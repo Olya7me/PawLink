@@ -5,6 +5,8 @@ import { useAuth } from '@/features/auth';
 import { isSupabaseConfigured, supabase } from '@/services/supabase';
 
 import {
+  chatUnreadQueryKey,
+  countUnreadChatNotifications,
   countUnreadNotifications,
   listNotifications,
   markAllNotificationsRead,
@@ -88,6 +90,7 @@ export function useNotificationsInbox() {
     return retainNotificationsRealtime(userId, () => {
       void queryClient.invalidateQueries({ queryKey: notificationsListQueryKey(userId) });
       void queryClient.invalidateQueries({ queryKey: notificationsUnreadQueryKey(userId) });
+      void queryClient.invalidateQueries({ queryKey: chatUnreadQueryKey(userId) });
     });
   }, [enabled, queryClient, userId]);
 
@@ -138,6 +141,34 @@ export function useUnreadNotificationCount() {
 
     return retainNotificationsRealtime(userId, () => {
       void queryClient.invalidateQueries({ queryKey: notificationsUnreadQueryKey(userId) });
+      void queryClient.invalidateQueries({ queryKey: chatUnreadQueryKey(userId) });
+    });
+  }, [enabled, queryClient, userId]);
+
+  return {
+    count: unreadQuery.data ?? 0,
+    isLoading: unreadQuery.isLoading && enabled,
+    refetch: unreadQuery.refetch,
+  };
+}
+
+export function useUnreadChatCount() {
+  const { user, isAuthenticated } = useAuth();
+  const queryClient = useQueryClient();
+  const userId = user?.id;
+  const enabled = isSupabaseConfigured && isAuthenticated && Boolean(userId);
+
+  const unreadQuery = useQuery({
+    queryKey: chatUnreadQueryKey(userId),
+    queryFn: () => countUnreadChatNotifications(userId!),
+    enabled,
+  });
+
+  useEffect(() => {
+    if (!enabled || !userId) return;
+
+    return retainNotificationsRealtime(userId, () => {
+      void queryClient.invalidateQueries({ queryKey: chatUnreadQueryKey(userId) });
     });
   }, [enabled, queryClient, userId]);
 

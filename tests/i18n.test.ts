@@ -66,6 +66,13 @@ describe('i18n locales', () => {
   });
 
 
+  it('includes chat strings', () => {
+    expect(en.chat.send).toBeTruthy();
+    expect(ru.chat.open).toBe('Открыть чат');
+    expect(en.chat.inboxTitle).toBeTruthy();
+    expect(en.chat.iconUnread).toContain('{{count}}');
+  });
+
   it('includes notifications chrome strings', () => {
     expect(en.notifications.title).toBeTruthy();
     expect(ru.notifications.markAllRead).toBeTruthy();

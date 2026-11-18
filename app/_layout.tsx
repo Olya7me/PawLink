@@ -25,11 +25,13 @@ function RootNavigator() {
         <Stack.Screen name="animals/[id]" options={{ headerShown: false }} />
         <Stack.Screen name="requests/[requestId]/index" options={{ title: 'Help request' }} />
         <Stack.Screen name="requests/[requestId]/offer" options={{ title: 'Offer help' }} />
+        <Stack.Screen name="requests/[requestId]/chat" options={{ title: 'Chat' }} />
         <Stack.Screen name="sign-in" options={{ title: 'Sign in' }} />
         <Stack.Screen name="sign-up" options={{ title: 'Sign up' }} />
         <Stack.Screen name="reset-password" options={{ title: 'Reset password' }} />
         <Stack.Screen name="profile" options={{ title: 'Profile' }} />
         <Stack.Screen name="notifications" options={{ title: 'Notifications' }} />
+        <Stack.Screen name="chats" options={{ title: 'Messages' }} />
         <Stack.Screen name="faq" options={{ title: 'FAQ' }} />
         <Stack.Screen name="feedback" options={{ title: 'Feedback' }} />
         <Stack.Screen name="create" options={{ title: 'Create' }} />

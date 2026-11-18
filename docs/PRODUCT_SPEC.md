@@ -43,7 +43,7 @@ After accept, contact / meetup details become visible to the author and the acce
 3. Meetup/contact after accept only; public city + approximate location  
 4. Account deletion anonymizes PII; rescue history kept without personal data  
 5. No maps in MVP (city text)  
-6. No in-app chat  
+6. Text chat after accept (author + helper only)  
 7. Basic reports only (no admin panel)  
 8. Light theme only  
 9. Guest browse of feed + animal cards; auth to create/respond  
@@ -57,14 +57,15 @@ After accept, contact / meetup details become visible to the author and the acce
 4. **Animal card** — guest-readable public fields; tasks; history; gated contact after accept  
 5. **Help coordination** — offers; author accept/reject; statuses  
 6. **Rescue history** — timeline of updates/events  
-7. **Personal area** — my listings, requests, offers, active tasks, history  
-8. **Notifications** — in-app for MVP; push later  
-9. **Reports** — report listing or user; store for later review  
+7. **Personal area** — my listings, requests, offers, chats, active tasks, history  
+8. **Notifications** — in-app inbox + device push  
+9. **Chat** — text only after accept, author and helper  
+10. **Reports** — report listing; Help feedback; store for later review  
 
 ## Non-goals (MVP)
 
 - Maps / map pins  
-- In-app chat  
+- Chat attachments / typing indicators  
 - Admin / moderation console
 - User-profile reports
 - Store submission

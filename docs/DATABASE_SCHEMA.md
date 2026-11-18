@@ -17,6 +17,7 @@ profiles ──< animals >── help_requests >── help_offers
 profiles ──< favorites >── animals
 profiles ──< notifications
 profiles ──< reports (as reporter)
+help_requests ──< chat_messages
 
 faq_items (standalone content; public read when published)
 lookup_options / app_copy / app_config (public read catalogs + copy + limits)
@@ -96,6 +97,20 @@ Partial unique index: at most one accepted offer per `help_request_id`.
 
 **Coordination RPCs** (migration `00004`): `accept_help_offer`, `reject_help_offer`, `withdraw_help_offer`, `set_help_request_status`. Prefer these over ad-hoc multi-row client updates so accept is atomic (sets assignee, rejects other pending offers, updates request status). Read offers via `help_offers_safe` so `meetup_details` is masked until accept.
 
+### `chat_messages`
+
+One text thread per accepted `help_request`. Migration: `00012_chat_messages.sql`.
+
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid PK | |
+| help_request_id | uuid FK | ON DELETE CASCADE |
+| sender_id | uuid FK → profiles | ON DELETE SET NULL; must equal `auth.uid()` on insert |
+| body | text | 1–2000 chars after trim |
+| created_at | timestamptz | |
+
+Index: `(help_request_id, created_at desc)`. Inserts notify the other party (`type = chat_message`, payload `chat: true`).
+
 ### `animal_updates`
 
 Timeline / rescue history (retained after anonymization).
@@ -116,7 +131,7 @@ Timeline / rescue history (retained after anonymization).
 |--------|------|-------|
 | id | uuid PK | |
 | user_id | uuid FK → profiles | ON DELETE CASCADE |
-| type | text | `offer_created` / `offer_accepted` / `offer_rejected` / `help_request_status` / `animal_status` |
+| type | text | `offer_created` / `offer_accepted` / `offer_rejected` / `help_request_status` / `animal_status` / `chat_message` |
 | title | text | English fallback resolved from `app_copy` at insert |
 | body | text | English fallback; nullable |
 | payload | jsonb | `animal_id`, `help_request_id`, `offer_id`, `status`, localized `titles`/`bodies`, `title_key`/`body_key`/`vars` |
@@ -157,6 +172,7 @@ Check constraint: feedback has no targets; listing reports require `animal_id`; 
 10. `lookup_options`: **SELECT** active rows for anon + authenticated; **no client writes**.
 11. `app_copy` / `app_config`: **SELECT** all rows for anon + authenticated; **no client writes**.
 12. `favorites`: **SELECT / INSERT / DELETE** own rows only (`user_id = auth.uid()`); no anon access; no UPDATE.
+13. `chat_messages`: **SELECT** for request author and assignee after an offer is accepted; **INSERT** only while status is `accepted` or `in_progress` and `sender_id = auth.uid()`; no client update/delete.
 
 ### `favorites`
 

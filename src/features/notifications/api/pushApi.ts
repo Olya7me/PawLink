@@ -1,5 +1,6 @@
 import Constants from 'expo-constants';
-import { requireOptionalNativeModule } from 'expo-modules-core';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 
 import type { AppLanguage } from '@/i18n';
@@ -8,37 +9,16 @@ import { isSupabaseConfigured, supabase } from '@/services/supabase';
 const CHANNEL_ID = 'default';
 
 let currentToken: string | null = null;
-let handlerReady = false;
 
-async function loadPushNative() {
-  if (
-    !requireOptionalNativeModule('ExpoPushTokenManager') ||
-    !requireOptionalNativeModule('ExpoDevice')
-  ) {
-    return null;
-  }
-  try {
-    const [Notifications, Device] = await Promise.all([
-      import('expo-notifications'),
-      import('expo-device'),
-    ]);
-    if (!handlerReady) {
-      Notifications.setNotificationHandler({
-        handleNotification: async () => ({
-          shouldShowAlert: true,
-          shouldPlaySound: true,
-          shouldSetBadge: false,
-          shouldShowBanner: true,
-          shouldShowList: true,
-        }),
-      });
-      handlerReady = true;
-    }
-    return { Notifications, Device };
-  } catch {
-    return null;
-  }
-}
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+});
 
 function projectId(): string | null {
   const fromExtra = Constants.expoConfig?.extra?.eas?.projectId;
@@ -50,9 +30,7 @@ function projectId(): string | null {
 
 export async function registerPushToken(userId: string, locale: AppLanguage): Promise<void> {
   if (!isSupabaseConfigured) return;
-  const native = await loadPushNative();
-  if (!native || Platform.OS === 'web' || !native.Device.isDevice) return;
-  const { Notifications } = native;
+  if (Platform.OS === 'web' || !Device.isDevice) return;
 
   const id = projectId();
   if (!id) return;
