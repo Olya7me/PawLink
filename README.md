@@ -68,4 +68,4 @@ Longer notes live in [docs/](docs/): product spec, architecture, database schema
 
 ## License
 
-See [LICENSE](./LICENSE).
+[MIT](./LICENSE) © 2026 Olga Gumenyuk
