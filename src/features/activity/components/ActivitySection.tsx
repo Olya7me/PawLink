@@ -32,7 +32,7 @@ function ListingRow({ animal }: { animal: AnimalListItem }) {
           {title}
         </Text>
         <Text style={styles.rowMeta}>
-          {animal.city} · {labelFor('animal_status', animal.status)} ·{' '}
+          {animal.city} · <Text style={styles.rowStatus}>{labelFor('animal_status', animal.status)}</Text> ·{' '}
           {labelFor('urgency', animal.urgency)}
         </Text>
       </View>
@@ -101,7 +101,7 @@ function FavoriteRow({ animal }: { animal: AnimalListItem }) {
           {title}
         </Text>
         <Text style={styles.rowMeta}>
-          {animal.city} · {labelFor('animal_status', animal.status)} ·{' '}
+          {animal.city} · <Text style={styles.rowStatus}>{labelFor('animal_status', animal.status)}</Text> ·{' '}
           {labelFor('urgency', animal.urgency)}
         </Text>
       </View>

@@ -9,6 +9,9 @@ export type ColorPalette = {
   accent: string;
   accentPressed: string;
   accentSoft: string;
+  highlight: string;
+  highlightPressed: string;
+  status: string;
   success: string;
   warning: string;
   danger: string;
@@ -16,35 +19,41 @@ export type ColorPalette = {
 };
 
 export const lightColors: ColorPalette = {
-  background: '#F7F3EE',
+  background: '#F6F4EE',
   surface: '#FFFFFF',
-  surfaceMuted: '#EFE9E2',
-  text: '#2C2420',
-  textSecondary: '#6B5E56',
-  textMuted: '#9A8C82',
-  border: '#E4DBD2',
-  accent: '#E07A5F',
-  accentPressed: '#C9654B',
-  accentSoft: '#F6D5CB',
-  success: '#5B8C6A',
-  warning: '#C9A227',
-  danger: '#C45C5C',
-  overlay: 'rgba(44, 36, 32, 0.4)',
+  surfaceMuted: '#EEE9DC',
+  text: '#1E1868',
+  textSecondary: '#4E4978',
+  textMuted: '#8E89A8',
+  border: '#E4DFD2',
+  accent: '#3D2FBF',
+  accentPressed: '#2E2294',
+  accentSoft: '#E4DCF8',
+  highlight: '#D6F25A',
+  highlightPressed: '#C4E044',
+  status: '#FF4FA3',
+  success: '#7A9A32',
+  warning: '#C6B43A',
+  danger: '#C4546A',
+  overlay: 'rgba(30, 24, 104, 0.4)',
 };
 
 export const darkColors: ColorPalette = {
-  background: '#1C1714',
-  surface: '#2A2420',
-  surfaceMuted: '#3A322C',
-  text: '#F7F3EE',
-  textSecondary: '#D4C6BC',
-  textMuted: '#A8988C',
-  border: '#4A403A',
-  accent: '#E07A5F',
-  accentPressed: '#F0947C',
-  accentSoft: '#4A332C',
-  success: '#7DAB8A',
-  warning: '#E0C15A',
-  danger: '#E08A8A',
+  background: '#14121F',
+  surface: '#1E1B2E',
+  surfaceMuted: '#2A2640',
+  text: '#F6F4EE',
+  textSecondary: '#C8C2DC',
+  textMuted: '#8E88A4',
+  border: '#3A3550',
+  accent: '#A89BFF',
+  accentPressed: '#C4BAFF',
+  accentSoft: '#2E2850',
+  highlight: '#D6F25A',
+  highlightPressed: '#E4F98A',
+  status: '#FF7AB8',
+  success: '#D4E86A',
+  warning: '#E6D36A',
+  danger: '#F0A0B0',
   overlay: 'rgba(0, 0, 0, 0.55)',
 };

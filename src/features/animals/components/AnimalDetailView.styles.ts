@@ -46,7 +46,8 @@ export const styles = lazyStyles((colors) => ({
   },
   status: {
     fontSize: typography.size.sm,
-    color: colors.textMuted,
+    fontWeight: '700',
+    color: colors.status,
   },
   author: {
     fontSize: typography.size.sm,

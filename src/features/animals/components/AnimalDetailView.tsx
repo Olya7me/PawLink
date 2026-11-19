@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Image } from 'expo-image';
-import { router } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import { ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
@@ -74,6 +74,7 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
 
   return (
     <ScrollView contentContainerStyle={styles.content}>
+      <Stack.Screen options={{ title }} />
       <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
         {photos.length > 0 ? (
           photos.map((uri) => (

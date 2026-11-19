@@ -48,6 +48,7 @@ export function AnimalFeedCard({ animal, onPress }: AnimalFeedCardProps) {
         <Text style={styles.meta}>
           {labelFor('species', animal.species)} · {animal.city}
         </Text>
+        <Text style={styles.status}>{labelFor('animal_status', animal.status)}</Text>
         {animal.description ? (
           <Text style={styles.description} numberOfLines={2}>
             {animal.description}

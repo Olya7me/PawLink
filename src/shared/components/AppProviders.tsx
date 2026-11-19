@@ -6,13 +6,14 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider } from '@/features/auth';
 import { PushRegistration } from '@/features/notifications/components/PushRegistration';
 import { i18n } from '@/i18n';
-import { ThemeProvider } from '@/theme';
+import { ThemeProvider, useAppFonts } from '@/theme';
 
 type AppProvidersProps = {
   children: ReactNode;
 };
 
 export function AppProviders({ children }: AppProvidersProps) {
+  const fontsLoaded = useAppFonts();
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -24,6 +25,8 @@ export function AppProviders({ children }: AppProvidersProps) {
         },
       }),
   );
+
+  if (!fontsLoaded) return null;
 
   return (
     <SafeAreaProvider>

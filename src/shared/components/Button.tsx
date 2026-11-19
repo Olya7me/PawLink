@@ -47,7 +47,9 @@ export function Button({
       {...props}
     >
       {loading ? (
-        <ActivityIndicator color={variant === 'primary' || variant === 'danger' ? '#fff' : colors.accent} />
+        <ActivityIndicator
+          color={variant === 'danger' ? '#fff' : variant === 'primary' ? colors.text : colors.accent}
+        />
       ) : (
         <Text
           style={[

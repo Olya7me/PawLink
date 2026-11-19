@@ -100,6 +100,10 @@ export const styles = lazyStyles((colors) => ({
     fontSize: typography.size.sm,
     color: colors.textSecondary,
   },
+  rowStatus: {
+    fontWeight: '700',
+    color: colors.status,
+  },
   rowMessage: {
     fontSize: typography.size.sm,
     color: colors.text,

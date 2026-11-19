@@ -14,7 +14,7 @@ export const styles = lazyStyles((colors) => ({
     borderRadius: radii.sm,
   },
   primary: {
-    backgroundColor: colors.accent,
+    backgroundColor: colors.highlight,
   },
   secondary: {
     backgroundColor: colors.surface,
@@ -41,7 +41,7 @@ export const styles = lazyStyles((colors) => ({
     fontSize: typography.size.sm,
   },
   primaryLabel: {
-    color: '#FFFFFF',
+    color: colors.text,
   },
   secondaryLabel: {
     color: colors.text,

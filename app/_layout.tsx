@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 import { AppProviders } from '@/shared/components/AppProviders';
-import { useTheme } from '@/theme';
+import { typography, useTheme } from '@/theme';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -17,6 +17,7 @@ function RootNavigator() {
         screenOptions={{
           headerStyle: { backgroundColor: colors.background },
           headerTintColor: colors.text,
+          headerTitleStyle: { fontFamily: typography.fontFamily.bold },
           headerShadowVisible: false,
           contentStyle: { backgroundColor: colors.background },
         }}
