@@ -15,9 +15,8 @@
 | 9 | In-app notifications | Done (PR #14) |
 | 10 | Feedback + listing reports | Done (PR #15) |
 | 11 | Public map (city, district, optional street, pins) | Done |
-| 12 | Dark theme | Next |
-| 13 | Device push (Expo) | Done (project id in `app.json`; apply migration `00011` on Supabase) |
-| 14 | Text chat after accept | Done (apply migration `00012` on Supabase) |
+| 12 | Device push (Expo) | Done (project id in `app.json`; apply migration `00011` on Supabase) |
+| 13 | Text chat after accept | Done (apply migration `00012` on Supabase) |
 
 ## Locked product decisions (2026-11-14)
 
@@ -30,7 +29,7 @@
 | 5 | Maps | **Done**: city + district required, street optional; pin uses coordinates of the chosen public place |
 | 6 | Chat | **Text only** after an offer is accepted; author + assignee; no attachments |
 | 7 | Moderation | **Listing report + Help feedback** only; rows in Table Editor. No admin console, no user-profile reports |
-| 8 | Theme | **Light now**; dark theme next |
+| 8 | Theme | **Light only** |
 | 9 | Guest feed | Guests may browse feed + animal detail; auth required to create listings/offers |
 | 10 | Photos | Max **5** per animal; max **5 MB** each; JPEG / PNG / WebP; compress before upload when possible |
 
@@ -48,8 +47,7 @@ See also [PRODUCT_SPEC.md](./PRODUCT_SPEC.md), [ARCHITECTURE.md](./ARCHITECTURE.
 7. Reports / feedback (listing report + Help feedback in Table Editor) — done  
 8. Public map pins — done  
 9. Text chat after accept — done  
-10. Dark theme — next  
-11. Polish  
+10. Polish  
 
 ## Out of scope
 
@@ -73,7 +71,6 @@ See also [PRODUCT_SPEC.md](./PRODUCT_SPEC.md), [ARCHITECTURE.md](./ARCHITECTURE.
 
 ## Still open after the map
 
-- Dark theme  
 - Photo replace on edit  
 - Fake seed data (optional)  
 - Chat attachments / typing indicators  

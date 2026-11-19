@@ -129,7 +129,6 @@ export function ChatInbox() {
         />
       }
     >
-      <Text style={styles.subtitle}>{t('chat.inboxSubtitle')}</Text>
       {threads.length === 0 ? (
         <EmptyState title={t('chat.inboxEmptyTitle')} body={t('chat.inboxEmptyBody')} />
       ) : (

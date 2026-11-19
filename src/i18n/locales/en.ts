@@ -382,7 +382,6 @@ export const en = {
   chat: {
     title: 'Chat',
     inboxTitle: 'Messages',
-    inboxSubtitle: 'Chats with people after an offer is accepted.',
     inboxGuest: 'Sign in to see your chats.',
     inboxError: 'Could not load your chats.',
     inboxEmptyTitle: 'No chats yet',

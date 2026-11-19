@@ -46,8 +46,14 @@ coverage/
 
 # IDE
 .idea/
+.vscode/
 *.swp
 *.swo
+
+# local agent / debug artifacts
+AGENTS.md
+.cursor/
+.cursor-pawlink-screen.png
 
 # misc
 *.log

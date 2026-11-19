@@ -382,7 +382,6 @@ export const ru: TranslationResources = {
   chat: {
     title: 'Чат',
     inboxTitle: 'Сообщения',
-    inboxSubtitle: 'Переписки после принятия отклика.',
     inboxGuest: 'Войдите, чтобы видеть чаты.',
     inboxError: 'Не удалось загрузить переписки.',
     inboxEmptyTitle: 'Пока нет переписок',
